@@ -5,7 +5,7 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
-String locationString;
+String locationString = "location";
 
 
 void setupWifiManager() {
@@ -53,18 +53,20 @@ void loop() {
   WiFiClient client;
   Serial.println("connecting");
   client.connect("192.168.31.181", 40000);
-  client.println(ESP.getChipId());
+  client.print(ESP.getChipId());
+  client.print(" ");
+  client.print("location");
+  client.println();
 
-  client.setTimeout(1);
-  Serial.setTimeout(1);
+
 
 
 
   while (client.connected()) {
     if (Serial.available() > 0) {
-      String s = Serial.readStringUntil('\n');
-      Serial.println(s);
-      client.println(s);
+      String s = Serial.readString();
+      Serial.print(s);
+      client.print(s);
     }
     if (client.available() > 0) {
       Serial.print(client.readStringUntil('\r'));

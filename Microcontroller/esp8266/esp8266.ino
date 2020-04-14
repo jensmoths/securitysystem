@@ -51,35 +51,24 @@ void loop() {
   // put your main code here, to run repeatedly:
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
-  client.connect("192.168.1.46", 40000);
-  client.print(ESP.getChipId());
-  client.print(" ");
-  client.print("kitchen");
-  client.println(""); 
+  Serial.println("connecting");
+  client.connect("192.168.31.181", 40000);
+  client.println(ESP.getChipId());
+
+  client.setTimeout(1);
+  Serial.setTimeout(1);
 
 
 
-
-
-  while (true) {
-
-    if (!client.connected()) {
-      Serial.println("connection failed");
-      delay(5000);
-      return;
+  while (client.connected()) {
+   // if (Serial.available() > 0) {
+      //String s = Serial.readStringUntil('\n');
+      Serial.println("s");
+      client.println("s");
+  //  }
+    if (client.available() > 0) {
+      Serial.print(client.readStringUntil('\r'));
+      Serial.println();
     }
-
-
-    // This will send a string to the server
-    Serial.println("sending data to server");
-    if (client.connected()) {
-      if (Serial.available() > 0) {
-      String s = Serial.readString();
-      client.println(s);
-      Serial.println(s);
-      }
-    }
-
-    delay(10000);
   }
 }

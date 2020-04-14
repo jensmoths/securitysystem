@@ -61,14 +61,13 @@ void loop() {
 
 
   while (client.connected()) {
-   // if (Serial.available() > 0) {
-      //String s = Serial.readStringUntil('\n');
-      Serial.println("s");
-      client.println("s");
-  //  }
+    if (Serial.available() > 0) {
+      String s = Serial.readStringUntil('\n');
+      Serial.println(s);
+      client.println(s);
+    }
     if (client.available() > 0) {
       Serial.print(client.readStringUntil('\r'));
-      Serial.println();
     }
   }
 }

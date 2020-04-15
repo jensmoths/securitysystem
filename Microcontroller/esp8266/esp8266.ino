@@ -45,31 +45,56 @@ void setup() {
 
 
 
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  // Use WiFiClient class to create TCP connections
-  WiFiClient client;
+
+  WiFiClient magnet;
   Serial.println("connecting");
-  client.connect("192.168.31.181", 40000);
-  client.print(ESP.getChipId());
-  client.print(" ");
-  client.print("location");
-  client.println();
+  magnet.connect("192.168.31.181", 3000);
+  magnet.print(ESP.getChipId());
+  magnet.print(" ");
+  magnet.print("kitchen");
+  magnet.print(" ");
+  magnet.print("magnet");
+  magnet.println();
+  delay(1000);
 
+  //heartbeat
+  while (magnet.connected()) {
 
-
-
-
-  while (client.connected()) {
     if (Serial.available() > 0) {
       String s = Serial.readString();
-      Serial.print(s);
-      client.print(s);
+      //Serial.print(s);
+      magnet.print(s);
     }
-    if (client.available() > 0) {
-      Serial.print(client.readStringUntil('\r'));
+    if (magnet.available() > 0) {
+      
+      Serial.print(magnet.readStringUntil('\r'));
     }
+
+    //magnet.println("heartbeat");
+    //delay(2000);
   }
+
+
+
+
+  //  while (siren.connected()) {
+  //    if (Serial.available() > 0) {
+  //      String s = Serial.readString();
+  //      Serial.print(s);
+  //      magnet.print(s);
+  //    }
+  //    if (magnet.available() > 0) {
+  //      Serial.print("magnet: ");
+  //      Serial.print(magnet.readStringUntil('\r'));
+  //    }
+  //    if (siren.available() > 0) {
+  //      Serial.print("siren: ");
+  //      Serial.print(siren.readStringUntil('\r'));
+  //
+  //    }
+  //  }
 }

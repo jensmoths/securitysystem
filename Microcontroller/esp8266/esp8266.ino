@@ -6,6 +6,8 @@
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
 String locationString = "location";
+int buttonState = 0;         // current state of the button
+int lastButtonState = 0;     // previous state of the button
 
 
 void setupWifiManager() {
@@ -43,6 +45,9 @@ void setup() {
   //method for easy connection to a wifi
   setupWifiManager();
 
+  pinMode(4, OUTPUT);
+  pinMode(0, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT); 
 
 
 
@@ -50,51 +55,72 @@ void setup() {
 
 void loop() {
 
-  WiFiClient magnet;
+  WiFiClient door;
   Serial.println("connecting");
-  magnet.connect("192.168.31.181", 3000);
-  magnet.print(ESP.getChipId());
-  magnet.print(" ");
-  magnet.print("kitchen");
-  magnet.print(" ");
-  magnet.print("magnet");
-  magnet.println();
+  door.connect("192.168.31.181", 3000);
+  door.print(ESP.getChipId());
+  door.print(" ");
+  door.print("kitchen");
+  door.print(" ");
+  door.print("door");
+  door.println();
+
   delay(1000);
 
+  WiFiClient proximity;
+  Serial.println("connecting");
+  proximity.connect("192.168.31.181", 3000);
+  proximity.print(ESP.getChipId() + 1);
+  proximity.print(" ");
+  proximity.print("hallway");
+  proximity.print(" ");
+  proximity.print("proximity");
+  proximity.println();
+
   //heartbeat
-  while (magnet.connected()) {
+  while (proximity.connected()) {
 
     if (Serial.available() > 0) {
       String s = Serial.readString();
-      //Serial.print(s);
-      magnet.print(s);
+      Serial.println(s);
+      if (s.equals("ledOn")) {
+        digitalWrite(4, HIGH);
+        digitalWrite(LED_BUILTIN, LOW); 
+      } else if (s.equals("ledOff")) {
+        digitalWrite(4, LOW);
+        digitalWrite(LED_BUILTIN, HIGH);
+      }
     }
-    if (magnet.available() > 0) {
-      
-      Serial.print(magnet.readStringUntil('\r'));
+
+
+
+    if (door.available() > 0) {
+      String s2 = door.readString();
+      Serial.println("Server: " + s2);
+      if (s2.equals("ledOn")) {
+        digitalWrite(4, HIGH);
+        digitalWrite(LED_BUILTIN, LOW); 
+      } else if (s2.equals("ledOff")) {
+        digitalWrite(4, LOW);
+        digitalWrite(LED_BUILTIN, HIGH);
+      }
     }
+
+
 
     //magnet.println("heartbeat");
     //delay(2000);
+
+    buttonState = digitalRead(0);
+
+    if (buttonState != lastButtonState) {
+      if (buttonState == LOW) {
+        proximity.println("ledOn");
+        Serial.println("button on");
+      } else {
+        Serial.println("button off");
+      }
+    }
+    lastButtonState = buttonState;
   }
-
-
-
-
-  //  while (siren.connected()) {
-  //    if (Serial.available() > 0) {
-  //      String s = Serial.readString();
-  //      Serial.print(s);
-  //      magnet.print(s);
-  //    }
-  //    if (magnet.available() > 0) {
-  //      Serial.print("magnet: ");
-  //      Serial.print(magnet.readStringUntil('\r'));
-  //    }
-  //    if (siren.available() > 0) {
-  //      Serial.print("siren: ");
-  //      Serial.print(siren.readStringUntil('\r'));
-  //
-  //    }
-  //  }
 }

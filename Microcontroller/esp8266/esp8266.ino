@@ -59,9 +59,9 @@ void loop() {
   Serial.println("connecting");
   door.connect("192.168.31.181", 3000);
   door.print(ESP.getChipId());
-  door.print(" ");
+  door.print("|");
   door.print("kitchen");
-  door.print(" ");
+  door.print("|");
   door.print("door");
   door.println();
 
@@ -71,10 +71,10 @@ void loop() {
   Serial.println("connecting");
   proximity.connect("192.168.31.181", 3000);
   proximity.print(ESP.getChipId() + 1);
-  proximity.print(" ");
+  proximity.print("|");
   proximity.print("hallway");
-  proximity.print(" ");
-  proximity.print("proximity");
+  proximity.print("|");
+  proximity.print("magnet");
   proximity.println();
 
   //heartbeat
@@ -115,7 +115,7 @@ void loop() {
 
     if (buttonState != lastButtonState) {
       if (buttonState == LOW) {
-        proximity.println("ledOn");
+        proximity.println("on");
         Serial.println("button on");
       } else {
         Serial.println("button off");

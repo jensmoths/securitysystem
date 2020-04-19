@@ -57,9 +57,6 @@ void reconnectToServer() {
     Serial.println("connecting to server")
     client.connect(IP, PORT);
     client.print(ESP.getChipId());
-    client.print("|");
-    client.print(TYPE);
-    client.println();
     if (client.connected()) break;
     delay(10000);
   }

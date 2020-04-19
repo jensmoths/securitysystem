@@ -5,16 +5,21 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
-String locationString = "location";
+//String locationString = "location";
 int buttonState = 0;         // current state of the button
 int lastButtonState = 0;     // previous state of the button
+const String IP = "192.168.31.181";
+const int PORT = 3000;
+const String TYPE = "magnet";
+
+WiFiClient client;
 
 
-void setupWifiManager() {
+String setupWifiManager() {
   WiFiManager wifiManager;
 
   //uncomment to reset saved settings
-  //wifiManager.resetSettings();
+  wifiManager.resetSettings();
 
   //Parameter for configuring the location at the same time as wifi
   WiFiManagerParameter location("location", "location", "", 40);
@@ -28,7 +33,37 @@ void setupWifiManager() {
   //if you get here you have connected to the WiFi
   Serial.println("connected to wifi");
   Serial.println(location.getValue());
-  locationString = location.getValue();
+  return location.getValue();
+}
+
+void connectToServer(String location) {
+  while (true) {
+    Serial.println("connecting to server")
+    client.connect(IP, PORT);
+    client.print(ESP.getChipId());
+    client.print("|");
+    client.print(location);
+    client.print("|");
+    client.print(TYPE);
+    client.println();
+    if (client.connected()) break;
+    delay(10000);
+  }
+  Serial.println("connected to server")
+}
+
+void reconnectToServer() {
+  while (true) {
+    Serial.println("connecting to server")
+    client.connect(IP, PORT);
+    client.print(ESP.getChipId());
+    client.print("|");
+    client.print(TYPE);
+    client.println();
+    if (client.connected()) break;
+    delay(10000);
+  }
+  Serial.println("connected to server")
 }
 
 
@@ -38,81 +73,22 @@ void setupWifiManager() {
 
 void setup() {
   // put your setup code here, to run once:
+  pinMode(4, OUTPUT);
+  pinMode(0, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
 
   //start serial for debugging
   Serial.begin(115200);
 
   //method for easy connection to a wifi
-  setupWifiManager();
+  String location = setupWifiManager();
 
-  pinMode(4, OUTPUT);
-  pinMode(0, INPUT);
-  pinMode(LED_BUILTIN, OUTPUT); 
-
-
-
+  connectToServer(location);
 }
 
 void loop() {
-
-  WiFiClient door;
-  Serial.println("connecting");
-  door.connect("192.168.31.181", 3000);
-  door.print(ESP.getChipId());
-  door.print("|");
-  door.print("kitchen");
-  door.print("|");
-  door.print("door");
-  door.println();
-
-  delay(1000);
-
-  WiFiClient proximity;
-  Serial.println("connecting");
-  proximity.connect("192.168.31.181", 3000);
-  proximity.print(ESP.getChipId() + 1);
-  proximity.print("|");
-  proximity.print("hallway");
-  proximity.print("|");
-  proximity.print("magnet");
-  proximity.println();
-
-  //heartbeat
-  while (proximity.connected()) {
-
-    if (Serial.available() > 0) {
-      String s = Serial.readString();
-      Serial.println(s);
-      if (s.equals("ledOn")) {
-        digitalWrite(4, HIGH);
-        digitalWrite(LED_BUILTIN, LOW); 
-      } else if (s.equals("ledOff")) {
-        digitalWrite(4, LOW);
-        digitalWrite(LED_BUILTIN, HIGH);
-      }
-    }
-
-
-
-    if (door.available() > 0) {
-      String s2 = door.readString();
-      Serial.println("Server: " + s2);
-      if (s2.equals("ledOn")) {
-        digitalWrite(4, HIGH);
-        digitalWrite(LED_BUILTIN, LOW); 
-      } else if (s2.equals("ledOff")) {
-        digitalWrite(4, LOW);
-        digitalWrite(LED_BUILTIN, HIGH);
-      }
-    }
-
-
-
-    //magnet.println("heartbeat");
-    //delay(2000);
-
+  while (client.connected()) {
     buttonState = digitalRead(0);
-
     if (buttonState != lastButtonState) {
       if (buttonState == LOW) {
         proximity.println("on");
@@ -122,5 +98,19 @@ void loop() {
       }
     }
     lastButtonState = buttonState;
+
+
+    if (client.available() > 0) {
+      String message = client.readString();
+      Serial.println("Server: " + s2);
+      if (message.equals("ledOn")) {
+        digitalWrite(4, HIGH);
+        digitalWrite(LED_BUILTIN, LOW);
+      } else if (message.equals("ledOff")) {
+        digitalWrite(4, LOW);
+        digitalWrite(LED_BUILTIN, HIGH);
+      }
+    }
   }
+  reconnectToServer();
 }

@@ -8,8 +8,9 @@
 //String locationString = "location";
 int buttonState = 0;         // current state of the button
 int lastButtonState = 0;     // previous state of the button
-const String IP = "192.168.31.181";
-const int PORT = 3000;
+const String IP = "83.254.129.68"; //per
+//const String IP = "192.168.31.181";
+const int PORT = 40000;
 const String TYPE = "magnet";
 
 WiFiClient client;
@@ -19,7 +20,7 @@ String setupWifiManager() {
   WiFiManager wifiManager;
 
   //uncomment to reset saved settings
-  wifiManager.resetSettings();
+  //wifiManager.resetSettings();
 
   //Parameter for configuring the location at the same time as wifi
   WiFiManagerParameter location("location", "location", "", 40);
@@ -42,9 +43,9 @@ void connectToServer(String location) {
     client.connect(IP, PORT);
     client.print(ESP.getChipId());
     client.print("|");
-    client.print(location);
-    client.print("|");
     client.print(TYPE);
+    client.print("|");
+    client.print("jens");   
     client.println();
     if (client.connected()) break;
     delay(10000);
@@ -53,10 +54,16 @@ void connectToServer(String location) {
 }
 
 void reconnectToServer() {
+
+
+ 
+  
   while (true) {
-    Serial.println("connecting to server");
+    Serial.println("reconnecting to server");
     client.connect(IP, PORT);
     client.print(ESP.getChipId());
+    client.print("|");
+    client.println(TYPE);
     if (client.connected()) break;
     delay(10000);
   }
@@ -83,31 +90,32 @@ void setup() {
   connectToServer(location);
 }
 
-void loop() {
-  while (client.connected()) {
+void loop() { 
+  if (client.connected()) {
     buttonState = digitalRead(0);
     if (buttonState != lastButtonState) {
       if (buttonState == LOW) {
         client.println("on");
+        
         Serial.println("button on");
       } else {
         Serial.println("button off");
+        client.println("off");
       }
     }
     lastButtonState = buttonState;
 
 
     if (client.available() > 0) {
-      String message = client.readString();
-      Serial.println("Server: " + message);
-      if (message.equals("ledOn")) {
+      char message = client.read();
+      Serial.println(message);
+      if (message == 'c') {
         digitalWrite(4, HIGH);
         digitalWrite(LED_BUILTIN, LOW);
-      } else if (message.equals("ledOff")) {
+      } else if (message == 'o') {
         digitalWrite(4, LOW);
         digitalWrite(LED_BUILTIN, HIGH);
       }
     }
-  }
-  reconnectToServer();
+  } else reconnectToServer();
 }

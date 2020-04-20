@@ -38,7 +38,7 @@ String setupWifiManager() {
 
 void connectToServer(String location) {
   while (true) {
-    Serial.println("connecting to server")
+    Serial.println("connecting to server");
     client.connect(IP, PORT);
     client.print(ESP.getChipId());
     client.print("|");
@@ -49,18 +49,18 @@ void connectToServer(String location) {
     if (client.connected()) break;
     delay(10000);
   }
-  Serial.println("connected to server")
+  Serial.println("connected to server");
 }
 
 void reconnectToServer() {
   while (true) {
-    Serial.println("connecting to server")
+    Serial.println("connecting to server");
     client.connect(IP, PORT);
     client.print(ESP.getChipId());
     if (client.connected()) break;
     delay(10000);
   }
-  Serial.println("connected to server")
+  Serial.println("connected to server");
 }
 
 
@@ -88,7 +88,7 @@ void loop() {
     buttonState = digitalRead(0);
     if (buttonState != lastButtonState) {
       if (buttonState == LOW) {
-        proximity.println("on");
+        client.println("on");
         Serial.println("button on");
       } else {
         Serial.println("button off");
@@ -99,7 +99,7 @@ void loop() {
 
     if (client.available() > 0) {
       String message = client.readString();
-      Serial.println("Server: " + s2);
+      Serial.println("Server: " + message);
       if (message.equals("ledOn")) {
         digitalWrite(4, HIGH);
         digitalWrite(LED_BUILTIN, LOW);

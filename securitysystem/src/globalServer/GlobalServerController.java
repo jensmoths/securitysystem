@@ -86,39 +86,10 @@ public class GlobalServerController {
 
                             ois = new ObjectInputStream(socket.getInputStream());
                             requestObject = ois.readObject();
-
                             System.out.println(requestObject.toString());
 
-                            if (requestObject instanceof Message) {
-                                message = (Message) requestObject;
-                                SecurityComponent securityComponent = message.getSecurityComponent();
+                                handleServerRequest(requestObject);
 
-                                if (securityComponent instanceof MagneticSensor) {
-                                    System.out.println("You are in magnet sensor");
-                                    System.out.println(securityComponent.isOpen());
-
-                                    if (securityComponent.isOpen()) {
-                                        clients.get(name).oos.writeObject("Magnetsensorn larmar");
-
-                                    } if (!securityComponent.isOpen()){
-                                        clients.get(name).oos.writeObject("Magnetsensorn larmar inte");
-                                    }
-                                }
-                                if (securityComponent instanceof FireAlarm) {
-                                    System.out.println("You are in Firealarm");
-                                    System.out.println(securityComponent.isOpen());
-
-                                    if (securityComponent.isOpen()) {
-                                        clients.get(name).oos.writeObject("brandlarm larmar");
-
-                                    } if (!securityComponent.isOpen()){
-                                        clients.get(name).oos.writeObject("brandlarm larmar inte");
-                                    }
-                                }
-                                if (requestObject instanceof String) {
-                                    clients.get(name).oos.writeObject(requestObject);
-                                }
-                            }
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                             System.out.println(socket.getInetAddress() + " has disconnected");
@@ -144,8 +115,8 @@ public class GlobalServerController {
                             String requestString = requestObject.toString();
                             System.out.println(socket.getInetAddress() + ": " + requestString);
                             ObjectOutputStream localServerOos = localServers.get(name).oos;
-                            localServerOos.writeObject(handleRequest(requestString));
-                            System.out.println(handleRequest(requestString).toString());
+                            localServerOos.writeObject(handleClientRequest(requestString));
+                            System.out.println(handleClientRequest(requestString).toString());
 
                         } catch (IOException | ClassNotFoundException e) {
                             System.out.println(socket.getInetAddress() + " has disconnected");
@@ -163,7 +134,43 @@ public class GlobalServerController {
             }
         }
 
-        public Message handleRequest(String clientRequest) {
+        public void handleServerRequest (Object requestObject) {
+            try {
+                if (requestObject instanceof String) {
+                    clients.get(name).oos.writeObject(requestObject);
+                } else if (requestObject instanceof Message) {
+                    message = (Message) requestObject;
+                    SecurityComponent securityComponent = message.getSecurityComponent();
+
+                    if (securityComponent instanceof MagneticSensor) {
+                        System.out.println("You are in magnet sensor");
+                        System.out.println(securityComponent.isOpen());
+
+                        if (securityComponent.isOpen()) {
+                            clients.get(name).oos.writeObject("Magnetsensorn larmar");
+
+                        } else if (!securityComponent.isOpen()) {
+                            clients.get(name).oos.writeObject("Magnetsensorn är aktiv");
+                        }
+                    }
+                    if (securityComponent instanceof FireAlarm) {
+                        System.out.println("You are in Firealarm");
+                        //System.out.println(securityComponent.isOpen());
+                        clients.get(name).oos.writeObject("Brandlarmet har upptäckt rök i byggnaden");
+                    }
+                    if (securityComponent instanceof ProximitySensor) {
+                        System.out.println("You are in Proximity Sensor");
+                        //System.out.println(securityComponent.isOpen());
+
+                        clients.get(name).oos.writeObject("Rörelsedetektorn har upptäckt rörelse i byggnaden");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public Message handleClientRequest(String clientRequest) {
             Message messageResponse = new Message();
 
             switch (clientRequest) {

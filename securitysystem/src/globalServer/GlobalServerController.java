@@ -104,6 +104,17 @@ public class GlobalServerController {
                                         clients.get(name).oos.writeObject("Magnetsensorn larmar inte");
                                     }
                                 }
+                                if (securityComponent instanceof FireAlarm) {
+                                    System.out.println("You are in Firealarm");
+                                    System.out.println(securityComponent.isOpen());
+
+                                    if (securityComponent.isOpen()) {
+                                        clients.get(name).oos.writeObject("brandlarm larmar");
+
+                                    } if (!securityComponent.isOpen()){
+                                        clients.get(name).oos.writeObject("brandlarm larmar inte");
+                                    }
+                                }
                                 if (requestObject instanceof String) {
                                     clients.get(name).oos.writeObject(requestObject);
                                 }

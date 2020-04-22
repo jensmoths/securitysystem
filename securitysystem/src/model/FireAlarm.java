@@ -14,8 +14,12 @@ public class FireAlarm extends Sensor {
         super("", "", false);
     }
 
-    @Override
     public boolean isOpen() {
-        return false;
+        return super.isOpen();
+    }
+
+    @Override
+    public void setOpen(boolean open) {
+        super.setOpen(open);
     }
 }

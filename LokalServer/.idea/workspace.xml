@@ -6,8 +6,33 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="80edb57b-b785-4a77-b465-08fa2b1570ba" name="Default Changelist" comment="" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="80edb57b-b785-4a77-b465-08fa2b1570ba" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Lokalserver_jar/Lokalserver.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Lokalserver_jar/Lokalserver.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/ConsoleColors.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/ConsoleColors.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/PiServer$ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/PiServer$ClientHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/PiServer$GlobalServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/PiServer$GlobalServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/PiServer$StartServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/PiServer$StartServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/PiServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/ConnectToMK/PiServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/MINAmodel/DoorLock.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/MINAmodel/FireAlarm.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/MINAmodel/MagneticSensor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/MINAmodel/Message.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/MINAmodel/ProximitySensor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/MINAmodel/SecurityComponent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/MINAmodel/Sensor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/MINAmodel/Speaker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/model/DoorLock.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/model/DoorLock.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/model/FireAlarm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/model/FireAlarm.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/model/MagneticSensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/model/MagneticSensor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/model/Message.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/model/Message.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/model/ProximitySensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/model/ProximitySensor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/model/SecurityComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/model/SecurityComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/model/Sensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/model/Sensor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Lokalserver/model/Speaker.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Lokalserver/model/Speaker.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,6 +45,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1aZp24akbwbH9JdpZsnQYLBieRh" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -29,9 +57,9 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/ConnectToMK" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -42,18 +70,6 @@
       <recent name="C:\Users\Per\Desktop\Securitysystem\MItt\src\ConnectToMK" />
       <recent name="C:\Users\Per\Desktop\Securitysystem\MItt\src\ConnectToGlobal" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -96,10 +112,10 @@
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state x="1889" y="861" key="#com.intellij.ide.util.MemberChooser/0.0.3840.2120@0.0.3840.2120" timestamp="1587133980114" />
-    <state x="2509" y="1245" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1586975031242">
+    <state x="2509" y="1245" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1587546620446">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
-    <state x="2509" y="1245" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1586975031242" />
+    <state x="2509" y="1245" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1587546620446" />
     <state x="2097" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1587025797572">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
@@ -140,10 +156,18 @@
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state width="1685" height="407" key="GridCell.Tab.1.right/0.0.3840.2120@0.0.3840.2120" timestamp="1587135187435" />
-    <state x="1871" y="1175" key="com.intellij.ide.util.TipDialog" timestamp="1587025493467">
+    <state x="1683" y="780" key="SettingsEditor" timestamp="1587555481013">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
-    <state x="1871" y="1175" key="com.intellij.ide.util.TipDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1587025493467" />
+    <state x="1683" y="780" key="SettingsEditor/0.0.3840.2120@0.0.3840.2120" timestamp="1587555481013" />
+    <state x="1871" y="1175" key="com.intellij.ide.util.TipDialog" timestamp="1587554748404">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state x="1871" y="1175" key="com.intellij.ide.util.TipDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1587554748404" />
+    <state x="1897" y="975" key="git4idea.branch.GitSmartOperationDialog" timestamp="1587555003601">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state x="1897" y="975" key="git4idea.branch.GitSmartOperationDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1587555003601" />
     <state x="1901" y="775" width="672" height="678" key="search.everywhere.popup" timestamp="1587132431156">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>

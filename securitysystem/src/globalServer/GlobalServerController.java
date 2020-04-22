@@ -108,6 +108,7 @@ public class GlobalServerController {
                                     System.out.println("You are in Firealarm");
                                     System.out.println(securityComponent.isOpen());
 
+
                                     if (securityComponent.isOpen()) {
                                         clients.get(name).oos.writeObject("brandlarm larmar");
 

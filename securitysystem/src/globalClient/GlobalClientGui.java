@@ -21,7 +21,7 @@ public class GlobalClientGui extends JPanel {
     private GlobalClientController globalClientController;
     private String name;
 
-    JScrollPane scrollPane;
+    private JScrollPane scrollPane;
 
     public GlobalClientGui(GlobalClientController globalClientController) {
         this.globalClientController = globalClientController;
@@ -43,7 +43,6 @@ public class GlobalClientGui extends JPanel {
         leftPanelNorth = new JPanel();
         leftPanelSouth = new JPanel();
         textArea = new JTextArea();
-        scrollPane = new JScrollPane(textArea);
 
         leftPanel.setPreferredSize(new Dimension(280, 580));
         rightPanel.setPreferredSize(new Dimension(280, 580));
@@ -53,6 +52,7 @@ public class GlobalClientGui extends JPanel {
 
         textArea.setEditable(false);
         textArea.setPreferredSize(new Dimension(270, 580));
+        scrollPane = new JScrollPane(textArea);
 
         btnLock = new JButton("Lock door");
         btnUnlock = new JButton("Unlock door");
@@ -69,8 +69,8 @@ public class GlobalClientGui extends JPanel {
         leftPanelNorth.add(btnLock, BorderLayout.SOUTH);
         leftPanelSouth.add(btnUnlock,BorderLayout.SOUTH);
 
-        leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
-        leftPanelSouth.add(btnON, BorderLayout.CENTER);
+        //leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
+        //leftPanelSouth.add(btnON, BorderLayout.CENTER);
 
         leftPanel.add(leftPanelNorth, BorderLayout.NORTH);
         leftPanel.add(leftPanelSouth, BorderLayout.SOUTH);
@@ -85,8 +85,6 @@ public class GlobalClientGui extends JPanel {
         btnLock.addActionListener(buttonListener);
         btnUnlock.addActionListener(buttonListener);
     }
-
-
 
     public void setTextArea(String activity) {
         textArea.setText(activity);

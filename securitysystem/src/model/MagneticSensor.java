@@ -15,13 +15,4 @@ public class MagneticSensor extends Sensor {
         super("", "", false);
         super.setOpen(open);
     }
-
-    public boolean isOpen() {
-        return super.isOpen();
-    }
-
-    @Override
-    public void setOpen(boolean open) {
-        super.setOpen(open);
-    }
 }

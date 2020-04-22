@@ -156,7 +156,7 @@ public class PiServer extends Thread implements Serializable {
                     sensor.setOpen(booleanState);
 
                     Message message = new Message("", sensor);
-                    System.out.println(message.getSecurityComponent().getClass().getSimpleName());
+                 //   System.out.println(message.getSecurityComponent().getClass().getSimpleName());
 
 
                     if (message.getSecurityComponent() instanceof MagneticSensor) {
@@ -187,15 +187,16 @@ public class PiServer extends Thread implements Serializable {
                             }
                         }
                     }
+                    if(message.getSecurityComponent() instanceof FireAlarm){
+                        globalServer.GlobalsendMessage(message);
+                    }
 
                     System.out.println("CH " + "IP: " + socket.getInetAddress() + " ID: " + sensor.getId() + " TYPE: " + sensor.getClass().getSimpleName() + " " + message.getSecurityComponent().isOpen());
 
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                      /*  if (sensor instanceof FireAlarm){
-                    firesensors.remove(sensor);
-                }*/
+
                     break;
                 }
             }
@@ -234,7 +235,7 @@ public class PiServer extends Thread implements Serializable {
            oos.writeObject(msg);
             oos.flush();
 
-            System.out.println("sent message " + socket.toString());
+            System.out.println("sent message " + msg.getInfo() + "to GlobalServer: " +socket.toString());
         }
 
         @Override
@@ -270,9 +271,7 @@ public class PiServer extends Thread implements Serializable {
                     e.printStackTrace();
                 }
 
-                //   System.out.println("Servern skickade: " + msg.getInfo());
 
-                // map.get(msg.getSecurityComponent()).sendMessage(msg);
 
 
             }

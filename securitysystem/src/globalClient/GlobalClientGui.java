@@ -51,8 +51,8 @@ public class GlobalClientGui extends JPanel {
         leftPanelNorth.setPreferredSize(new Dimension(260, 285));
 
         textArea.setEditable(false);
-        textArea.setPreferredSize(new Dimension(270, 580));
         scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(270, 580));
 
         btnLock = new JButton("Lock door");
         btnUnlock = new JButton("Unlock door");

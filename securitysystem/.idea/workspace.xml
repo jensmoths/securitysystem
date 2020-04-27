@@ -7,12 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23d00dd-a4f0-4e41-a861-60ea4533051d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/globalClient/GlobalClientGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalClient/GlobalClientGui.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/globalServer/GlobalServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalServer/GlobalServerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/FireAlarm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/FireAlarm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/MagneticSensor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/MagneticSensor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/localserver/PiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localserver/PiServer.java" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -50,6 +49,18 @@
       <recent name="C:\Users\jensm\Downloads\MujEmaP1-2\securitysystem\src\localserver" />
       <recent name="C:\Users\jensm\Downloads\MujEmaP1-2\securitysystem\src" />
     </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager" selected="Application.GlobalClientController">
     <configuration name="GlobalClientController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -111,6 +122,17 @@
       <updated>1587556392915</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="WindowStateProjectService">
     <state x="2557" y="1077" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1587556582232">

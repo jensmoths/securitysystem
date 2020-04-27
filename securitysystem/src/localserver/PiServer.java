@@ -10,18 +10,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PiServer extends Thread implements Serializable {
-    private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
     ArrayList<SecurityComponent> firesensors = new ArrayList<SecurityComponent>();
     ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
     ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
     ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
     GlobalServer globalServer;
+    private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
 
 
     PiServer() throws IOException, InterruptedException {
         new StartServer(Integer.parseInt(JOptionPane.showInputDialog(null, "Välj port"))).start();
         globalServer = new GlobalServer();
         new Thread(globalServer).start();
+
+
       /*
         System.out.println(ConsoleColors.RED + "<('.'<) <('.'<) <('.'<)");
         Thread.sleep(1500);
@@ -42,16 +44,43 @@ public class PiServer extends Thread implements Serializable {
 
     }
 
+    private void saveKeySet() {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("data/keyset.obj");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            for (SecurityComponent s :
+                    map.keySet()) {
+                objectOutputStream.writeObject(s);
+            }
+            objectOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readKeySet() {
+        try {
+            FileInputStream fileInputStream = new FileInputStream("data/keyset.obj");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            while (objectInputStream.available() != 0) {
+               map.put((SecurityComponent) objectInputStream.readObject(), new ClientHandler());
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     class StartServer extends Thread {
 
-        private int port;
         SecurityComponent sensor;
+        private int port;
         private String location;
 
         StartServer(int port) {
             this.port = port;
-
+readKeySet();
         }
 
         @Override
@@ -114,6 +143,7 @@ public class PiServer extends Thread implements Serializable {
                         System.out.println("EN RECONNECT HAR SKETT SORTA: " + "FÅR DEN SIN GAMLA LOCATION: " + sensor.getLocation()); //BORDE INTE GETLOCATION VARA BASERA PÅ RAD 90??__??
                     }
                     System.out.println(map.size());
+                    saveKeySet();
 
 
                 }
@@ -128,6 +158,10 @@ public class PiServer extends Thread implements Serializable {
         private BufferedWriter bufferedWriter;
         private Socket socket;
         private SecurityComponent sensor;
+
+        ClientHandler() {
+
+        }
 
         ClientHandler(Socket socket, SecurityComponent securityComponent) throws IOException {
             this.socket = socket;
@@ -152,11 +186,10 @@ public class PiServer extends Thread implements Serializable {
                     boolean booleanState = state.equals("on");
 
 
-
                     sensor.setOpen(booleanState);
 
                     Message message = new Message("", sensor);
-                 //   System.out.println(message.getSecurityComponent().getClass().getSimpleName());
+                    //   System.out.println(message.getSecurityComponent().getClass().getSimpleName());
 
 
                     if (message.getSecurityComponent() instanceof MagneticSensor) {
@@ -187,7 +220,7 @@ public class PiServer extends Thread implements Serializable {
                             }
                         }
                     }
-                    if(message.getSecurityComponent() instanceof FireAlarm){
+                    if (message.getSecurityComponent() instanceof FireAlarm) {
                         globalServer.GlobalsendMessage(message);
                     }
 
@@ -232,10 +265,10 @@ public class PiServer extends Thread implements Serializable {
 
         public void GlobalsendMessage(Message msg) throws IOException {
             oos = new ObjectOutputStream(socket.getOutputStream());  //FUNGERADE INTE ATT LÄSA OBJEKTETS BOOLEAN OM VI INTE GJORDE NYA STREAMS VARJE GÅNG VI SKICKADE
-           oos.writeObject(msg);
+            oos.writeObject(msg);
             oos.flush();
 
-            System.out.println("sent message " + msg.getInfo() + "to GlobalServer: " +socket.toString());
+            System.out.println("sent message " + msg.getInfo() + "to GlobalServer: " + socket.toString());
         }
 
         @Override
@@ -270,8 +303,6 @@ public class PiServer extends Thread implements Serializable {
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-
-
 
 
             }

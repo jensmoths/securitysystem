@@ -18,6 +18,10 @@ public class Clients {
         return clients.get(name);
     }
 
+    public int getSize(){
+        return clients.size();
+    }
+
 
     /*public synchronized LinkedList<User> getOnlineList() {
         LinkedList<User> linkedList = new LinkedList<>();

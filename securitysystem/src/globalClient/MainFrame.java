@@ -1,8 +1,11 @@
 package globalClient;
 
+import model.SecurityComponent;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
     private GlobalClientGui globalClientGui;
@@ -10,14 +13,16 @@ public class MainFrame extends JFrame {
 
     public MainFrame(GlobalClientController globalClientController) {
         this.globalClientController = globalClientController;
+        globalClientGui = new GlobalClientGui(globalClientController);
         setupMainFrame();
     }
 
     public void setupMainFrame() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
+
             public void run() {
-                globalClientGui = new GlobalClientGui(globalClientController);
+
                 setSize(new Dimension(610, 650));
                 setContentPane(globalClientGui);
                 setVisible(true);
@@ -35,4 +40,8 @@ public class MainFrame extends JFrame {
     public void setTextArea(String text) {
         globalClientGui.setTextArea(text);
     }
-}
+    public void setTest(ArrayList<SecurityComponent> rey){
+             globalClientGui.setTestJlist(rey);
+       }
+    }
+//}

@@ -1,8 +1,11 @@
 package globalServer;
 
+import globalClient.GlobalClientGui;
 import model.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RequestHandler {
 
@@ -37,6 +40,15 @@ public class RequestHandler {
 
                     clients.get(name).getOos().writeObject("Rörelsedetektorn har upptäckt rörelse i byggnaden");
                 }
+            }
+            if(requestObject instanceof ArrayList){   //TODO ÄNDRAT HÄR
+                ArrayList<SecurityComponent> onlineMK = (ArrayList<SecurityComponent>) requestObject;
+                clients.get(name).getOos().writeObject(onlineMK);
+
+
+
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();

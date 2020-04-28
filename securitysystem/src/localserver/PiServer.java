@@ -1,6 +1,5 @@
 package localserver;
 
-import globalServer.GlobalServerController;
 import model.*;
 
 import javax.swing.*;
@@ -13,7 +12,7 @@ import java.util.HashMap;
 
 public class PiServer extends Thread implements Serializable {
 
-   // private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
+    // private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
     private HashMap<String, SecurityComponent> globalMap = new HashMap<>();
     private MicroClients map = new MicroClients();
 
@@ -28,10 +27,8 @@ public class PiServer extends Thread implements Serializable {
     PiServer() throws IOException, InterruptedException {
         new StartServer(Integer.parseInt(JOptionPane.showInputDialog(null, "Välj port"))).start();
 
-        // globalServer = new GlobalServer();
-        // new Thread(globalServer).start();
-
-
+        globalServer = new GlobalServer();
+        new Thread(globalServer).start();
 
 
     }
@@ -54,15 +51,15 @@ public class PiServer extends Thread implements Serializable {
             FileInputStream fileInputStream = new FileInputStream("data/keyset.dat");
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-             map = (MicroClients) objectInputStream.readObject();
+            map = (MicroClients) objectInputStream.readObject();
             objectInputStream.close();
         } catch (IOException | ClassNotFoundException ex) {
-           // ex.printStackTrace();
+            // ex.printStackTrace();
         }
     }
 
 
-  private class StartServer extends Thread {
+    private class StartServer extends Thread {
 
         private SecurityComponent sensor;
         private int port;
@@ -121,6 +118,7 @@ public class PiServer extends Thread implements Serializable {
 
                     }
                     allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
+                    globalServer.UpdateGlobal(allOnlineSensors);
 
 
                     System.out.println("IP :" + socket.getInetAddress() + " Sensortype: " + sensor.getClass().getSimpleName() + " Location: " + sensor.getLocation() + " SensorID: " + sensor.getId());
@@ -131,23 +129,20 @@ public class PiServer extends Thread implements Serializable {
                     } else {
                         String oldLocation = map.get(sensor).sensor.getLocation();
                         System.out.println(oldLocation);
-                        if(location.equals("default")) {
+                        if (location.equals("default")) {
                             sensor.setLocation(oldLocation);
                         }
 
-                            map.get(sensor).interrupt();
-                            ClientHandler ch = new ClientHandler(socket, sensor);
-                            map.replace(sensor, ch);
-
-
-
+                        map.get(sensor).interrupt();
+                        ClientHandler ch = new ClientHandler(socket, sensor);
+                        map.replace(sensor, ch);
 
 
                         System.out.println("EN RECONNECT HAR SKETT: " + "MK FÅR SIN GAMLA LOCATION: " + sensor.getLocation());
                     }
 
                     globalMap.put(sensor.getId(), sensor); //TODO NYTT
-                //    globalServer.UpdateGlobal(globalMap);
+                    //    globalServer.UpdateGlobal(globalMap);
                     System.out.println("MAPSIZE: " + map.size());
                     System.out.println("GLOBALMAPSIZE: " + globalMap.size());
 
@@ -162,14 +157,13 @@ public class PiServer extends Thread implements Serializable {
         }
     }
 
-   private class ClientHandler extends Thread implements Serializable {
+    private class ClientHandler extends Thread implements Serializable {
         private transient BufferedReader bufferedReader;
         private transient BufferedWriter bufferedWriter;
         private transient Socket socket;
         private SecurityComponent sensor;
         private long lastRead;
         private int HeartbeatIntervall = 5;
-
 
 
         ClientHandler(Socket socket, SecurityComponent securityComponent) throws IOException {
@@ -201,9 +195,6 @@ public class PiServer extends Thread implements Serializable {
 
                     sensor.setOpen(booleanState);
                     Message message = new Message("", sensor);
-
-
-
 
 
                     if (message.getSecurityComponent() instanceof MagneticSensor) {
@@ -252,27 +243,20 @@ public class PiServer extends Thread implements Serializable {
                 } catch (SocketTimeoutException e) {
                     if ((HeartbeatIntervall > 0) && ((System.currentTimeMillis() - lastRead) > HeartbeatIntervall)) {
                         e.printStackTrace();
-                        allOnlineSensors.remove(sensor);//TODO NYTT KOPPLA FRÅN SENSOR
                         globalMap.remove(sensor.getId());
                         System.out.println(sensor.getClass().getSimpleName() + " " + socket.getInetAddress() + " Har kopplats bort via HEARTHBEAT YEYEYEYE");
-                        //UPDATE ONLINE METOD. SKICKA INFO TILL GLOBAL SERVER ATT EN MK HAR DISCONNECTAT
-                        try {
-                            globalServer.UpdateGlobal(globalMap);
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
                         break;
                     }
-
-
                 } catch (IOException e) {
-
-
                     e.printStackTrace();
-
                     break;
-
                 }
+            }
+            allOnlineSensors.remove(sensor);//TODO NYTT KOPPLA FRÅN SENSOR
+            try {
+                globalServer.UpdateGlobal(allOnlineSensors);
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
 
@@ -286,7 +270,7 @@ public class PiServer extends Thread implements Serializable {
     }
 
 
-  private class GlobalServer implements Runnable {
+    private class GlobalServer implements Runnable {
         Socket socket;
         ObjectOutputStream oos;
         ObjectInputStream ois;
@@ -314,7 +298,7 @@ public class PiServer extends Thread implements Serializable {
 
         }
 
-        public void UpdateGlobal(HashMap msg) throws IOException { //TODO EJ TESTAD METOD
+        public void UpdateGlobal(ArrayList<SecurityComponent> msg) throws IOException { //TODO EJ TESTAD METOD
             oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(msg);
             oos.flush();

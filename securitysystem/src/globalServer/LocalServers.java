@@ -4,14 +4,14 @@ import java.util.HashMap;
 
 public class LocalServers {
 
-    private HashMap<String, GlobalServerController.ClientHandler> localServers = new HashMap<>();
+    private HashMap<String, GlobalServer.ClientHandler> localServers = new HashMap<>();
 
-    public synchronized void put(String name, GlobalServerController.ClientHandler handler) {
+    public synchronized void put(String name, GlobalServer.ClientHandler handler) {
         localServers.put(name, handler);
     }
 
 
-    public GlobalServerController.ClientHandler get(String name) {
+    public GlobalServer.ClientHandler get(String name) {
         return localServers.get(name);
     }
 

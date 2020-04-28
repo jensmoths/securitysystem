@@ -18,7 +18,7 @@ public class MainFrame extends JFrame {
             @Override
             public void run() {
                 globalClientGui = new GlobalClientGui(globalClientController);
-                setSize(new Dimension(610, 610));
+                setSize(new Dimension(610, 650));
                 setContentPane(globalClientGui);
                 setVisible(true);
                 setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

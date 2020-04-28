@@ -9,6 +9,7 @@
     <list default="true" id="f23d00dd-a4f0-4e41-a861-60ea4533051d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui$ButtonListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui$ButtonListener.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$ClientHandler.class" afterDir="false" />
@@ -19,6 +20,7 @@
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/FireAlarm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/FireAlarm.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/MagneticSensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/MagneticSensor.class" afterDir="false" />
+
       <change beforePath="$PROJECT_DIR$/src/localserver/PiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localserver/PiServer.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -78,7 +80,11 @@
       </list>
     </option>
   </component>
+
   <component name="RunManager" selected="Application.Main">
+
+  <component name="RunManager" selected="Application.GlobalClientController">
+
     <configuration name="GlobalClientController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="globalClient.GlobalClientController" />
       <module name="securitysystem" />
@@ -144,9 +150,13 @@
       <map>
         <entry key="MAIN">
           <value>
+
             <State>
               <option name="COLUMN_ORDER" />
             </State>
+
+            <State />
+
           </value>
         </entry>
       </map>

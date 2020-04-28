@@ -56,12 +56,13 @@ public class GlobalServerController {
         private Object requestObject;
         private String serverOrClient;
         private String name;
-        private Message message;
+        private RequestHandler requestHandler;
 
         public ClientHandler(Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
             this.socket = socket;
             this.oos = oos;
             this.ois = ois;
+            requestHandler = new RequestHandler();
         }
 
         @Override
@@ -79,16 +80,12 @@ public class GlobalServerController {
 
                 case "server":
                     localServers.put(name, this);
-                    System.out.println(name + " :" + localServers.get(name));
-
                     while (true) {
                         try {
-
                             ois = new ObjectInputStream(socket.getInputStream());
                             requestObject = ois.readObject();
                             System.out.println(requestObject.toString());
-
-                                handleServerRequest(requestObject);
+                            requestHandler.handleServerRequest(requestObject, clients, name);
 
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
@@ -113,10 +110,8 @@ public class GlobalServerController {
                         try {
                             requestObject = ois.readObject();
                             String requestString = requestObject.toString();
-                            System.out.println(socket.getInetAddress() + ": " + requestString);
                             ObjectOutputStream localServerOos = localServers.get(name).oos;
-                            localServerOos.writeObject(handleClientRequest(requestString));
-                            System.out.println(handleClientRequest(requestString).toString());
+                            localServerOos.writeObject(requestHandler.handleClientRequest(requestString));
 
                         } catch (IOException | ClassNotFoundException e) {
                             System.out.println(socket.getInetAddress() + " has disconnected");
@@ -134,64 +129,12 @@ public class GlobalServerController {
             }
         }
 
-        public void handleServerRequest (Object requestObject) {
-            try {
-                if (requestObject instanceof String) {
-                    clients.get(name).oos.writeObject(requestObject);
-                } else if (requestObject instanceof Message) {
-                    message = (Message) requestObject;
-                    SecurityComponent securityComponent = message.getSecurityComponent();
 
-                    if (securityComponent instanceof MagneticSensor) {
-                        System.out.println("You are in magnet sensor");
-                        System.out.println(securityComponent.isOpen());
-
-                        if (securityComponent.isOpen()) {
-                            clients.get(name).oos.writeObject("Magnetsensorn larmar");
-
-                        } else if (!securityComponent.isOpen()) {
-                            clients.get(name).oos.writeObject("Magnetsensorn är aktiv");
-                        }
-                    }
-                    if (securityComponent instanceof FireAlarm) {
-                        System.out.println("You are in Firealarm");
-                        //System.out.println(securityComponent.isOpen());
-                        clients.get(name).oos.writeObject("Brandlarmet har upptäckt rök i byggnaden");
-                    }
-                    if (securityComponent instanceof ProximitySensor) {
-                        System.out.println("You are in Proximity Sensor");
-                        //System.out.println(securityComponent.isOpen());
-
-                        clients.get(name).oos.writeObject("Rörelsedetektorn har upptäckt rörelse i byggnaden");
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        public ObjectOutputStream getOos() {
+            return oos;
         }
 
-        public Message handleClientRequest(String clientRequest) {
-            Message messageResponse = new Message();
-
-            switch (clientRequest) {
-                    case "on":
-                        //localServerOos.writeObject(new MagneticSensor());
-                        break;
-                    case "off":
-                        //localServerOos.writeObject(new );
-                        break;
-                    case "lock":
-                        messageResponse = new Message("", new DoorLock(false));
-                        break;
-                    case "unlock":
-                        messageResponse = new Message("", new DoorLock(true));
-                        break;
-                }
-
-            return messageResponse;
-        }
     }
-
 
     public static void main(String[] args) {
         GlobalServerController globalServerController = new GlobalServerController(8081);

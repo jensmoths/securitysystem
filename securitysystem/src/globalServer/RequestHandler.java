@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RequestHandler {
+    private ArrayList<SecurityComponent> onlineMK;
+
 
     public void handleServerRequest(Object requestObject, Clients clients, String name) {
         try {
@@ -42,13 +44,8 @@ public class RequestHandler {
                 }
             }
             if(requestObject instanceof ArrayList){   //TODO ÄNDRAT HÄR
-                ArrayList<SecurityComponent> onlineMK = (ArrayList<SecurityComponent>) requestObject;
+                onlineMK = (ArrayList<SecurityComponent>) requestObject;
                 clients.get(name).getOos().writeObject(onlineMK);
-
-
-
-
-
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,9 +1,12 @@
 package globalClient;
 
+import model.SecurityComponent;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class GlobalClientGui extends JPanel {
 
@@ -23,12 +26,34 @@ public class GlobalClientGui extends JPanel {
 
     private JScrollPane scrollPane;
 
+    private JList testJlist;
+    private DefaultListModel testListModel;
+
+
+
+
     public GlobalClientGui(GlobalClientController globalClientController) {
         this.globalClientController = globalClientController;
         draw();
+
+    }
+    public void setTestJlist(ArrayList<SecurityComponent> rey) {
+        testListModel.clear();
+
+        for (SecurityComponent s: rey
+             ) {
+            String hej =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            testListModel.addElement(hej);
+        }
+        testJlist.setModel(testListModel);
+       testJlist.repaint();
+
+
     }
 
+
     public void draw() {
+
         ButtonListener buttonListener = new ButtonListener();
         this.setPreferredSize(new Dimension(600, 600));
         this.setLayout(new BorderLayout());
@@ -66,8 +91,17 @@ public class GlobalClientGui extends JPanel {
         btnOFF.setPreferredSize(new Dimension(btnDimension));
         btnON.setPreferredSize(new Dimension(btnDimension));
 
-        leftPanelNorth.add(btnLock, BorderLayout.SOUTH);
-        leftPanelSouth.add(btnUnlock,BorderLayout.SOUTH);
+        leftPanelNorth.add(btnLock, BorderLayout.CENTER);
+        leftPanelNorth.add(btnUnlock,BorderLayout.SOUTH); //TODO ÄNDRAT UNLOCK TILL NORTH ISTÄLLET FÖR SOUTHPANEL
+
+       testJlist = new JList();
+       testListModel = new DefaultListModel();
+        leftPanelSouth.setBackground(Color.pink);
+        leftPanelSouth.add(testJlist);
+        leftPanelSouth.add(btnON, BorderLayout.SOUTH);
+        leftPanelSouth.add(btnOFF, BorderLayout.SOUTH);
+
+
 
         //leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         //leftPanelSouth.add(btnON, BorderLayout.CENTER);
@@ -96,9 +130,13 @@ public class GlobalClientGui extends JPanel {
 
 
             if (e.getSource() == btnON) {
+                testJlist.getSelectedIndex();
                 globalClientController.send("on");
+                leftPanelSouth.setBackground(Color.CYAN);
             } else if (e.getSource() == btnOFF) {
+                testJlist.getSelectedIndex();
                 globalClientController.send("off");
+                leftPanelSouth.setBackground(Color.YELLOW);
             }else if (e.getSource() == btnLock){
                 globalClientController.send("lock");
             }else if (e.getSource() == btnUnlock){

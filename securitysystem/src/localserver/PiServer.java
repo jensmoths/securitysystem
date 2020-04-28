@@ -4,6 +4,7 @@ import model.*;
 
 import javax.swing.*;
 import java.io.*;
+import java.net.PasswordAuthentication;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -157,7 +158,7 @@ public class PiServer extends Thread implements Serializable {
         }
     }
 
-    private class ClientHandler extends Thread implements Serializable {
+    class ClientHandler extends Thread implements Serializable {
         private transient BufferedReader bufferedReader;
         private transient BufferedWriter bufferedWriter;
         private transient Socket socket;
@@ -169,9 +170,8 @@ public class PiServer extends Thread implements Serializable {
         ClientHandler(Socket socket, SecurityComponent securityComponent) throws IOException {
             this.socket = socket;
             this.sensor = securityComponent;
-            socket.setTcpNoDelay(true);
-
-            socket.setSoTimeout(2000);
+            socket.setTcpNoDelay(true); //TODO HA DET HÄR ELLER?
+            socket.setSoTimeout(5000);
 
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -236,6 +236,26 @@ public class PiServer extends Thread implements Serializable {
 
 
                     }
+                    if(message.getSecurityComponent() instanceof FingerprintSensor){
+                        String userName = null;
+                        char[] password = new char[0];
+                        PasswordAuthentication login= new PasswordAuthentication(userName, password);
+
+                        if(message.getInfo().equals(password)){
+                            for(SecurityComponent s: map.keySet()){
+                                if(s instanceof MagneticSensor){
+                                    map.get(s).sendMessage('o');
+                                }
+                            }
+                        }else for(SecurityComponent s: map.keySet()){
+                            if(s instanceof MagneticSensor){
+                                map.get(s).sendMessage('c');
+                            }
+                        }
+
+                        globalServer.GlobalsendMessage(message);
+
+                    }
 
                     System.out.println("CH " + "IP: " + socket.getInetAddress() + " ID: " + sensor.getId() + " TYPE: " + sensor.getClass().getSimpleName() + " " + message.getSecurityComponent().isOpen());
 
@@ -270,10 +290,11 @@ public class PiServer extends Thread implements Serializable {
     }
 
 
-    private class GlobalServer implements Runnable {
-        Socket socket;
-        ObjectOutputStream oos;
-        ObjectInputStream ois;
+     class GlobalServer implements Runnable,Serializable {
+       private transient Socket socket;
+        private transient ObjectOutputStream oos;
+        private transient ObjectInputStream ois;
+        private String name ="Ammar";
 
         public void connect(String ip, int port) throws IOException {
             String clientType = "server";
@@ -282,8 +303,8 @@ public class PiServer extends Thread implements Serializable {
             oos = new ObjectOutputStream(socket.getOutputStream());
 
             oos.writeObject(clientType);
-            oos.writeObject("Ammar");
-            oos.writeObject(allOnlineSensors); //TODO NYTT KOPPLA FRÅN SENSOR
+            oos.writeObject(name);
+
 
             oos.flush();
         }
@@ -315,7 +336,7 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("109.228.172.110", 8081);
+                connect("localhost", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 e.printStackTrace();

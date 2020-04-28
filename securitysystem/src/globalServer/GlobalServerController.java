@@ -7,12 +7,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class GlobalServerController {
 
 
     private Clients clients;
     private LocalServers localServers;
+    private ArrayList<SecurityComponent> rey;
+
 
     public GlobalServerController(int port) {
         clients = new Clients();
@@ -58,6 +61,7 @@ public class GlobalServerController {
         private String name;
         private RequestHandler requestHandler;
 
+
         public ClientHandler(Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
             this.socket = socket;
             this.oos = oos;
@@ -85,8 +89,14 @@ public class GlobalServerController {
                             ois = new ObjectInputStream(socket.getInputStream());
                             requestObject = ois.readObject();
                             System.out.println(requestObject.toString());
-                            requestHandler.handleServerRequest(requestObject, clients, name);
-
+                               if(requestObject instanceof ArrayList){
+                                   rey = (ArrayList<SecurityComponent>) requestObject;
+                                   System.out.println("Sparade en rey");
+                               }
+                                    if(clients.getSize() > 0) {
+                                        System.out.println("Skickade till klient");
+                                        requestHandler.handleServerRequest(requestObject, clients, name);
+                                    }
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                             System.out.println(socket.getInetAddress() + " has disconnected");
@@ -105,7 +115,14 @@ public class GlobalServerController {
                 case "globalClient":
                     clients.put(name, this);
                     System.out.println(name + " :" + clients.get(name));
+                    try {
 
+                        clients.get(name).getOos().writeObject(rey);
+                        System.out.println("skickade en rey" + rey);
+                        clients.get(name).getOos().flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     while (true) {
                         try {
                             requestObject = ois.readObject();

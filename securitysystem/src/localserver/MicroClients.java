@@ -3,6 +3,7 @@ package localserver;
 import model.SecurityComponent;
 import model.Sensor;
 
+
 import java.io.Serializable;
 import java.util.HashMap;
 

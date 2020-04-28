@@ -1,5 +1,6 @@
 package localserver;
 
+import globalServer.GlobalServerController;
 import model.*;
 
 import javax.swing.*;
@@ -12,59 +13,37 @@ import java.util.HashMap;
 
 public class PiServer extends Thread implements Serializable {
 
-    private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
+   // private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
     private HashMap<String, SecurityComponent> globalMap = new HashMap<>();
+    private MicroClients map = new MicroClients();
 
-
-    ArrayList<SecurityComponent> firesensors = new ArrayList<SecurityComponent>();
-    ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
-    ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
-    ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
-    ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
-    GlobalServer globalServer;
-    private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
+    private ArrayList<SecurityComponent> firesensors = new ArrayList<SecurityComponent>();
+    private ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
+    private ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
+    private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
+    private ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
+    private GlobalServer globalServer;
 
 
     PiServer() throws IOException, InterruptedException {
         new StartServer(Integer.parseInt(JOptionPane.showInputDialog(null, "Välj port"))).start();
 
-       // globalServer = new GlobalServer();
-       // new Thread(globalServer).start();
-
-        globalServer = new GlobalServer();
-        new Thread(globalServer).start();
+        // globalServer = new GlobalServer();
+        // new Thread(globalServer).start();
 
 
-      /*
-        System.out.println(ConsoleColors.RED + "<('.'<) <('.'<) <('.'<)");
-        Thread.sleep(1500);
-        System.out.println(ConsoleColors.PURPLE + "<('.'<) <('.')> (>'.')>");
-        Thread.sleep(1500);
-        System.out.println(ConsoleColors.GREEN_BOLD_BRIGHT + "(>'.')> (>'.')> (>'.')>");
-        Thread.sleep(1500);
-        System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "(>'.')>");
-        Thread.sleep(1500);
-        System.out.println(ConsoleColors.YELLOW_BOLD_BRIGHT + "<('.')>");
-        Thread.sleep(1500);
-        System.out.println(ConsoleColors.GREEN + "<('.'<)");
-        //
-        //
-        Thread.sleep(1500);
-        System.out.println(ConsoleColors.BLUE_BRIGHT + "LETS GO:");
-*/
 
 
     }
 
     private void saveKeySet() {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("data/keyset.obj");
+            FileOutputStream fileOutputStream = new FileOutputStream("data/keyset.dat");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            for (SecurityComponent s :
-                    map.keySet()) {
-                objectOutputStream.writeObject(s);
-            }
+
+            objectOutputStream.writeObject(map);
             objectOutputStream.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,27 +51,27 @@ public class PiServer extends Thread implements Serializable {
 
     private void readKeySet() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("data/keyset.obj");
+            FileInputStream fileInputStream = new FileInputStream("data/keyset.dat");
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-            while (objectInputStream.available() != 0) {
-               map.put((SecurityComponent) objectInputStream.readObject(), new ClientHandler());
-            }
+             map = (MicroClients) objectInputStream.readObject();
+            objectInputStream.close();
         } catch (IOException | ClassNotFoundException ex) {
-            ex.printStackTrace();
+           // ex.printStackTrace();
         }
     }
 
 
-    class StartServer extends Thread {
+  private class StartServer extends Thread {
 
-        SecurityComponent sensor;
+        private SecurityComponent sensor;
         private int port;
         private String location;
 
         StartServer(int port) {
             this.port = port;
-readKeySet();
+            readKeySet();
+            System.out.println(map.size() + " READ SIZE PÅ MAPFILEN PÅ HÅRDDISK");
         }
 
         @Override
@@ -106,8 +85,7 @@ readKeySet();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                     String who = bufferedReader.readLine();
-                    //   bufferedWriter.write(ConsoleColors.RED+"VÄLKOMNMEN TILL SERVERN");
-                    //  bufferedWriter.flush();
+
                     System.out.println("CON " + "ID: " + who);
 
                     String[] split = who.split("\\|");
@@ -147,27 +125,34 @@ readKeySet();
 
                     System.out.println("IP :" + socket.getInetAddress() + " Sensortype: " + sensor.getClass().getSimpleName() + " Location: " + sensor.getLocation() + " SensorID: " + sensor.getId());
 
-                    if (!map.containsKey(sensor)) {
+                    if (!map.containsSensor(sensor)) {
                         ClientHandler ch = new ClientHandler(socket, sensor);
-                        map.putIfAbsent(sensor, ch);
+                        map.put(sensor, ch);
                     } else {
                         String oldLocation = map.get(sensor).sensor.getLocation();
                         System.out.println(oldLocation);
-                        sensor.setLocation(oldLocation);                                                                        // RAD 90
-                        map.get(sensor).interrupt();
-                        ClientHandler ch = new ClientHandler(socket, sensor);
-                        map.replace(sensor, ch);
-                        System.out.println("EN RECONNECT HAR SKETT SORTA: " + "FÅR DEN SIN GAMLA LOCATION: " + sensor.getLocation()); //BORDE INTE GETLOCATION VARA BASERA PÅ RAD 90??__??
+                        if(location.equals("default")) {
+                            sensor.setLocation(oldLocation);
+                        }
+
+                            map.get(sensor).interrupt();
+                            ClientHandler ch = new ClientHandler(socket, sensor);
+                            map.replace(sensor, ch);
+
+
+
+
+
+                        System.out.println("EN RECONNECT HAR SKETT: " + "MK FÅR SIN GAMLA LOCATION: " + sensor.getLocation());
                     }
 
                     globalMap.put(sensor.getId(), sensor); //TODO NYTT
-                    globalServer.UpdateGlobal(globalMap);
-                    System.out.println("MAPSIZE: " +map.size());
-                    System.out.println("GLOBALMAPSIZE: "+ globalMap.size());
+                //    globalServer.UpdateGlobal(globalMap);
+                    System.out.println("MAPSIZE: " + map.size());
+                    System.out.println("GLOBALMAPSIZE: " + globalMap.size());
 
-                    System.out.println(map.size());
+
                     saveKeySet();
-
 
 
                 }
@@ -177,17 +162,15 @@ readKeySet();
         }
     }
 
-    class ClientHandler extends Thread {
-        private BufferedReader bufferedReader;
-        private BufferedWriter bufferedWriter;
-        private Socket socket;
+   private class ClientHandler extends Thread implements Serializable {
+        private transient BufferedReader bufferedReader;
+        private transient BufferedWriter bufferedWriter;
+        private transient Socket socket;
         private SecurityComponent sensor;
         private long lastRead;
         private int HeartbeatIntervall = 5;
 
-        ClientHandler() {
 
-        }
 
         ClientHandler(Socket socket, SecurityComponent securityComponent) throws IOException {
             this.socket = socket;
@@ -209,21 +192,17 @@ readKeySet();
                     String stringMessage = bufferedReader.readLine();
                     if (stringMessage == null) continue;
                     lastRead = System.currentTimeMillis();
-                    if (stringMessage == "hearthbeat") continue;
+                    if (stringMessage == "heartbeat") continue;
 
                     String[] split = stringMessage.split("\\|");
                     String state = split[0]; //, location = split[1], type = split[2];
                     boolean booleanState = state.equals("on");
 
 
-
-
-
                     sensor.setOpen(booleanState);
                     Message message = new Message("", sensor);
 
 
-                    //   System.out.println(message.getSecurityComponent().getClass().getSimpleName());
 
 
 
@@ -275,8 +254,8 @@ readKeySet();
                         e.printStackTrace();
                         allOnlineSensors.remove(sensor);//TODO NYTT KOPPLA FRÅN SENSOR
                         globalMap.remove(sensor.getId());
-                        System.out.println(sensor.getClass().getSimpleName()+" "+ socket.getInetAddress()+ " Har kopplats bort via HEARTHBEAT YEYEYEYE");
-                       //UPDATE ONLINE METOD. SKICKA INFO TILL GLOBAL SERVER ATT EN MK HAR DISCONNECTAT
+                        System.out.println(sensor.getClass().getSimpleName() + " " + socket.getInetAddress() + " Har kopplats bort via HEARTHBEAT YEYEYEYE");
+                        //UPDATE ONLINE METOD. SKICKA INFO TILL GLOBAL SERVER ATT EN MK HAR DISCONNECTAT
                         try {
                             globalServer.UpdateGlobal(globalMap);
                         } catch (IOException ex) {
@@ -296,6 +275,7 @@ readKeySet();
                 }
             }
         }
+
         public void sendMessage(char msg) throws IOException {
             bufferedWriter.write(msg);
             bufferedWriter.flush();
@@ -306,7 +286,7 @@ readKeySet();
     }
 
 
-    class GlobalServer implements Runnable {
+  private class GlobalServer implements Runnable {
         Socket socket;
         ObjectOutputStream oos;
         ObjectInputStream ois;
@@ -333,7 +313,8 @@ readKeySet();
             System.out.println("sent message " + msg.getInfo() + "to GlobalServer: " + socket.toString());
 
         }
-        public void UpdateGlobal (HashMap msg) throws IOException { //TODO EJ TESTAD METOD
+
+        public void UpdateGlobal(HashMap msg) throws IOException { //TODO EJ TESTAD METOD
             oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(msg);
             oos.flush();
@@ -342,7 +323,7 @@ readKeySet();
 
         public void ShutdownSensor(Message msg) throws IOException {  //TODO EJ TESTAD METOD
 
-          //  map.get(msg.getSecurityComponent()).socket.close();
+            //  map.get(msg.getSecurityComponent()).socket.close();
             map.get(msg.getSecurityComponent()).sendMessage('k');
         }
 

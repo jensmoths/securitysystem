@@ -7,10 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23d00dd-a4f0-4e41-a861-60ea4533051d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/localserver/MicroClients.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui$ButtonListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui$ButtonListener.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$ClientHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController.class" afterDir="false" />
@@ -18,9 +17,6 @@
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$GlobalServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$GlobalServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$StartServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$StartServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/FireAlarm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/FireAlarm.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/MagneticSensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/MagneticSensor.class" afterDir="false" />
-
       <change beforePath="$PROJECT_DIR$/src/localserver/PiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localserver/PiServer.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,10 +48,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
   </component>
@@ -80,11 +74,7 @@
       </list>
     </option>
   </component>
-
   <component name="RunManager" selected="Application.Main">
-
-  <component name="RunManager" selected="Application.GlobalClientController">
-
     <configuration name="GlobalClientController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="globalClient.GlobalClientController" />
       <module name="securitysystem" />
@@ -136,31 +126,11 @@
     <configuration />
   </component>
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="f23d00dd-a4f0-4e41-a861-60ea4533051d" name="Default Changelist" comment="" />
-      <created>1587556392915</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1587556392915</updated>
-    </task>
     <servers />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
-
-            <State />
-
-          </value>
-        </entry>
-      </map>
-    </option>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Nya saker.&#10;ny hashmap, metoder mellan global lokal" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nya saker.&#10;ny hashmap, metoder mellan global lokal" />
   </component>
   <component name="WindowStateProjectService">
     <state x="2557" y="1077" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1587556582232">

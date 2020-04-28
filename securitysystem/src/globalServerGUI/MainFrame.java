@@ -5,7 +5,8 @@ import java.awt.*;
 
 public class MainFrame {
     private JFrame frame = new JFrame();
-    private RegisterPanel registerPanel = new RegisterPanel();
+    private MainPanel mainPanel = new MainPanel();
+
 
     public MainFrame () {
         SwingUtilities.invokeLater(new Runnable() {
@@ -13,17 +14,17 @@ public class MainFrame {
             public void run() {
                 Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                 frame.setLocation(dim.width/3-frame.getSize().width/3, dim.height/3-frame.getSize().height/3);
-                frame.setSize(new Dimension(350, 150));
-                frame.setContentPane(registerPanel);
+                frame.setSize(new Dimension(820,520));
+                frame.setContentPane(mainPanel);
                 frame.setVisible(true);
                 frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                frame.setTitle("Registration");
+                frame.setTitle("Server");
             }
         });
     }
 
     public RegisterPanel getRegisterPanel() {
-        return registerPanel;
+        return mainPanel.getRegisterPanel();
     }
 
     public static void main(String[] args) {

@@ -12,7 +12,7 @@ public class GlobalServer {
     private Clients clients;
     private LocalServers localServers;
 
-    private HashMap<User, Home> registeredHomes = new HashMap<>();
+    //private HashMap<User, Home> registeredHomes = new HashMap<>();
 
     public GlobalServer(int port, Clients clients, LocalServers localServers) {
         this.clients = clients;

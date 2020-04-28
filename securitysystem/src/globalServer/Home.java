@@ -3,11 +3,13 @@ package globalServer;
 import java.util.ArrayList;
 
 public class Home {
+    String userName;
     GlobalServer.ClientHandler localServer;
-    ArrayList<GlobalServer.ClientHandler> globalClients = new ArrayList<>();
+    ArrayList<GlobalServer.ClientHandler> globalClients;
 
-    public Home() {
-
+    public Home(String userName, GlobalServer.ClientHandler localServer) {
+        globalClients = new ArrayList<>();
     }
+
 
 }

@@ -1,9 +1,5 @@
 package globalServer;
 
-import globalServerGUI.MainFrame;
-import globalServerGUI.RegisterPanel;
-import localserver.Main;
-
 public class User {
     private String firstName, surName, street, zipCode, city, country, userName, password;
 
@@ -104,9 +100,9 @@ public class User {
 
     public static void main(String[] args) {
         User malek = new User();
-        malek.setFirstName("Malek");
-        malek.setSurName("Abdul Sater");
-        malek.setStreet("Sörbäcksgatan 4 lgh 1402");
+        malek.setFirstName("Ammar");
+        malek.setSurName("Darwesh");
+        malek.setStreet("Fläderbärsgatan 2");
         System.out.println(malek.generateLogInDetails());
     }
 }

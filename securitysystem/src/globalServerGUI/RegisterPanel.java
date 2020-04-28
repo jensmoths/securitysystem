@@ -32,9 +32,16 @@ public class RegisterPanel extends JPanel {
         lblFirstName = new JLabel("First name:");
         lblSurName = new JLabel("Surname:");
         lblZipCode = new JLabel("Zip code:");
-
-
         draw();
+
+        JFrame frame = new JFrame();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width/3-frame.getSize().width/3, dim.height/3-frame.getSize().height/3);
+        frame.setSize(new Dimension(350, 150));
+        frame.setContentPane(this);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setTitle("Registration");
     }
 
     public void draw() {

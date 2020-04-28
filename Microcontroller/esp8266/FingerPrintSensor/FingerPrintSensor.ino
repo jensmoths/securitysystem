@@ -1,6 +1,9 @@
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 #include <Adafruit_Fingerprint.h>
 #include <SoftwareSerial.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
 
 //needed libraries for WifiManager
 #include <DNSServer.h>
@@ -8,9 +11,11 @@
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
 //SoftSerial use pins D6 (TX) and D5 (RX).
-SoftwareSerial swSer(14, 12, false, 128);
+SoftwareSerial swSer(14, 12);
 
-//String locationString = "location";
+//0x31
+#define OLED_RESET 0
+Adafruit_SSD1306 display(OLED_RESET);
 
 const String IP = "83.254.129.68";
 const int PORT = 40000;
@@ -37,38 +42,7 @@ String setupWifiManager() {
   return location.getValue();
 }
 
-void connectToServer(String location) {
-  while (true) {
-    client.connect(IP, PORT);
-    client.print(ESP.getChipId());
-    client.print("|");
-    client.print(TYPE);
-    client.print("|");
-    client.print(location);
-    client.println();
-    if (client.connected()) break;
-    delay(10000);
-  }
-}
-
-void reconnectToServer() {
-  while (true) {
-    client.connect(IP, PORT);
-    client.print(ESP.getChipId());
-    client.print("|");
-    client.println(TYPE);
-
-    if (client.connected()) break;
-    delay(10000);
-  }
-}
-
-
-
-
-void setup() {
-  Serial.begin(115200);
-
+void setupFingerPrint(){
   // set the data rate for the sensor serial port
   finger.begin(57600);
 
@@ -83,6 +57,62 @@ void setup() {
   finger.getTemplateCount();
   Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
   Serial.println("Waiting for valid finger...");
+}
+
+void setupDisplay(){
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.setTextSize(1);
+  display.setCursor(0, 0);
+  display.setTextColor(WHITE);
+  display.clearDisplay();
+  display.display();
+}
+
+
+//add animation
+void connectToServer(String location) {
+  display.println("connecting");
+  display.display();
+  while (true) {
+    client.connect(IP, PORT);
+    client.print(ESP.getChipId());
+    client.print("|");
+    client.print(TYPE);
+    client.print("|");
+    client.print(location);
+    client.println();
+    if (client.connected()) break;
+    delay(10000);
+  }
+  display.println("connected");
+  display.display();
+}
+
+void reconnectToServer() {
+  display.println("reconnecting");
+  display.display();
+  while (true) {
+    client.connect(IP, PORT);
+    client.print(ESP.getChipId());
+    client.print("|");
+    client.println(TYPE);
+
+    if (client.connected()) break;
+    delay(10000);
+  }
+  display.println("connected to server");
+  display.display();
+}
+
+
+
+
+void setup() {
+  setupDisplay();
+
+  Serial.begin(115200);
+
+  //setupFingerPrint();
 
   //method for easy connection to a wifi
   String location = setupWifiManager();
@@ -96,18 +126,19 @@ void loop() {
       char message = client.read();
       Serial.println(message);
       if (message == 'a') {
-        while (!getFingerprintEnroll());
+        while (!getFingerprintEnroll(4));
       } else if (message == 'e') {
         finger.emptyDatabase();
         Serial.println("Database cleared");
       } else if (message == 'd') {
+        int id = client.parseInt();
         deleteFingerprint(id);
       }
     }
   } else reconnectToServer();
 }
 
-uint8_t getFingerprintEnroll() {
+uint8_t getFingerprintEnroll(int id) {
 
   int p = -1;
   Serial.print("Waiting for valid finger to enroll as #"); Serial.println(id);

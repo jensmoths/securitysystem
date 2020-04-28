@@ -1,5 +1,7 @@
 package globalServer;
 
+import globalServerGUI.MainFrame;
+
 import java.util.HashMap;
 
 public class GlobalServerController {

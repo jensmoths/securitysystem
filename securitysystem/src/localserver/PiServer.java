@@ -301,17 +301,18 @@ public class PiServer extends Thread implements Serializable {
        private transient Socket socket;
         private transient ObjectOutputStream oos;
         private transient ObjectInputStream ois;
-        private String name ="mmmmmmm";
 
-        public void connect(String ip, int port) throws IOException {
-            String clientType = "server";
+         public void connect(String ip, int port) throws IOException {
             socket = new Socket(ip, port);
-            ois = new ObjectInputStream(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
+             ois = new ObjectInputStream(socket.getInputStream());
+             oos = new ObjectOutputStream(socket.getOutputStream());
 
-            oos.writeObject(clientType);
-            oos.writeObject(name);
-            oos.writeObject("ged82gii");
+             String clientType = "server";
+             oos.writeObject(clientType);
+             String name = "admin";
+             oos.writeObject(name);
+             String password = "password";
+             oos.writeObject(password);
 
 
             oos.flush();
@@ -344,7 +345,7 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("109.228.172.110", 47000);
+                connect("109.228.172.110", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 e.printStackTrace();

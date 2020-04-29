@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class VirtualNumPad extends JPanel implements ActionListener {
+public class MainFrame extends JPanel implements ActionListener {
     private JButton btnNum0, btnNum1, btnNum2, btnNum3, btnNum4, btnNum5, btnNum6, btnNum7,
             btnNum8, btnNum9, btnClear, btnOK;
     JPanel tfPanel;
@@ -16,21 +16,36 @@ public class VirtualNumPad extends JPanel implements ActionListener {
     private String systemPinCode = "1234";
     private Color numberPadColor = new Color(74, 77, 82);
     private ChangeCode cc;
-    private Meny meny;
+    Meny meny;
+    Controller controller;
+    JFrame frame;
 
 
     /*
     Instantiates the global GUI (the virtual numberpad) and hardcodes a value as the correct pincode.
     Also sets up all the necessary graphical components, using the draw() method.
      */
-    public VirtualNumPad() {
+    public MainFrame(Controller controller) {
+        this.controller = controller;
+        frame = new JFrame();
+        //frame.setSize(new Dimension(320, 420));
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
+        frame.setContentPane(this);
+        frame.setTitle("Numpad");
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+
         cc = new ChangeCode(this);
         meny = new Meny(this, cc);
         cc.setVisible(false);
         meny.setVisible(false);
+        meny.setBackground(new Color(83,86,91));
 
         draw();
     }
+
     /*
     instantiates all the needed graphical and non-graphical components needed for the virtual numberpad.
      */
@@ -181,22 +196,23 @@ public class VirtualNumPad extends JPanel implements ActionListener {
         JButton button = (JButton) e.getSource();
         String buttonNumber = button.getText();
 
-        if (pinCode.length() < 4  && !buttonNumber.equals("OK") && !buttonNumber.equals("CLR")) {
-            pinCode+=buttonNumber;
-        }else if (buttonNumber.equals("CLR")){
+        if (pinCode.length() < 4 && !buttonNumber.equals("OK") && !buttonNumber.equals("CLR")) {
+            pinCode += buttonNumber;
+        } else if (buttonNumber.equals("CLR")) {
             pinCode = "";
-        }else if (buttonNumber.equals("OK") && pinCode.length() == 4 ){
+        } else if (buttonNumber.equals("OK") && pinCode.length() == 4) {
             System.out.println(systemPinCode);
             if (pinCode.equals(systemPinCode)) {
-               meny.setVisible(true);
+                meny.setVisible(true);
+                frame.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Please type again!");
             }
             pinCode = "";
             // TODO: 2020-04-14 Lägg till kod som berättar vad som händer med OK
-        } else if (buttonNumber.equals("OK") && pinCode.length()<4){
+        } else if (buttonNumber.equals("OK") && pinCode.length() < 4) {
             JOptionPane.showMessageDialog(null, "Invalid: Enter a 4 digit number");
-        } else if (pinCode.length()==4 ){
+        } else if (pinCode.length() == 4) {
             JOptionPane.showMessageDialog(null, "Invalid: Maximum 4 digits");
         }
         tfNumber.setText(pinCode);
@@ -218,21 +234,5 @@ public class VirtualNumPad extends JPanel implements ActionListener {
         return systemPinCode;
     }
 
-    public static void main(String[] args) {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame();
-                //frame.setSize(new Dimension(320, 420));
-                frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-                frame.setUndecorated(true);
-                frame.setContentPane(new VirtualNumPad());
-                frame.setTitle("Numpad");
-                frame.setVisible(true);
-                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-            }
-        });
-    }
 }

@@ -15,6 +15,12 @@ const int led = 13;
 int ledState = LOW;
 unsigned long preMillis = 0;
 unsigned long ms;
+unsigned long beatMs;
+unsigned long preBeat = 0;
+unsigned long connectMs;
+unsigned long preConnect = 0;
+unsigned long reconnectMs;
+unsigned long preReconnect = 0;
 
 WiFiClient client;
 
@@ -41,7 +47,7 @@ String setupWifiManager() {
 }
 void ledBlink() {
   ms = millis();
-  if ((ms - preMillis) >= 1000 ) {
+  if ((ms - preMillis) >= 500 ) {
     preMillis = ms;
     if (ledState == LOW) {
       ledState = HIGH;
@@ -50,20 +56,37 @@ void ledBlink() {
     } digitalWrite(led, ledState);
   }
 }
+void heartBeat() {
+  beatMs = millis();
+  if ((beatMs - preBeat) >= 1000 ) {
+    preBeat = beatMs;
+    client.print("heartbeat");
+    Serial.println("heartbeat");
+  }
+}
+
+//unsigned long connectMs;
+//unsigned long preConnect = 0;
+//unsigned long reconnectMs;
+//unsigned long preReconnect = 0;
+
 void connectToServer(String location) {
   while (true) {
     ledBlink();
-    Serial.println("connecting to server");
-    client.setTimeout(1000);
-    client.connect(IP, PORT);
-    client.print(ESP.getChipId());
-    client.print("|");
-    client.print(TYPE);
-    client.print("|");
-    client.print(location);
-    client.println();
+    connectMs = millis();
+    if ((connectMs - preConnect) >= 5000 ) {
+      preConnect = connectMs;
+      Serial.println("connecting to server");
+      client.connect(IP, PORT);
+      client.print(ESP.getChipId());
+      client.print("|");
+      client.print(TYPE);
+      client.print("|");
+      client.print(location);
+      client.println();
+    }
+    yield();
     if (client.connected()) break;
-    //delay(1000);
   }
   Serial.println("connected to server");
 }
@@ -71,12 +94,16 @@ void connectToServer(String location) {
 void reconnectToServer() {
   while (true) {
     ledBlink();
-    Serial.println("reconnecting to server");
-    client.connect(IP, PORT);
-    client.print(ESP.getChipId());
-    client.print("|");
-    client.println(TYPE);
-
+    reconnectMs = millis();
+    if ((reconnectMs - preReconnect) >= 5000) {
+      preReconnect = reconnectMs;
+      Serial.println("reconnecting to server");
+      client.connect(IP, PORT);
+      client.print(ESP.getChipId());
+      client.print("|");
+      client.println(TYPE);
+    }
+    yield();
     if (client.connected()) break;
     //delay(5000);
   }
@@ -84,25 +111,25 @@ void reconnectToServer() {
 }
 
 
-
-
 void setup() {
 
   //start serial for debugging
   Serial.begin(115200);
+  client.setTimeout(250);
   pinMode(larm, INPUT);
   pinMode(led, OUTPUT);
 
   //method for easy connection to a wifi
   String location = setupWifiManager();
 
-
   connectToServer(location);
-  digitalWrite(led, HIGH);
+
 }
 
 void loop() {
   if (client.connected()) {
+    heartBeat();
+    digitalWrite(led, HIGH);
     larmSignal = digitalRead(larm);
     if (larmSignal == HIGH) {
       client.println("Fire");

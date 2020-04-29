@@ -1,6 +1,7 @@
 package localClient;
 
 
+import model.SecurityComponent;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -8,8 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Meny extends JFrame {
+
 
     JButton btnOpenDoor = new JButton("Lås upp");
     JButton btnCloseDoor = new JButton("Lås");
@@ -18,12 +21,13 @@ public class Meny extends JFrame {
 
     JList tfonlineMK = new JList();
     JList tfofflineMK = new JList();
-    private VirtualNumPad virtualNumPad;
+    DefaultListModel defaultListModel = new DefaultListModel();
+    private MainFrame mainFrame;
     private ChangeCode changeCode;
 
 
-    public Meny (VirtualNumPad virtualNumPad, ChangeCode changeCode){
-        this.virtualNumPad = virtualNumPad;
+    public Meny (MainFrame mainFrame, ChangeCode changeCode){
+        this.mainFrame = mainFrame;
         this.changeCode = changeCode;
 
         this.setLayout(new MigLayout());
@@ -64,6 +68,21 @@ public class Meny extends JFrame {
 
     }
 
+    public void updateStatusMK(ArrayList<SecurityComponent> sensors) {
+        defaultListModel.clear();
+
+        for (SecurityComponent s: sensors
+        ) {
+            String onlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            defaultListModel.addElement(onlineMK);
+        }
+        tfonlineMK.setModel(defaultListModel);
+        tfonlineMK.repaint();
+
+
+    }
+
+
 
     private class ButtonListener implements ActionListener{
 
@@ -71,22 +90,23 @@ public class Meny extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == btnOpenDoor){
                 System.out.println("Dörr öppen");
+                mainFrame.controller.setDoorOpen(true);
             }
             if (e.getSource() == btnCloseDoor){
                 System.out.println("Dörr stängd");
+                mainFrame.controller.setDoorOpen(false);
             }
             if(e.getSource() == btnAlarmOn){
                 System.out.println("Larmet är på");
+                mainFrame.controller.setAlarmOn(true);
             }
             if (e.getSource() == btnChangeCode){
+                changeCode.setVisible(true);
                 //JFrame ChangeCode = new JFrame();
                 //ChangeCode.setSize(new Dimension(320, 420));
-                changeCode.setVisible(true);
                 //ChangeCode.setTitle("Ändra kod");
                 //ChangeCode.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             }
-
         }
     }
-
 }

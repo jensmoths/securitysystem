@@ -1,142 +1,49 @@
 package globalServer;
 
-import model.*;
+import globalServerGUI.MainFrame;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+public class GlobalServerController implements Observer {
+    private GlobalServer globalServer;
+    private HashMap<String, Home> homes;
+    private MainFrame mainFrame;
+    private UserRegister userRegister;
 
-public class GlobalServerController {
+    public GlobalServerController() {
 
-
-    private Clients clients;
-    private LocalServers localServers;
-
-    public GlobalServerController(int port) {
-        clients = new Clients();
-        localServers = new LocalServers();
-        new Connection(port).start();
-
+        userRegister = new UserRegister();
+        this.userRegister.addObserver(this);
+        homes = new HashMap<>();
+        mainFrame = new MainFrame(this);
+        globalServer = new GlobalServer(8081, homes);
     }
 
-    private class Connection extends Thread {
-
-        private int port;
-
-        public Connection(int port) {
-            this.port = port;
-        }
-
-        @Override
-        public void run() {
-
-            try (ServerSocket serverSocket = new ServerSocket(port)) {
-
-                while (true) {
-                    Socket socket = serverSocket.accept();
-                    System.out.println(socket.getInetAddress() + " has connected");
-                    ClientHandler clientHandler = new ClientHandler(socket, new ObjectOutputStream(socket.getOutputStream()),
-                            new ObjectInputStream(socket.getInputStream()));
-                    clientHandler.start();
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void addHome(String userName, Home home) {
+        homes.put(userName, home);
     }
 
-    public class ClientHandler extends Thread {
+    public void deleteHome(String userName) {
+        homes.remove(userName);
+    }
 
-        private Socket socket;
-        private ObjectInputStream ois;
-        private ObjectOutputStream oos;
-        private Object requestObject;
-        private String serverOrClient;
-        private String name;
-        private RequestHandler requestHandler;
+    public UserRegister getUserRegister(){
+        return userRegister;
+    }
 
-        public ClientHandler(Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
-            this.socket = socket;
-            this.oos = oos;
-            this.ois = ois;
-            requestHandler = new RequestHandler();
-        }
-
-        @Override
-        public void run() {
-            try {
-                serverOrClient = (String) ois.readObject();
-                name = (String) ois.readObject();
-                System.out.println(serverOrClient);
-
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            switch (serverOrClient) {
-
-                case "server":
-                    localServers.put(name, this);
-                    while (true) {
-                        try {
-                            ois = new ObjectInputStream(socket.getInputStream());
-                            requestObject = ois.readObject();
-                            System.out.println(requestObject.toString());
-                            requestHandler.handleServerRequest(requestObject, clients, name);
-
-                        } catch (IOException | ClassNotFoundException e) {
-                            e.printStackTrace();
-                            System.out.println(socket.getInetAddress() + " has disconnected");
-                            try {
-                                if (socket != null) {
-                                    socket.close();
-                                }
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
-                            break;
-                        }
-                    }
-                    break;
-
-                case "globalClient":
-                    clients.put(name, this);
-                    System.out.println(name + " :" + clients.get(name));
-
-                    while (true) {
-                        try {
-                            requestObject = ois.readObject();
-                            String requestString = requestObject.toString();
-                            ObjectOutputStream localServerOos = localServers.get(name).oos;
-                            localServerOos.writeObject(requestHandler.handleClientRequest(requestString));
-
-                        } catch (IOException | ClassNotFoundException e) {
-                            System.out.println(socket.getInetAddress() + " has disconnected");
-                            try {
-                                if (socket != null) {
-                                    socket.close();
-                                }
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
-                            break;
-                        }
-                    }
-                    break;
-            }
-        }
+    public void setInfo(String[][] strings){
+        mainFrame.getMainPanel().setTableInfo(strings);
+    }
 
 
-        public ObjectOutputStream getOos() {
-            return oos;
-        }
+    @Override
+    public void update(Observable observable, Object o) {
+        setInfo((String[][]) o);
 
     }
 
     public static void main(String[] args) {
-        GlobalServerController globalServerController = new GlobalServerController(8081);
+        new GlobalServerController();
     }
 }

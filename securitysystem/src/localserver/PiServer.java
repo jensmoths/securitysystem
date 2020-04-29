@@ -354,7 +354,7 @@ public class PiServer extends Thread implements Serializable {
                 e.printStackTrace();
             }
 
-            while (true) {
+            while (socket.isConnected()) {
 
                 try {
                     Object obj = ois.readObject();
@@ -383,9 +383,7 @@ public class PiServer extends Thread implements Serializable {
                     if(obj instanceof String){
                         System.out.println(obj);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }

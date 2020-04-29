@@ -79,14 +79,20 @@ public class RegisterPanel extends JPanel {
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            // TODO: 29-Apr-20 Avkommentera alla kommentaren nedan för slutversion
+            /*
             if ((tfFirstName.getText().isEmpty() | tfFirstName.getText().length() < 2)
                     | (tfSurName.getText().isEmpty() | tfSurName.getText().length() < 2)
                     | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3)) {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
-            } else {
+            } else {*/
+                /*
                 User user = new User(tfFirstName.getText(), tfSurName.getText(),
-                                     tfStreet.getText(), tfZipCode.getText(), tfCity.getText());
-                user.generateLogInDetails();
+                                     tfStreet.getText(), tfZipCode.getText(), tfCity.getText());*/
+                User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö");
+                //user.generateLogInDetails();
+                user.setUserName("admin");
+                user.setPassword("password");
                 globalServerController.getUserRegister().addUser(user);
                 globalServerController.addHome(user.getUserName(), new Home(user));
                 System.out.println("created and added home");
@@ -96,7 +102,7 @@ public class RegisterPanel extends JPanel {
                         RegisterPanel.this.frame.dispose();
                     }
                 });
-            }
+            /*}*/
         }
     }
 }

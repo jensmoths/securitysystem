@@ -11,7 +11,6 @@ public class UserRegister extends Observable {
 
     public void addUser(User user){
         this.users.add(user);
-        System.out.println(Arrays.deepToString(user.getUserInfo()));
         getUserInformation();
     }
 
@@ -35,7 +34,6 @@ public class UserRegister extends Observable {
                 userString[i][j] = users.get(i).getUserInfo()[j];
             }
         }
-        System.out.println("NERREE" + Arrays.deepToString(userString));
         setChanged();
         notifyObservers(userString);
     }

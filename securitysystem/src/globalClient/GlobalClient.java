@@ -1,4 +1,5 @@
 package globalClient;
+import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,15 +12,18 @@ public class GlobalClient {
     private int port;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
-    private MainFrame mainFrame;
 
-    public GlobalClient(String ip, int port) {
+    private GlobalClientController globalClientController;
+
+    public GlobalClient(String ip, int port, GlobalClientController globalClientController) {
         this.ip = ip;
         this.port = port;
+        this.globalClientController = globalClientController;
         connect();
-        //mainFrame = new MainFrame(this);
         new Receiver().start();
     }
+
+
 
     public void connect() {
 
@@ -30,7 +34,10 @@ public class GlobalClient {
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
             oos.writeObject("globalClient");
-
+            /*
+            oos.writeObject("mmmmmmm");
+            oos.writeObject("ged82gii");
+             */
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Connection faulty in client");
@@ -65,9 +72,14 @@ public class GlobalClient {
             while (true) {
                 try {
                     String objectRead = (String) ois.readObject();
-                    logger += objectRead + "\n";
+                    //logger += objectRead + "\n";
                     System.out.println("You have received: " + objectRead);
-                    mainFrame.setTextArea(logger);
+                    //mainFrame.setTextArea(logger);
+                    if (objectRead.equals("user authenticated")) {
+                        globalClientController.authenticateUser();
+                    } else if (objectRead.equals("user unauthenticated")) {
+                        JOptionPane.showMessageDialog(null, "username or password are incorrect");
+                    }
 
                 } catch (IOException | ClassNotFoundException e) {
                     break;

@@ -7,15 +7,18 @@ public class MainFrame extends JFrame {
     private LogInPanel logInPanel;
     private GlobalClient globalClient;
 
+
     public MainFrame(GlobalClient globalClient) {
         this.globalClient = globalClient;
-        mainPanel = new MainPanel(globalClient);
         logInPanel = new LogInPanel(globalClient);
-        setupMainFrame();
     }
 
-    public void setupMainFrame() {
+    public void showMainPanel() {
+        mainPanel = new MainPanel(globalClient);
+    }
 
+    public void disposeLoginPanel() {
+        logInPanel.disposeLogInPanel();
     }
 
     public void setTextArea(String text) {

@@ -51,6 +51,10 @@ public class LogInPanel extends JPanel {
         add(btnLogIn, "span 2, grow,  wrap");
     }
 
+    public void disposeLogInPanel() {
+        frame.dispose();
+    }
+
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {

@@ -66,7 +66,6 @@ public class GlobalServer {
         public void run() {
             try {
                 serverOrClient = (String) ois.readObject();
-                //name = (String) ois.readObject();
                 username = (String) ois.readObject();
                 password = (String) ois.readObject();
                 System.out.println(serverOrClient);
@@ -74,10 +73,33 @@ public class GlobalServer {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+
+            do {
+                try {
+                    if (homes.containsKey(username)) {
+                        break;
+                    } else {
+                        System.out.println("failed login");
+                        oos.writeObject("user unauthenticated");
+                        username = (String) ois.readObject();
+                        password = (String) ois.readObject();
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } while (!homes.containsKey(username) );
+
             if (homes.containsKey(username)) {
                 if (password.equals(homes.get(username).getUser().getPassword()) & socket != null) {
+                    System.out.println("in if");
                     Home home = homes.get(username);
                     home.setClientHandler(this);
+
+                    try {
+                        oos.writeObject("user authenticated");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     switch (serverOrClient) {
 
@@ -140,16 +162,19 @@ public class GlobalServer {
                 } else {
                     System.out.println("disconnected");
                     try {
-                        oos.writeObject("failed login");
+                        oos.writeObject("user unauthenticated");
                         System.out.println("failed login");
+                        //socket.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-            } else if (username == null) {
+            } else {
                 try {
-                    socket.close();
-                    System.out.println("Unexpected disconnection");
+                    System.out.println("failed login");
+                    oos.writeObject("user unauthenticated");
+                    //socket.close();
+                    //System.out.println("Unexpected disconnection");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

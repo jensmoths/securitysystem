@@ -4,9 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+
 import globalServer.GlobalServerController;
 import globalServer.Home;
 import globalServer.User;
+import globalServer.UserRegister;
 import net.miginfocom.swing.MigLayout;
 
 public class RegisterPanel extends JPanel {
@@ -15,9 +18,11 @@ public class RegisterPanel extends JPanel {
     private JButton btnRegister;
     private GlobalServerController globalServerController;
     private JFrame frame;
+    private UserRegister register;
 
     public RegisterPanel(GlobalServerController globalServerController) {
         this.globalServerController = globalServerController;
+        register = new UserRegister();
         frame = new JFrame();
         this.setLayout(new MigLayout());
         setPreferredSize(new Dimension(250, 200));
@@ -79,8 +84,10 @@ public class RegisterPanel extends JPanel {
                     | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3)) {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
             } else {
-                User user = new User(tfFirstName.getText(), tfSurName.getText(), tfStreet.getText());
+                User user = new User(tfFirstName.getText(), tfSurName.getText(),
+                                     tfStreet.getText(), tfZipCode.getText(), tfCity.getText());
                 user.generateLogInDetails();
+                globalServerController.getUserRegister().addUser(user);
                 globalServerController.addHome(user.getUserName(), new Home(user));
                 System.out.println("created and added home");
                 SwingUtilities.invokeLater(new Runnable() {

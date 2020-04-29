@@ -5,7 +5,7 @@ public class GlobalClientController {
     private MainFrame mainFrame;
 
     public GlobalClientController () {
-        globalClient = new GlobalClient("localhost", 8081, this);
+        globalClient = new GlobalClient("localhost", 47000, this);
         mainFrame = new MainFrame(globalClient);
     }
 

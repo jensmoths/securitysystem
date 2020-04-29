@@ -1,20 +1,23 @@
 package globalServer;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class User {
-    private String firstName, surName, street, zipCode, city, country, userName, password;
 
-    public User(String firstName, String surName, String street, String zipCode, String city, String country) {
+    private String firstName, surName, street, zipCode, city, userName, password;
+
+    public User(String firstName, String surName, String street, String zipCode, String city) {
 
         this.firstName = firstName;
         this.surName = surName;
         this.street = street;
         this.zipCode = zipCode;
         this.city = city;
-        this.country = country;
         password = "";
         userName = "";
+
+
     }
 
     public User() {
@@ -23,7 +26,6 @@ public class User {
         street = "";
         zipCode = "";
         city = "";
-        country = "";
         password = "";
         userName = "";
     }
@@ -34,7 +36,6 @@ public class User {
         this.street = street;
         zipCode = "";
         city = "";
-        country = "";
         password = "";
         userName = "";
     }
@@ -96,13 +97,6 @@ public class User {
         this.city = city;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
 
     public String getUserName() {
         return userName;
@@ -118,6 +112,20 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String[] getUserInfo(){
+
+        String[] userInfo = new String[5];
+
+        userInfo[0] = firstName;
+        userInfo[1] = surName;
+        userInfo[2] = street;
+        userInfo[3] = city;
+        userInfo[4] = zipCode;
+
+        return userInfo;
+
     }
 
     public static void main(String[] args) {

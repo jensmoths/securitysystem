@@ -344,7 +344,7 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("109.228.172.110", 8081);
+                connect("109.228.172.110", 47000);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -371,9 +371,7 @@ public class PiServer extends Thread implements Serializable {
                             }
                         }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
 

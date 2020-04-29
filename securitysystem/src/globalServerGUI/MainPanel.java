@@ -1,10 +1,9 @@
 package globalServerGUI;
 
-import globalServer.GlobalServer;
 import globalServer.GlobalServerController;
-
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,11 +14,15 @@ public class MainPanel extends JPanel {
     private JPanel pnlRight;
     private JButton btnRegister;
     private JButton btnDelete;
-    private JScrollPane scrollPane;
+    private JButton btnUpdate;
+    private JScrollPane loggerScrollPane;
     private JTextArea textArea;
-    private JList tblInfo;
+    private JTable tblInfo;
     private ButtonListener buttonListener;
     private GlobalServerController globalServerController;
+    private DefaultTableModel model;
+    private String[] columns;
+    private JScrollPane tblScrollPane;
 
     public MainPanel(GlobalServerController globalServerController) {
         this.globalServerController = globalServerController;
@@ -29,67 +32,96 @@ public class MainPanel extends JPanel {
     public void draw() {
         buttonListener = new ButtonListener();
 
+        model  = new DefaultTableModel();
         pnlLeft = new JPanel();
         pnlRight = new JPanel();
 
         btnRegister = new JButton();
         btnDelete = new JButton();
+        btnUpdate = new JButton();
 
         textArea = new JTextArea();
-        tblInfo = new JList();
+        tblInfo = new JTable();
 
-        this.setBackground(new Color(83, 86, 91));
-        pnlLeft.setBackground(new Color(83, 86, 91));
-        pnlRight.setBackground(new Color(83, 86, 91));
+        loggerScrollPane = new JScrollPane(textArea);
+        tblScrollPane = new JScrollPane(tblInfo);
 
-        textArea.setBackground(new Color(83, 86, 91));
-        tblInfo.setBackground(new Color(83, 86, 91));
+        this.setBackground(new Color(83,86,91));
+        pnlLeft.setBackground(new Color(83,86,91));
+        pnlRight.setBackground(new Color(83,86,91));
+
+        textArea.setBackground(new Color(83,86,91));
+        tblInfo.setBackground(new Color(83,86,91));
 
         this.setLayout(new BorderLayout());
         pnlLeft.setLayout(new FlowLayout());
         pnlRight.setLayout(new FlowLayout());
 
-        this.setPreferredSize(new Dimension(810, 810));
-        pnlLeft.setPreferredSize(new Dimension(400, 400));
-        pnlRight.setPreferredSize(new Dimension(400, 400));
-        textArea.setSize(new Dimension(380, 380));
+        this.setPreferredSize(new Dimension(1000,600));
+        pnlLeft.setPreferredSize(new Dimension(500,580));
+        pnlRight.setPreferredSize(new Dimension(450,580));
+        tblScrollPane.setPreferredSize(new Dimension(480,370));
+        loggerScrollPane.setPreferredSize(new Dimension(420,370));
 
         btnDelete.setText("Delete");
         btnRegister.setText("Register");
 
-        Border borderContact = BorderFactory.createTitledBorder("Contact Information");
-        Border borderLogger = BorderFactory.createTitledBorder("Logger");
+        TitledBorder borderContact = new TitledBorder("User Information");
+        borderContact.setTitleColor(new Color(255, 123,0, 231));
+
+
+        TitledBorder borderLogger = new TitledBorder("Logger");
+        borderLogger.setTitleColor(new Color(255, 123,0, 231));
 
         textArea.setEditable(false);
 
         pnlLeft.setBorder(borderContact);
         pnlRight.setBorder(borderLogger);
 
-        tblInfo.setPreferredSize(new Dimension(380, 370));
-        btnRegister.setPreferredSize(new Dimension(100, 40));
+        columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City"};
+        tblInfo.setForeground(Color.WHITE);
+
+        model.setColumnIdentifiers(columns);
+
+        tblInfo.setRowHeight(30);
+        tblInfo.setModel(model);
+        tblInfo.setBackground(new Color(83,86,91));
+
+
+        btnRegister.setPreferredSize(new Dimension(100,40));
         btnDelete.setPreferredSize(new Dimension(100, 40));
 
-        textArea.setPreferredSize(new Dimension(380, 400));
+        textArea.setForeground(Color.white);
 
-        scrollPane = new JScrollPane(textArea);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        loggerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        pnlLeft.add(tblInfo);
+        pnlLeft.add(tblScrollPane);
         pnlLeft.add(btnRegister);
         pnlLeft.add(btnDelete);
 
-        pnlRight.add(scrollPane);
+        pnlRight.add(loggerScrollPane);
 
         add(pnlLeft, BorderLayout.WEST);
-        add(pnlRight, BorderLayout.EAST);
+        add(pnlRight , BorderLayout.EAST);
 
         btnRegister.addActionListener(buttonListener);
         btnDelete.addActionListener(buttonListener);
-
     }
 
     public void setTextArea(JTextArea textArea) {
         this.textArea = textArea;
+    }
+
+    public void setTableInfo(String[][] info){
+
+        model = new DefaultTableModel(info,columns);
+        tblInfo.setModel(model);
+        tblInfo.repaint();
+
+    }
+
+    public int getSelectedRow(){
+      return tblInfo.getSelectedRow();
     }
 
     private class ButtonListener implements ActionListener {
@@ -98,7 +130,9 @@ public class MainPanel extends JPanel {
             if (actionEvent.getSource() == btnRegister) {
                 registerPanel = new RegisterPanel(globalServerController);
             } else if (actionEvent.getSource() == btnDelete) {
-                System.out.println("Delete this mf");
+                String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
+                globalServerController.deleteHome(username);
+                globalServerController.getUserRegister().deleteUser(getSelectedRow());
             }
         }
     }
@@ -106,11 +140,7 @@ public class MainPanel extends JPanel {
     public RegisterPanel getRegisterPanel() {
         return registerPanel;
     }
-/*
-    public static void main(String[] args) {
-        new MainFrame();
-    }
 
- */
+
 }
 

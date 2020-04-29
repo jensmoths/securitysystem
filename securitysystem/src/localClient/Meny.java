@@ -95,8 +95,6 @@ public class Meny extends JFrame {
                 //ChangeCode.setTitle("Ändra kod");
                 //ChangeCode.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             }
-
         }
     }
-
 }

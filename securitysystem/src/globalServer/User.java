@@ -116,24 +116,18 @@ public class User {
 
     public String[] getUserInfo(){
 
-        String[] userInfo = new String[5];
+        String[] userInfo = new String[7];
 
         userInfo[0] = firstName;
         userInfo[1] = surName;
         userInfo[2] = street;
-        userInfo[3] = city;
-        userInfo[4] = zipCode;
+        userInfo[3] = zipCode;
+        userInfo[4] = city;
+        userInfo[5] = userName;
+        userInfo[6] = password;
 
         return userInfo;
 
     }
 
-    public static void main(String[] args) {
-        User malek = new User();
-        malek.setFirstName("Ammar");
-        malek.setSurName("Darwesh");
-        malek.setStreet("Fläderbärsgatan 2");
-        malek.generateLogInDetails();
-        System.out.println(malek.getUserName() + ", "+ malek.getPassword());
-    }
 }

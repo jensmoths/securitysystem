@@ -57,10 +57,10 @@ public class MainPanel extends JPanel {
         pnlLeft.setLayout(new FlowLayout());
         pnlRight.setLayout(new FlowLayout());
 
-        this.setPreferredSize(new Dimension(1000,600));
-        pnlLeft.setPreferredSize(new Dimension(500,580));
+        this.setPreferredSize(new Dimension(1250,600));
+        pnlLeft.setPreferredSize(new Dimension(800,580));
         pnlRight.setPreferredSize(new Dimension(450,580));
-        tblScrollPane.setPreferredSize(new Dimension(480,370));
+        tblScrollPane.setPreferredSize(new Dimension(750,370));
         loggerScrollPane.setPreferredSize(new Dimension(420,370));
 
         btnDelete.setText("Delete");
@@ -68,7 +68,6 @@ public class MainPanel extends JPanel {
 
         TitledBorder borderContact = new TitledBorder("User Information");
         borderContact.setTitleColor(new Color(255, 123,0, 231));
-
 
         TitledBorder borderLogger = new TitledBorder("Logger");
         borderLogger.setTitleColor(new Color(255, 123,0, 231));
@@ -78,8 +77,9 @@ public class MainPanel extends JPanel {
         pnlLeft.setBorder(borderContact);
         pnlRight.setBorder(borderLogger);
 
-        columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City"};
+        columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City", "Username", "Password"};
         tblInfo.setForeground(Color.WHITE);
+
 
         model.setColumnIdentifiers(columns);
 

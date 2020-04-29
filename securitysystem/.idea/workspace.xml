@@ -7,19 +7,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23d00dd-a4f0-4e41-a861-60ea4533051d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/localserver/MicroClients.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Microcontroller/esp8266/FingerPrintSensor/FingerPrintSensor.ino" beforeDir="false" afterPath="$PROJECT_DIR$/../Microcontroller/esp8266/FingerPrintSensor/FingerPrintSensor.ino" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/keyset.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/keyset.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController$Receiver.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController$Receiver.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui$ButtonListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui$ButtonListener.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/Clients.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/Clients.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$ClientHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$Connection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$Connection.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/LocalServers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/LocalServers.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/RequestHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/RequestHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$ClientHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$GlobalServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$GlobalServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$StartServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$StartServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/DoorLock.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/DoorLock.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/FireAlarm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/FireAlarm.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/MagneticSensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/MagneticSensor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/Message.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/Message.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/ProximitySensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/ProximitySensor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/SecurityComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/SecurityComponent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/Sensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/Sensor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/Speaker.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/Speaker.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/securitysystem.iml" beforeDir="false" afterPath="$PROJECT_DIR$/securitysystem.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/localserver/PiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localserver/PiServer.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,8 +68,12 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="true" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
   </component>
@@ -61,18 +85,6 @@
       <recent name="C:\Users\jensm\Downloads\MujEmaP1-2\securitysystem\src\localserver" />
       <recent name="C:\Users\jensm\Downloads\MujEmaP1-2\securitysystem\src" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="GlobalClientController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -101,7 +113,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="localserver.Main" />
       <module name="securitysystem" />
       <extension name="coverage">
@@ -114,6 +126,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.GlobalClientController" />
+      <item itemvalue="Application.GlobalServerController" />
+      <item itemvalue="Application.Main" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
@@ -126,6 +143,13 @@
     <configuration />
   </component>
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f23d00dd-a4f0-4e41-a861-60ea4533051d" name="Default Changelist" comment="" />
+      <created>1588148012287</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1588148012287</updated>
+    </task>
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -133,37 +157,66 @@
     <option name="LAST_COMMIT_MESSAGE" value="Nya saker.&#10;ny hashmap, metoder mellan global lokal" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="2073" y="899" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588150655908">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state x="2073" y="899" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1588150655908" />
     <state x="2557" y="1077" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1587556582232">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state x="2557" y="1077" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1587556582232" />
-    <state x="1288" y="413" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1587558810495">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2576" y="842" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1588148021023">
+      <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state x="1288" y="413" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587558810495" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1587560583360">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2576" y="842" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1588148021023" />
+    <state width="1820" height="369" key="GridCell.Tab.0.bottom" timestamp="1588160453586">
+      <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587560583360" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1587560583360">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1820" height="369" key="GridCell.Tab.0.bottom/0.0.3840.2120@0.0.3840.2120" timestamp="1588160453586" />
+    <state width="1820" height="369" key="GridCell.Tab.0.center" timestamp="1588160453586">
+      <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587560583360" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1587560583360">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1820" height="369" key="GridCell.Tab.0.center/0.0.3840.2120@0.0.3840.2120" timestamp="1588160453586" />
+    <state width="1820" height="369" key="GridCell.Tab.0.left" timestamp="1588160453585">
+      <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587560583360" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1587560583360">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1820" height="369" key="GridCell.Tab.0.left/0.0.3840.2120@0.0.3840.2120" timestamp="1588160453585" />
+    <state width="1820" height="369" key="GridCell.Tab.0.right" timestamp="1588160453586">
+      <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587560583360" />
-    <state x="2307" y="868" key="SettingsEditor" timestamp="1587556599946">
+    <state width="1820" height="369" key="GridCell.Tab.0.right/0.0.3840.2120@0.0.3840.2120" timestamp="1588160453586" />
+    <state width="1820" height="454" key="GridCell.Tab.1.bottom" timestamp="1588148002820">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
-    <state x="2307" y="868" key="SettingsEditor/0.0.3840.2120@0.0.3840.2120" timestamp="1587556599946" />
-    <state x="2523" y="1117" key="com.intellij.ide.util.TipDialog" timestamp="1587558257300">
+    <state width="1820" height="454" key="GridCell.Tab.1.bottom/0.0.3840.2120@0.0.3840.2120" timestamp="1588148002820" />
+    <state width="1820" height="454" key="GridCell.Tab.1.center" timestamp="1588148002820">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
-    <state x="2523" y="1117" key="com.intellij.ide.util.TipDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1587558257300" />
+    <state width="1820" height="454" key="GridCell.Tab.1.center/0.0.3840.2120@0.0.3840.2120" timestamp="1588148002820" />
+    <state width="1820" height="454" key="GridCell.Tab.1.left" timestamp="1588148002820">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state width="1820" height="454" key="GridCell.Tab.1.left/0.0.3840.2120@0.0.3840.2120" timestamp="1588148002820" />
+    <state width="1820" height="454" key="GridCell.Tab.1.right" timestamp="1588148002820">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state width="1820" height="454" key="GridCell.Tab.1.right/0.0.3840.2120@0.0.3840.2120" timestamp="1588148002820" />
+    <state x="2307" y="868" key="SettingsEditor" timestamp="1588148425297">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state x="2307" y="868" key="SettingsEditor/0.0.3840.2120@0.0.3840.2120" timestamp="1588148425297" />
+    <state x="2523" y="1117" key="com.intellij.ide.util.TipDialog" timestamp="1588148017130">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state x="2523" y="1117" key="com.intellij.ide.util.TipDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1588148017130" />
+    <state x="2531" y="1187" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1588148397623">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state x="2531" y="1187" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.3840.2120@0.0.3840.2120" timestamp="1588148397623" />
   </component>
 </project>

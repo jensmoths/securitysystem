@@ -28,8 +28,8 @@ public class PiServer extends Thread implements Serializable {
     PiServer() throws IOException, InterruptedException {
         new StartServer(Integer.parseInt(JOptionPane.showInputDialog(null, "Välj port"))).start();
 
-        globalServer = new GlobalServer();
-        new Thread(globalServer).start();
+       // globalServer = new GlobalServer();
+      //  new Thread(globalServer).start();
 
 
     }
@@ -294,7 +294,7 @@ public class PiServer extends Thread implements Serializable {
        private transient Socket socket;
         private transient ObjectOutputStream oos;
         private transient ObjectInputStream ois;
-        private String name ="Ammar";
+        private String name ="mmmmmmm";
 
         public void connect(String ip, int port) throws IOException {
             String clientType = "server";
@@ -304,6 +304,7 @@ public class PiServer extends Thread implements Serializable {
 
             oos.writeObject(clientType);
             oos.writeObject(name);
+            oos.writeObject("ged82gii");
 
 
             oos.flush();
@@ -336,7 +337,7 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("localhost", 8081);
+                connect("109.228.172.110", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 e.printStackTrace();

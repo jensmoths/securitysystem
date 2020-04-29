@@ -16,18 +16,42 @@ SoftwareSerial swSer(14, 12);
 //0x31
 #define OLED_RESET 0
 Adafruit_SSD1306 display(OLED_RESET);
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&swSer);
+WiFiClient client;
 
-const String IP = "83.254.129.68";
+const String IP = "192.168.31.181";
 const int PORT = 40000;
 const String TYPE = "fingerprint";
-WiFiClient client;
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&swSer);
+int statusState = LOW;
+unsigned long preMillis = 0;
+unsigned long ms;
+unsigned long beatMs;
+unsigned long preBeat = 0;
+unsigned long connectMs;
+unsigned long preConnect = 0;
+unsigned long reconnectMs;
+unsigned long preReconnect = 0;
 
-// 'link-connected', 16x16px
-const unsigned char connectedBitmap [] PROGMEM = {
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x65, 0xf9, 0x3e, 0xe7, 0xbe, 0x9c, 0xbc, 
-  0x3d, 0x39, 0x7d, 0xe7, 0x7c, 0x9f, 0xa6, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+
+// reconnecting, 10x10px
+const unsigned char reconnectingBitmap [] PROGMEM = {
+  0x08, 0x00, 0x1c, 0x00, 0x0b, 0x00, 0x01, 0x00, 0x40, 0x80, 0x40, 0x80, 0x20, 0x00, 0x34, 0x00,
+  0x0e, 0x00, 0x04, 0x00
 };
+// connected, 10x10px
+const unsigned char connectedBitmap [] PROGMEM = {
+  0x10, 0x00, 0x38, 0x00, 0x10, 0x00, 0x10, 0x00, 0x12, 0x00, 0x12, 0x00, 0x02, 0x00, 0x02, 0x00,
+  0x07, 0x00, 0x02, 0x00
+};
+
+
+
+
+
+
+
+
+
 
 
 String setupWifiManager() {
@@ -48,7 +72,7 @@ String setupWifiManager() {
   return location.getValue();
 }
 
-void setupFingerPrint(){
+void setupFingerPrint() {
   // set the data rate for the sensor serial port
   finger.begin(57600);
 
@@ -65,7 +89,7 @@ void setupFingerPrint(){
   Serial.println("Waiting for valid finger...");
 }
 
-void setupDisplay(){
+void setupDisplay() {
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.setTextSize(1);
   display.setCursor(0, 0);
@@ -74,39 +98,77 @@ void setupDisplay(){
   display.display();
 }
 
+void heartBeat() {
+  beatMs = millis();
+  if ((beatMs - preBeat) >= 1000 ) {
+    preBeat = beatMs;
+    client.print("heartbeat");
+    Serial.println("heartbeat");
+  }
+}
+
+void statusBlink() {
+  ms = millis();
+  if ((ms - preMillis) >= 1000 ) {
+    preMillis = ms;
+    if (statusState == LOW) {
+      display.drawBitmap(0, 0,  reconnectingBitmap, 10, 10, WHITE);
+      display.display();
+      statusState = HIGH;
+    } else {
+      statusState = LOW;
+      display.clearDisplay();
+      display.display();
+    }
+  }
+}
+
 
 //add animation
 void connectToServer(String location) {
-  display.println("connecting");
+  display.clearDisplay();
   display.display();
   while (true) {
-    client.connect(IP, PORT);
-    client.print(ESP.getChipId());
-    client.print("|");
-    client.print(TYPE);
-    client.print("|");
-    client.print(location);
-    client.println();
+    statusBlink();
+    connectMs = millis();
+    if ((connectMs - preConnect) >= 5000 ) {
+      preConnect = connectMs;
+      Serial.println("connecting to server");
+      client.connect(IP, PORT);
+      client.print(ESP.getChipId());
+      client.print("|");
+      client.print(TYPE);
+      client.print("|");
+      client.print(location);
+      client.println();
+    }
+    yield();
     if (client.connected()) break;
-    delay(10000);
   }
-  display.println("connected");
+  display.clearDisplay();
+  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
   display.display();
 }
 
 void reconnectToServer() {
-  display.println("reconnecting");
+  display.clearDisplay();
   display.display();
   while (true) {
-    client.connect(IP, PORT);
-    client.print(ESP.getChipId());
-    client.print("|");
-    client.println(TYPE);
-
+    statusBlink();
+    reconnectMs = millis();
+    if ((reconnectMs - preReconnect) >= 5000) {
+      preReconnect = reconnectMs;
+      Serial.println("reconnecting to server");
+      client.connect(IP, PORT);
+      client.print(ESP.getChipId());
+      client.print("|");
+      client.println(TYPE);
+    }
+    yield();
     if (client.connected()) break;
-    delay(10000);
   }
-  display.println("connected to server");
+  display.clearDisplay();
+  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
   display.display();
 }
 
@@ -117,6 +179,7 @@ void setup() {
   setupDisplay();
 
   Serial.begin(115200);
+   client.setTimeout(250);
 
   //setupFingerPrint();
 
@@ -128,10 +191,12 @@ void setup() {
 
 void loop() {
   if (client.connected()) {
+    heartBeat();
     if (client.available() > 0) {
       char message = client.read();
       Serial.println(message);
       if (message == 'a') {
+        int id = client.parseInt();
         while (!getFingerprintEnroll(4));
       } else if (message == 'e') {
         finger.emptyDatabase();

@@ -14,12 +14,12 @@ public class ChangeCode extends JFrame implements ActionListener {
     private String pinCode = "";
     private Font font = new Font("Courier", Font.BOLD, 30);
     private Color numberPadColor = new Color(74, 77, 82);
-    private VirtualNumPad virtualNumPad;
+    private MainFrame mainFrame;
     Frame ChangeCodeFrame;
 
 
-    public ChangeCode(VirtualNumPad virtualNumPad) {
-        this.virtualNumPad = virtualNumPad;
+    public ChangeCode(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
 
         JFrame ChangeCodeFrame = new JFrame();
         ChangeCodeFrame.setTitle("Ändra kod");
@@ -178,7 +178,7 @@ public class ChangeCode extends JFrame implements ActionListener {
             pinCode = "";
         } if (buttonNumber.equals("OK") && pinCode.length() == 4) {
             String num = tfNumPad.getText();
-            virtualNumPad.setSystemPinCode(num);
+            mainFrame.setSystemPinCode(num);
         }
         // TODO: 2020-04-14 Lägg till kod som berättar vad som händer med OK
       if(buttonNumber.equals("OK")&&pinCode.length()<4)

@@ -1,20 +1,19 @@
 package globalServer;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Clients {
 
-    private HashMap<String, GlobalServerController.ClientHandler> clients = new HashMap<>();
+    private HashMap<String, GlobalServer.ClientHandler> clients = new HashMap<>();
 
 
 
-    public synchronized void put(String name, GlobalServerController.ClientHandler handler) {
+    public synchronized void put(String name, GlobalServer.ClientHandler handler) {
         clients.put(name, handler);
     }
 
 
-    public GlobalServerController.ClientHandler get(String name) {
+    public GlobalServer.ClientHandler get(String name) {
         return clients.get(name);
     }
 

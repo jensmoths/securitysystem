@@ -1,5 +1,6 @@
 package globalClient;
 
+<<<<<<< HEAD
 import model.Message;
 import model.SecurityComponent;
 
@@ -11,14 +12,13 @@ import java.net.PasswordAuthentication;
 import java.net.Socket;
 import java.util.ArrayList;
 
+=======
+>>>>>>> origin/Malek4
 public class GlobalClientController {
-
-    private Socket socket;
-    private String ip;
-    private ObjectOutputStream oos;
-    private ObjectInputStream ois;
+    private GlobalClient globalClient;
     private MainFrame mainFrame;
 
+<<<<<<< HEAD
     public GlobalClientController(String ip) {
         this.ip = ip;
         connect();
@@ -94,9 +94,21 @@ public class GlobalClientController {
        Login go = new Login();
        go.Login();
        // new GlobalClientController("localhost");
+=======
+    public GlobalClientController () {
+        globalClient = new GlobalClient("localhost", 8081, this);
+        mainFrame = new MainFrame(globalClient);
+    }
+
+    public void authenticateUser() {
+            System.out.println("show mainpanel");
+        mainFrame.disposeLoginPanel();
+        mainFrame.showMainPanel();
+    }
+
+
+    public static void main(String[] args) {
+        new GlobalClientController();
+>>>>>>> origin/Malek4
     }
 }
-
-
-
-

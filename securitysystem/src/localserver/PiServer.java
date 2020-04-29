@@ -1,5 +1,6 @@
 package localserver;
 
+import localClient.Controller;
 import model.*;
 
 import javax.swing.*;
@@ -23,9 +24,11 @@ public class PiServer extends Thread implements Serializable {
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
     private GlobalServer globalServer;
+    private Controller controller;
 
 
-    PiServer() throws IOException, InterruptedException {
+    public PiServer(Controller controller) throws IOException, InterruptedException {
+        this.controller = controller;
         new StartServer(Integer.parseInt(JOptionPane.showInputDialog(null, "Välj port"))).start();
 
        // globalServer = new GlobalServer();
@@ -57,6 +60,10 @@ public class PiServer extends Thread implements Serializable {
         } catch (IOException | ClassNotFoundException ex) {
             // ex.printStackTrace();
         }
+    }
+
+    public void setDoor(boolean open) {
+
     }
 
 

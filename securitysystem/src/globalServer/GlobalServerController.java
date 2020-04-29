@@ -1,7 +1,8 @@
 package globalServer;
 
-import model.*;
+import globalServerGUI.MainFrame;
 
+<<<<<<< HEAD
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -151,9 +152,26 @@ public class GlobalServerController {
             return oos;
         }
 
+=======
+import java.util.HashMap;
+
+public class GlobalServerController {
+    private GlobalServer globalServer;
+    private HashMap<String, Home> homes;
+    private MainFrame mainFrame;
+
+    public GlobalServerController() {
+        homes = new HashMap<>();
+        mainFrame = new MainFrame(this);
+        globalServer = new GlobalServer(8081, homes);
+    }
+
+    public void addHome(String userName, Home home) {
+        homes.put(userName, home);
+>>>>>>> origin/Malek4
     }
 
     public static void main(String[] args) {
-        GlobalServerController globalServerController = new GlobalServerController(8081);
+        new GlobalServerController();
     }
 }

@@ -6,9 +6,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+<<<<<<< HEAD:securitysystem/src/globalClient/GlobalClientGui.java
 import java.util.ArrayList;
+=======
+import java.awt.event.WindowEvent;
+>>>>>>> origin/Malek4:securitysystem/src/globalClient/MainPanel.java
 
-public class GlobalClientGui extends JPanel {
+public class MainPanel extends JPanel {
 
     private JPanel leftPanel;
     private JPanel rightPanel;
@@ -21,11 +25,11 @@ public class GlobalClientGui extends JPanel {
     private JButton btnUnlock;
 
     private JTextArea textArea;
-    private GlobalClientController globalClientController;
-    private String name;
-
+    private GlobalClient globalClient;
+    private JFrame frame;
     private JScrollPane scrollPane;
 
+<<<<<<< HEAD:securitysystem/src/globalClient/GlobalClientGui.java
     private JList testJlist;
     private DefaultListModel testListModel;
 
@@ -34,6 +38,11 @@ public class GlobalClientGui extends JPanel {
 
     public GlobalClientGui(GlobalClientController globalClientController) {
         this.globalClientController = globalClientController;
+=======
+    public MainPanel(GlobalClient globalClient) {
+        this.globalClient = globalClient;
+        frame = new JFrame();
+>>>>>>> origin/Malek4:securitysystem/src/globalClient/MainPanel.java
         draw();
 
     }
@@ -58,10 +67,7 @@ public class GlobalClientGui extends JPanel {
         this.setPreferredSize(new Dimension(600, 600));
         this.setLayout(new BorderLayout());
 
-        Dimension btnDimension = new Dimension(200,20);
-
-        name = "Ammar";
-        globalClientController.send(name);
+        Dimension btnDimension = new Dimension(200, 20);
 
         leftPanel = new JPanel();
         rightPanel = new JPanel();
@@ -91,6 +97,7 @@ public class GlobalClientGui extends JPanel {
         btnOFF.setPreferredSize(new Dimension(btnDimension));
         btnON.setPreferredSize(new Dimension(btnDimension));
 
+<<<<<<< HEAD:securitysystem/src/globalClient/GlobalClientGui.java
         leftPanelNorth.add(btnLock, BorderLayout.CENTER);
         leftPanelNorth.add(btnUnlock,BorderLayout.SOUTH); //TODO ÄNDRAT UNLOCK TILL NORTH ISTÄLLET FÖR SOUTHPANEL
 
@@ -102,6 +109,10 @@ public class GlobalClientGui extends JPanel {
         leftPanelSouth.add(btnOFF, BorderLayout.SOUTH);
 
 
+=======
+        leftPanelNorth.add(btnLock, BorderLayout.SOUTH);
+        leftPanelSouth.add(btnUnlock, BorderLayout.SOUTH);
+>>>>>>> origin/Malek4:securitysystem/src/globalClient/MainPanel.java
 
         //leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         //leftPanelSouth.add(btnON, BorderLayout.CENTER);
@@ -118,6 +129,18 @@ public class GlobalClientGui extends JPanel {
         btnON.addActionListener(buttonListener);
         btnLock.addActionListener(buttonListener);
         btnUnlock.addActionListener(buttonListener);
+
+        frame.setSize(new Dimension(610, 650));
+        frame.setContentPane(MainPanel.this);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                globalClient.closeSocket();
+                //System.exit(0);
+            }
+        });
     }
 
     public void setTextArea(String activity) {
@@ -130,6 +153,7 @@ public class GlobalClientGui extends JPanel {
 
 
             if (e.getSource() == btnON) {
+<<<<<<< HEAD:securitysystem/src/globalClient/GlobalClientGui.java
                 testJlist.getSelectedIndex();
                 globalClientController.send("on");
                 leftPanelSouth.setBackground(Color.CYAN);
@@ -141,6 +165,15 @@ public class GlobalClientGui extends JPanel {
                 globalClientController.send("lock");
             }else if (e.getSource() == btnUnlock){
                 globalClientController.send("unlock");
+=======
+                globalClient.send("on");
+            } else if (e.getSource() == btnOFF) {
+                globalClient.send("off");
+            } else if (e.getSource() == btnLock) {
+                globalClient.send("lock");
+            } else if (e.getSource() == btnUnlock) {
+                globalClient.send("unlock");
+>>>>>>> origin/Malek4:securitysystem/src/globalClient/MainPanel.java
 
             }
         }

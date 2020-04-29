@@ -7,38 +7,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23d00dd-a4f0-4e41-a861-60ea4533051d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Microcontroller/esp8266/FingerPrintSensor/FingerPrintSensor.ino" beforeDir="false" afterPath="$PROJECT_DIR$/../Microcontroller/esp8266/FingerPrintSensor/FingerPrintSensor.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/localClient/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/keyset.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/keyset.dat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController$Receiver.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController$Receiver.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui$ButtonListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui$ButtonListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientGui.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/Clients.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/Clients.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$ClientHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$Connection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController$Connection.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/LocalServers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/LocalServers.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/RequestHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/RequestHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/Main.class" afterDir="false" />
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/Main.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$ClientHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$GlobalServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$GlobalServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$StartServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$StartServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/DoorLock.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/DoorLock.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/FireAlarm.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/FireAlarm.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/MagneticSensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/MagneticSensor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/Message.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/Message.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/ProximitySensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/ProximitySensor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/SecurityComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/SecurityComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/Sensor.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/Sensor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/model/Speaker.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/model/Speaker.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/securitysystem.iml" beforeDir="false" afterPath="$PROJECT_DIR$/securitysystem.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/localClient/ChangeCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localClient/ChangeCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/localClient/Meny.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localClient/Meny.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/localClient/VirtualNumPad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localClient/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/localserver/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localserver/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/localserver/PiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localserver/PiServer.java" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/globalClient/GlobalClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalClient/GlobalClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/globalClient/GlobalClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalClient/GlobalClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/globalClient/LogInPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalClient/LogInPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/globalClient/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalClient/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/globalServer/GlobalServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalServer/GlobalServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/FireAlarm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/FireAlarm.java" afterDir="false" />
+>>>>>>> origin/Malek4
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,8 +77,35 @@
       <recent name="C:\Users\jensm\Downloads\MujEmaP1-2\securitysystem\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+<<<<<<< HEAD
+  <component name="RunManager" selected="Application.Controller">
+    <configuration name="Controller" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="localClient.Controller" />
+      <module name="securitysystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="localClient.*" />
+=======
+  <component name="RunManager" selected="Application.GlobalClientController">
+    <configuration name="GlobalClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="globalClient.GlobalClient" />
+      <module name="securitysystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="globalClient.*" />
+>>>>>>> origin/Malek4
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
     <configuration name="GlobalClientController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+=======
+    <configuration name="GlobalClientController" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+>>>>>>> origin/Malek4
       <option name="MAIN_CLASS_NAME" value="globalClient.GlobalClientController" />
       <module name="securitysystem" />
       <extension name="coverage">
@@ -113,12 +131,52 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+<<<<<<< HEAD
     <configuration name="Main" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="localserver.Main" />
+=======
+    <configuration name="LogInPanel" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="globalClient.LogInPanel" />
       <module name="securitysystem" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="localserver.*" />
+          <option name="PATTERN" value="globalClient.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="globalServerGUI.MainFrame" />
+>>>>>>> origin/Malek4
+      <module name="securitysystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="globalServerGUI.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+<<<<<<< HEAD
+    <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="localClient.MainFrame" />
+      <module name="securitysystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="localClient.*" />
+=======
+    <configuration name="User" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="globalServer.User" />
+      <module name="securitysystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="globalServer.*" />
+>>>>>>> origin/Malek4
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -127,15 +185,34 @@
       </method>
     </configuration>
     <list>
+<<<<<<< HEAD
       <item itemvalue="Application.GlobalClientController" />
       <item itemvalue="Application.GlobalServerController" />
       <item itemvalue="Application.Main" />
+      <item itemvalue="Application.MainFrame" />
+      <item itemvalue="Application.Controller" />
+=======
+      <item itemvalue="Application.GlobalClient" />
+      <item itemvalue="Application.GlobalClientController" />
+      <item itemvalue="Application.GlobalServerController" />
+      <item itemvalue="Application.LogInPanel" />
+      <item itemvalue="Application.MainFrame" />
+      <item itemvalue="Application.User" />
+>>>>>>> origin/Malek4
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Controller" />
+        <item itemvalue="Application.MainFrame" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.GlobalClientController" />
         <item itemvalue="Application.GlobalServerController" />
+<<<<<<< HEAD
+=======
+        <item itemvalue="Application.LogInPanel" />
+        <item itemvalue="Application.GlobalClientController" />
+        <item itemvalue="Application.MainFrame" />
+>>>>>>> origin/Malek4
       </list>
     </recent_temporary>
   </component>
@@ -157,10 +234,17 @@
     <option name="LAST_COMMIT_MESSAGE" value="Nya saker.&#10;ny hashmap, metoder mellan global lokal" />
   </component>
   <component name="WindowStateProjectService">
+<<<<<<< HEAD
     <state x="2073" y="899" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588150655908">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state x="2073" y="899" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1588150655908" />
+=======
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588150271592">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588150271592" />
+>>>>>>> origin/Malek4
     <state x="2557" y="1077" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1587556582232">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
@@ -169,27 +253,32 @@
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state x="1288" y="413" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587558810495" />
+<<<<<<< HEAD
     <state x="2576" y="842" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1588148021023" />
-    <state width="1820" height="369" key="GridCell.Tab.0.bottom" timestamp="1588160453586">
+    <state x="1254" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1588163602523">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state x="1254" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1588163602523" />
+    <state width="1820" height="369" key="GridCell.Tab.0.bottom" timestamp="1588165827369">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587560583360" />
-    <state width="1820" height="369" key="GridCell.Tab.0.bottom/0.0.3840.2120@0.0.3840.2120" timestamp="1588160453586" />
-    <state width="1820" height="369" key="GridCell.Tab.0.center" timestamp="1588160453586">
+    <state width="1820" height="369" key="GridCell.Tab.0.bottom/0.0.3840.2120@0.0.3840.2120" timestamp="1588165827369" />
+    <state width="1820" height="369" key="GridCell.Tab.0.center" timestamp="1588165827369">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587560583360" />
-    <state width="1820" height="369" key="GridCell.Tab.0.center/0.0.3840.2120@0.0.3840.2120" timestamp="1588160453586" />
-    <state width="1820" height="369" key="GridCell.Tab.0.left" timestamp="1588160453585">
+    <state width="1820" height="369" key="GridCell.Tab.0.center/0.0.3840.2120@0.0.3840.2120" timestamp="1588165827369" />
+    <state width="1820" height="369" key="GridCell.Tab.0.left" timestamp="1588165827368">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587560583360" />
-    <state width="1820" height="369" key="GridCell.Tab.0.left/0.0.3840.2120@0.0.3840.2120" timestamp="1588160453585" />
-    <state width="1820" height="369" key="GridCell.Tab.0.right" timestamp="1588160453586">
+    <state width="1820" height="369" key="GridCell.Tab.0.left/0.0.3840.2120@0.0.3840.2120" timestamp="1588165827368" />
+    <state width="1820" height="369" key="GridCell.Tab.0.right" timestamp="1588165827369">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587560583360" />
-    <state width="1820" height="369" key="GridCell.Tab.0.right/0.0.3840.2120@0.0.3840.2120" timestamp="1588160453586" />
+    <state width="1820" height="369" key="GridCell.Tab.0.right/0.0.3840.2120@0.0.3840.2120" timestamp="1588165827369" />
     <state width="1820" height="454" key="GridCell.Tab.1.bottom" timestamp="1588148002820">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
@@ -218,5 +307,60 @@
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state x="2531" y="1187" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.3840.2120@0.0.3840.2120" timestamp="1588148397623" />
+    <state x="1957" y="1004" key="refactoring.ChangeSignatureDialog" timestamp="1588163916982">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state x="1957" y="1004" key="refactoring.ChangeSignatureDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1588163916982" />
+=======
+    <state x="648" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1588117760162">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="648" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588117760162" />
+    <state width="1877" height="208" key="GridCell.Tab.0.bottom" timestamp="1588157614212">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="208" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588157614212" />
+    <state width="1877" height="208" key="GridCell.Tab.0.center" timestamp="1588157614212">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="208" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588157614212" />
+    <state width="1877" height="208" key="GridCell.Tab.0.left" timestamp="1588157614212">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="208" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588157614212" />
+    <state width="1877" height="208" key="GridCell.Tab.0.right" timestamp="1588157614212">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="208" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588157614212" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1588119396682">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588119396682" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1588119396682">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588119396682" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1588119396682">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588119396682" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1588119396682">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588119396682" />
+    <state x="2307" y="868" key="SettingsEditor" timestamp="1587556599946">
+      <screen x="0" y="0" width="3840" height="2120" />
+    </state>
+    <state x="2307" y="868" key="SettingsEditor/0.0.3840.2120@0.0.3840.2120" timestamp="1587556599946" />
+    <state x="1262" y="548" key="com.intellij.ide.util.TipDialog" timestamp="1588145583444">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1262" y="548" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588145583444" />
+    <state x="2523" y="1117" key="com.intellij.ide.util.TipDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1587558257300" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1588105987989">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1588105987989" />
+>>>>>>> origin/Malek4
   </component>
 </project>

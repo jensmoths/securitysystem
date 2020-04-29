@@ -3,14 +3,19 @@ package globalClient;
 import model.SecurityComponent;
 
 import javax.swing.*;
+<<<<<<< HEAD
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+=======
+>>>>>>> origin/Malek4
 
 public class MainFrame extends JFrame {
-    private GlobalClientGui globalClientGui;
-    private GlobalClientController globalClientController;
+    private MainPanel mainPanel;
+    private LogInPanel logInPanel;
+    private GlobalClient globalClient;
 
+<<<<<<< HEAD
     public MainFrame(GlobalClientController globalClientController) {
         this.globalClientController = globalClientController;
         globalClientGui = new GlobalClientGui(globalClientController);
@@ -36,9 +41,24 @@ public class MainFrame extends JFrame {
                 //System.exit(0);
             }
         });
+=======
+
+    public MainFrame(GlobalClient globalClient) {
+        this.globalClient = globalClient;
+        logInPanel = new LogInPanel(globalClient);
     }
+
+    public void showMainPanel() {
+        mainPanel = new MainPanel(globalClient);
+    }
+
+    public void disposeLoginPanel() {
+        logInPanel.disposeLogInPanel();
+>>>>>>> origin/Malek4
+    }
+
     public void setTextArea(String text) {
-        globalClientGui.setTextArea(text);
+        mainPanel.setTextArea(text);
     }
     public void setTest(ArrayList<SecurityComponent> rey){
              globalClientGui.setTestJlist(rey);

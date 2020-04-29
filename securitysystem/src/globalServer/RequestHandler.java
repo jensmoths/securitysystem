@@ -11,44 +11,42 @@ public class RequestHandler {
     private ArrayList<SecurityComponent> onlineMK;
 
 
-    public void handleServerRequest(Object requestObject, Clients clients, String name) {
-        try {
+    public void handleServerRequest(Object requestObject, Home home) {
 
-            if (requestObject instanceof String) {
-                clients.get(name).getOos().writeObject(requestObject);
-            } else if (requestObject instanceof Message) {
-                Message message = (Message) requestObject;
-                SecurityComponent securityComponent = message.getSecurityComponent();
+        if (requestObject instanceof String) {
+            home.sendToAllClients(requestObject);
+        } else if (requestObject instanceof Message) {
+            Message message = (Message) requestObject;
+            SecurityComponent securityComponent = message.getSecurityComponent();
 
-                if (securityComponent instanceof MagneticSensor) {
-                    System.out.println("You are in magnet sensor");
-                    System.out.println(securityComponent.isOpen());
+            if (securityComponent instanceof MagneticSensor) {
+                System.out.println("You are in magnet sensor");
+                System.out.println(securityComponent.isOpen());
 
-                    if (securityComponent.isOpen()) {
-                        clients.get(name).getOos().writeObject("Magnetsensorn larmar");
+                if (securityComponent.isOpen()) {
+                    home.sendToAllClients("Magnetsensorn larmar");
 
-                    } else if (!securityComponent.isOpen()) {
-                        clients.get(name).getOos().writeObject("Magnetsensorn är aktiv");
-                    }
-                }
-                if (securityComponent instanceof FireAlarm) {
-                    System.out.println("You are in Firealarm");
-                    //System.out.println(securityComponent.isOpen());
-                    clients.get(name).getOos().writeObject("Brandlarmet har upptäckt rök i byggnaden");
-                }
-                if (securityComponent instanceof ProximitySensor) {
-                    System.out.println("You are in Proximity Sensor");
-                    //System.out.println(securityComponent.isOpen());
-
-                    clients.get(name).getOos().writeObject("Rörelsedetektorn har upptäckt rörelse i byggnaden");
+                } else if (!securityComponent.isOpen()) {
+                    home.sendToAllClients("Magnetsensorn är aktiv");
                 }
             }
+<<<<<<< HEAD
             if(requestObject instanceof ArrayList){   //TODO ÄNDRAT HÄR
                 onlineMK = (ArrayList<SecurityComponent>) requestObject;
                 clients.get(name).getOos().writeObject(onlineMK);
             }
         } catch (IOException e) {
             e.printStackTrace();
+=======
+            if (securityComponent instanceof FireAlarm) {
+                System.out.println("You are in Firealarm");
+                home.sendToAllClients("Brandlarmet har upptäckt rök i byggnaden");
+            }
+            if (securityComponent instanceof ProximitySensor) {
+                System.out.println("You are in Proximity Sensor");
+                home.sendToAllClients("Rörelsedetektorn har upptäckt rörelse i byggnaden");
+            }
+>>>>>>> origin/Malek4
         }
     }
 

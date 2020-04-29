@@ -20,7 +20,6 @@ public class GlobalClient {
         this.port = port;
         this.globalClientController = globalClientController;
         connect();
-        new Receiver().start();
     }
 
 
@@ -33,11 +32,8 @@ public class GlobalClient {
 
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
-            oos.writeObject("globalClient");
-            /*
-            oos.writeObject("mmmmmmm");
-            oos.writeObject("ged82gii");
-             */
+            new Receiver().start();
+
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Connection faulty in client");
@@ -69,6 +65,12 @@ public class GlobalClient {
 
         @Override
         public void run() {
+            try {
+                oos.writeObject("globalClient");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             while (true) {
                 try {
                     String objectRead = (String) ois.readObject();

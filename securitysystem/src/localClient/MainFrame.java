@@ -18,6 +18,7 @@ public class MainFrame extends JPanel implements ActionListener {
     private ChangeCode cc;
     Meny meny;
     Controller controller;
+    FingerprintGui fingerprintGui;
 
 
     /*
@@ -35,9 +36,9 @@ public class MainFrame extends JPanel implements ActionListener {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-
+        fingerprintGui = new FingerprintGui(this);
         cc = new ChangeCode(this);
-        meny = new Meny(this, cc);
+        meny = new Meny(this, cc, fingerprintGui);
         cc.setVisible(false);
         meny.setVisible(false);
         meny.setBackground(new Color(83,86,91));

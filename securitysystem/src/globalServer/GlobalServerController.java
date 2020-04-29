@@ -19,7 +19,7 @@ public class GlobalServerController implements Observer {
         this.userRegister.addObserver(this);
         homes = new HashMap<>();
         mainFrame = new MainFrame(this);
-        globalServer = new GlobalServer(47000, homes);
+        globalServer = new GlobalServer(8081, homes);
 
     }
 

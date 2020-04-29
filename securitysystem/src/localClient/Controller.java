@@ -1,6 +1,8 @@
 package localClient;
 
+import localserver.MicroClients;
 import localserver.PiServer;
+import model.FingerprintSensor;
 import model.SecurityComponent;
 
 import java.io.IOException;
@@ -11,7 +13,8 @@ public class Controller {
 
     MainFrame mainFrame = new MainFrame(this);
     PiServer server = new PiServer(this);
-    private ArrayList SecurityComponent;
+    MicroClients map;
+
 
     public Controller() throws IOException, InterruptedException {
 
@@ -24,6 +27,12 @@ public class Controller {
         mainFrame.meny.updateStatusMK(MKarray);
 
     }
+    public void sendToMK(char c) throws IOException {
+        server.sendToFinger(c);
+
+            }
+
+
 
     void setAlarmOn(boolean b) {
         alarmOn = b;

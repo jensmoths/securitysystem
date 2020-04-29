@@ -7,14 +7,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f23d00dd-a4f0-4e41-a861-60ea4533051d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/localClient/FingerprintGui.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/MainFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/RequestHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/RequestHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalClient/GlobalClientController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/globalServer/GlobalServerController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$ClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$ClientHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$GlobalServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$GlobalServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$StartServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer$StartServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/securitysystem/localserver/PiServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/globalServer/UserRegister.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalServer/UserRegister.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/globalClient/GlobalClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalClient/GlobalClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/globalServer/GlobalServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalServer/GlobalServerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/localClient/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localClient/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/localClient/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localClient/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/localClient/Meny.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localClient/Meny.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/localserver/PiServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/localserver/PiServer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,7 +47,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Projektmap/MIN/securitysystem/securitysystem" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -55,13 +62,25 @@
       <recent name="C:\Users\jensm\Downloads\MujEmaP1-2\securitysystem\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.GlobalServerController">
-    <configuration name="GlobalClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="globalClient.GlobalClient" />
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.Controller">
+    <configuration name="Controller" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="localClient.Controller" />
       <module name="securitysystem" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="globalClient.*" />
+          <option name="PATTERN" value="localClient.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -108,19 +127,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="globalServerGUI.MainFrame" />
-      <module name="securitysystem" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="globalServerGUI.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="User" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="globalServer.User" />
       <module name="securitysystem" />
@@ -135,20 +141,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.GlobalClient" />
       <item itemvalue="Application.GlobalClientController" />
       <item itemvalue="Application.GlobalServerController" />
       <item itemvalue="Application.LogInPanel" />
-      <item itemvalue="Application.MainFrame" />
       <item itemvalue="Application.User" />
+      <item itemvalue="Application.Controller" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Controller" />
         <item itemvalue="Application.GlobalServerController" />
         <item itemvalue="Application.GlobalClientController" />
         <item itemvalue="Application.User" />
         <item itemvalue="Application.LogInPanel" />
-        <item itemvalue="Application.GlobalClientController" />
       </list>
     </recent_temporary>
   </component>
@@ -170,7 +175,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

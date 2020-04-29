@@ -18,20 +18,23 @@ public class Meny extends JFrame {
     JButton btnCloseDoor = new JButton("Lås");
     JButton btnAlarmOn = new JButton("Larma");
     JButton btnChangeCode = new JButton("Ändra kod");
+    JButton btnFingerprint = new JButton("Fingeravläsare");
 
     JList tfonlineMK = new JList();
     JList tfofflineMK = new JList();
     DefaultListModel defaultListModel = new DefaultListModel();
     private MainFrame mainFrame;
     private ChangeCode changeCode;
+    private FingerprintGui fingerprintGui;
 
 
-    public Meny (MainFrame mainFrame, ChangeCode changeCode){
+    public Meny (MainFrame mainFrame, ChangeCode changeCode, FingerprintGui fingerprintGui){
         this.mainFrame = mainFrame;
         this.changeCode = changeCode;
+        this.fingerprintGui = fingerprintGui;
 
         this.setLayout(new MigLayout());
-        setSize(400,600);
+        setSize(400,800);
         setBackground(new Color(83, 86, 91));
         setVisible(true);
         setLocation(500,200);
@@ -46,6 +49,8 @@ public class Meny extends JFrame {
         btnCloseDoor.addActionListener(new ButtonListener());
         btnAlarmOn.addActionListener(new ButtonListener());
         btnChangeCode.addActionListener(new ButtonListener());
+        btnFingerprint.addActionListener(new ButtonListener());
+
 
         tfofflineMK.setPreferredSize(new Dimension(400,400));
         tfonlineMK.setPreferredSize(new Dimension(400, 400));
@@ -54,6 +59,7 @@ public class Meny extends JFrame {
         btnCloseDoor.setPreferredSize(new Dimension(90,90));
         btnAlarmOn.setPreferredSize(new Dimension(90,90));
         btnChangeCode.setPreferredSize(new Dimension(90,90));
+        btnFingerprint.setPreferredSize(new Dimension(90,90));
 
         add(tfonlineMK,"span");
         add(tfofflineMK,"wrap, span");
@@ -61,6 +67,7 @@ public class Meny extends JFrame {
         add(btnCloseDoor);
         add(btnAlarmOn);
         add(btnChangeCode);
+        add(btnFingerprint);
 
         tfofflineMK.setBorder(BorderFactory.createTitledBorder("Offline"));
         tfonlineMK.setBorder(BorderFactory.createTitledBorder("Online"));
@@ -107,6 +114,10 @@ public class Meny extends JFrame {
                 //ChangeCode.setTitle("Ändra kod");
                 //ChangeCode.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             }
+            if(e.getSource() == btnFingerprint){
+                fingerprintGui.setVisible(true);
+            }
         }
     }
 }
+

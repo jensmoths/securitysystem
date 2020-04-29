@@ -21,6 +21,7 @@ public class Meny extends JFrame {
 
     JList tfonlineMK = new JList();
     JList tfofflineMK = new JList();
+    DefaultListModel defaultListModel = new DefaultListModel();
     private MainFrame mainFrame;
     private ChangeCode changeCode;
 
@@ -68,8 +69,19 @@ public class Meny extends JFrame {
     }
 
     public void updateStatusMK(ArrayList<SecurityComponent> sensors) {
-        //TODO uppdatera listorn med MKs
+        defaultListModel.clear();
+
+        for (SecurityComponent s: sensors
+        ) {
+            String onlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            defaultListModel.addElement(onlineMK);
+        }
+        tfonlineMK.setModel(defaultListModel);
+        tfonlineMK.repaint();
+
+
     }
+
 
 
     private class ButtonListener implements ActionListener{

@@ -24,15 +24,15 @@ public class PiServer extends Thread implements Serializable {
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
     private GlobalServer globalServer;
-    private Controller controller;
+    private  transient Controller controller;
 
 
     public PiServer(Controller controller) throws IOException, InterruptedException {
         this.controller = controller;
         new StartServer(Integer.parseInt(JOptionPane.showInputDialog(null, "Välj port"))).start();
 
-       // globalServer = new GlobalServer();
-      //  new Thread(globalServer).start();
+        globalServer = new GlobalServer();
+        new Thread(globalServer).start();
 
 
     }
@@ -126,6 +126,7 @@ public class PiServer extends Thread implements Serializable {
 
                     }
                     allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
+                    controller.updateMK(allOnlineSensors);
                     globalServer.UpdateGlobal(allOnlineSensors);
 
 
@@ -243,19 +244,19 @@ public class PiServer extends Thread implements Serializable {
 
 
                     }
-                    if(message.getSecurityComponent() instanceof FingerprintSensor){
+                    if (message.getSecurityComponent() instanceof FingerprintSensor) {
                         String userName = null;
                         char[] password = new char[0];
-                        PasswordAuthentication login= new PasswordAuthentication(userName, password);
+                        PasswordAuthentication login = new PasswordAuthentication(userName, password);
 
-                        if(message.getInfo().equals(password)){
-                            for(SecurityComponent s: map.keySet()){
-                                if(s instanceof MagneticSensor){
+                        if (message.getInfo().equals(password)) {
+                            for (SecurityComponent s : map.keySet()) {
+                                if (s instanceof MagneticSensor) {
                                     map.get(s).sendMessage('o');
                                 }
                             }
-                        }else for(SecurityComponent s: map.keySet()){
-                            if(s instanceof MagneticSensor){
+                        } else for (SecurityComponent s : map.keySet()) {
+                            if (s instanceof MagneticSensor) {
                                 map.get(s).sendMessage('c');
                             }
                         }
@@ -280,7 +281,9 @@ public class PiServer extends Thread implements Serializable {
                 }
             }
             allOnlineSensors.remove(sensor);//TODO NYTT KOPPLA FRÅN SENSOR
+
             try {
+                controller.updateMK(allOnlineSensors);
                 globalServer.UpdateGlobal(allOnlineSensors);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -297,22 +300,22 @@ public class PiServer extends Thread implements Serializable {
     }
 
 
-     class GlobalServer implements Runnable,Serializable {
-       private transient Socket socket;
+    class GlobalServer implements Runnable, Serializable {
+        private transient Socket socket;
         private transient ObjectOutputStream oos;
         private transient ObjectInputStream ois;
 
-         public void connect(String ip, int port) throws IOException {
+        public void connect(String ip, int port) throws IOException {
             socket = new Socket(ip, port);
-             ois = new ObjectInputStream(socket.getInputStream());
-             oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
 
-             String clientType = "server";
-             oos.writeObject(clientType);
-             String name = "admin";
-             oos.writeObject(name);
-             String password = "password";
-             oos.writeObject(password);
+            String clientType = "server";
+            oos.writeObject(clientType);
+            String name = "admin";
+            oos.writeObject(name);
+            String password = "password";
+            oos.writeObject(password);
 
 
             oos.flush();
@@ -354,31 +357,40 @@ public class PiServer extends Thread implements Serializable {
             while (true) {
 
                 try {
-                    Message msg = (Message) ois.readObject();
+                    Object obj = ois.readObject();
+                    if (obj instanceof Message) {
+                        Message msg = (Message) obj;
 
-                    if (msg.getInfo() == "shutdown") {
-                        ShutdownSensor(msg);
-                    }
+                        if (msg.getInfo() == "shutdown") {
+                            ShutdownSensor(msg);
+                        }
 
-                    if (msg.getSecurityComponent() instanceof DoorLock) {
-                        for (SecurityComponent s : map.keySet()) {
-                            if (s instanceof MagneticSensor) {
-                                if (msg.getSecurityComponent().isOpen()) {
-                                    map.get(s).sendMessage('o');
+                        if (msg.getSecurityComponent() instanceof DoorLock) {
+                            for (SecurityComponent s : map.keySet()) {
+                                if (s instanceof MagneticSensor) {
+                                    if (msg.getSecurityComponent().isOpen()) {
+                                        map.get(s).sendMessage('o');
 
-                                } else map.get(s).sendMessage('c');
+                                    } else map.get(s).sendMessage('c');
 
 
+                                }
                             }
                         }
+
+
                     }
-                } catch (IOException | ClassNotFoundException e) {
+                    if(obj instanceof String){
+                        System.out.println(obj);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-
-
             }
         }
     }
 }
+
 

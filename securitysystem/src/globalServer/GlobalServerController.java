@@ -5,18 +5,21 @@ import globalServerGUI.MainFrame;
 import java.util.HashMap;
 
 public class GlobalServerController {
-    private Clients clients;
-    private LocalServers localServers;
     private GlobalServer globalServer;
-    private HashMap<String, Home> homes = new HashMap<>();
+    private HashMap<String, Home> homes;
+    private MainFrame mainFrame;
 
     public GlobalServerController() {
-        clients = new Clients();
-        localServers = new LocalServers();
-        globalServer = new GlobalServer(8081, clients, localServers);
-
-
+        homes = new HashMap<>();
+        mainFrame = new MainFrame(this);
+        globalServer = new GlobalServer(8081, homes);
     }
 
+    public void addHome(String userName, Home home) {
+        homes.put(userName, home);
+    }
 
+    public static void main(String[] args) {
+        new GlobalServerController();
+    }
 }

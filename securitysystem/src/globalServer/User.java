@@ -1,5 +1,7 @@
 package globalServer;
 
+import java.util.Random;
+
 public class User {
     private String firstName, surName, street, zipCode, city, country, userName, password;
 
@@ -11,6 +13,8 @@ public class User {
         this.zipCode = zipCode;
         this.city = city;
         this.country = country;
+        password = "";
+        userName = "";
     }
 
     public User() {
@@ -20,18 +24,36 @@ public class User {
         zipCode = "";
         city = "";
         country = "";
+        password = "";
+        userName = "";
     }
 
-    public String generateLogInDetails() {
+    public User(String firstName, String surName, String street) {
+        this.firstName = firstName;
+        this.surName = surName;
+        this.street = street;
+        zipCode = "";
+        city = "";
+        country = "";
+        password = "";
+        userName = "";
+    }
+
+    public void generateLogInDetails() {
+        Random rand = new Random();
+
+        String characters = "123456789abcdefghijklmnopqrstuvwxyz";
+        for (int i = 0; i < 8; i++) {
+            password += characters.charAt(rand.nextInt(characters.length()));
+        }
+
         String firstName = getFirstName().toLowerCase().replaceAll("\\s", "");
         String surName = getSurName().toLowerCase().replaceAll("\\s", "");
         String street = getStreet().toLowerCase().replaceAll("\\s", "");
-        String zipCode = getZipCode().toLowerCase().replaceAll("\\s", "");
-        String city = getCity().toLowerCase().replaceAll("\\s", "");
-        String country = getCountry().toLowerCase().replaceAll("\\s", "");
-        String userName = street.substring(0, 3) + surName.substring(0, 2) + firstName.substring(0, 2);
-        this.userName = userName;
-        return userName;
+
+        userName = street.substring(0, 3) + surName.substring(0, 2) + firstName.substring(0, 2);
+
+        System.out.println(getUserName() + ", "+ getPassword());
     }
 
     public String getFirstName() {
@@ -103,6 +125,7 @@ public class User {
         malek.setFirstName("Ammar");
         malek.setSurName("Darwesh");
         malek.setStreet("Fläderbärsgatan 2");
-        System.out.println(malek.generateLogInDetails());
+        malek.generateLogInDetails();
+        System.out.println(malek.getUserName() + ", "+ malek.getPassword());
     }
 }

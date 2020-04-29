@@ -1,14 +1,18 @@
 package globalServerGUI;
 
+import globalServer.GlobalServerController;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainFrame {
     private JFrame frame = new JFrame();
-    private MainPanel mainPanel = new MainPanel();
+    private GlobalServerController globalServerController;
+    private MainPanel mainPanel;
 
-
-    public MainFrame () {
+    public MainFrame (GlobalServerController globalServerController) {
+        this.globalServerController = globalServerController;
+        mainPanel = new MainPanel(globalServerController);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -25,9 +29,5 @@ public class MainFrame {
 
     public RegisterPanel getRegisterPanel() {
         return mainPanel.getRegisterPanel();
-    }
-
-    public static void main(String[] args) {
-        MainFrame mainFrame = new MainFrame();
     }
 }

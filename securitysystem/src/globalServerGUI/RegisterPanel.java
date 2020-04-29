@@ -4,16 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import globalServer.GlobalServerController;
+import globalServer.Home;
+import globalServer.User;
 import net.miginfocom.swing.MigLayout;
 
 public class RegisterPanel extends JPanel {
-    private JTextField tfFirstName, tfSurName, tfStreet, tfZipCode, tfCity, tfCountry;
+    private JTextField tfFirstName, tfSurName, tfStreet, tfZipCode, tfCity;
     private JLabel lblFirstName, lblSurName, lblStreet, lblZipCode, lblCity, lblCountry;
     private JButton btnRegister;
+    private GlobalServerController globalServerController;
+    private JFrame frame;
 
-
-    public RegisterPanel() {
+    public RegisterPanel(GlobalServerController globalServerController) {
+        this.globalServerController = globalServerController;
+        frame = new JFrame();
         this.setLayout(new MigLayout());
         setPreferredSize(new Dimension(250, 200));
         setBackground(new Color(83, 86, 91));
@@ -21,7 +26,6 @@ public class RegisterPanel extends JPanel {
         btnRegister = new JButton("Register Client");
         tfStreet = new JTextField();
         tfCity = new JTextField();
-        tfCountry = new JTextField();
         tfFirstName = new JTextField();
         tfSurName = new JTextField();
         tfZipCode = new JTextField();
@@ -34,9 +38,8 @@ public class RegisterPanel extends JPanel {
         lblZipCode = new JLabel("Zip code:");
         draw();
 
-        JFrame frame = new JFrame();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation(dim.width/3-frame.getSize().width/3, dim.height/3-frame.getSize().height/3);
+        frame.setLocation(dim.width / 3 - frame.getSize().width / 3, dim.height / 3 - frame.getSize().height / 3);
         frame.setSize(new Dimension(350, 150));
         frame.setContentPane(this);
         frame.setVisible(true);
@@ -71,10 +74,21 @@ public class RegisterPanel extends JPanel {
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (tfFirstName.getText().isEmpty() | tfSurName.getText().isEmpty() | tfStreet.getText().isEmpty()) {
+            if ((tfFirstName.getText().isEmpty() | tfFirstName.getText().length() < 2)
+                    | (tfSurName.getText().isEmpty() | tfSurName.getText().length() < 2)
+                    | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3)) {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
             } else {
-                // TODO: 28-Apr-20 Create a new Home instance with the auto generated inparameters and put that instance in ServerController
+                User user = new User(tfFirstName.getText(), tfSurName.getText(), tfStreet.getText());
+                user.generateLogInDetails();
+                globalServerController.addHome(user.getUserName(), new Home(user));
+                System.out.println("created and added home");
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        RegisterPanel.this.frame.dispose();
+                    }
+                });
             }
         }
     }

@@ -4,8 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
-public class GlobalClientGui extends JPanel {
+public class MainPanel extends JPanel {
 
     private JPanel leftPanel;
     private JPanel rightPanel;
@@ -18,13 +19,13 @@ public class GlobalClientGui extends JPanel {
     private JButton btnUnlock;
 
     private JTextArea textArea;
-    private GlobalClientController globalClientController;
-    private String name;
-
+    private GlobalClient globalClient;
+    private JFrame frame;
     private JScrollPane scrollPane;
 
-    public GlobalClientGui(GlobalClientController globalClientController) {
-        this.globalClientController = globalClientController;
+    public MainPanel(GlobalClient globalClient) {
+        this.globalClient = globalClient;
+        frame = new JFrame();
         draw();
     }
 
@@ -33,10 +34,7 @@ public class GlobalClientGui extends JPanel {
         this.setPreferredSize(new Dimension(600, 600));
         this.setLayout(new BorderLayout());
 
-        Dimension btnDimension = new Dimension(200,20);
-
-        name = "Ammar";
-        globalClientController.send(name);
+        Dimension btnDimension = new Dimension(200, 20);
 
         leftPanel = new JPanel();
         rightPanel = new JPanel();
@@ -67,7 +65,7 @@ public class GlobalClientGui extends JPanel {
         btnON.setPreferredSize(new Dimension(btnDimension));
 
         leftPanelNorth.add(btnLock, BorderLayout.SOUTH);
-        leftPanelSouth.add(btnUnlock,BorderLayout.SOUTH);
+        leftPanelSouth.add(btnUnlock, BorderLayout.SOUTH);
 
         //leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         //leftPanelSouth.add(btnON, BorderLayout.CENTER);
@@ -84,6 +82,18 @@ public class GlobalClientGui extends JPanel {
         btnON.addActionListener(buttonListener);
         btnLock.addActionListener(buttonListener);
         btnUnlock.addActionListener(buttonListener);
+
+        frame.setSize(new Dimension(610, 650));
+        frame.setContentPane(MainPanel.this);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                globalClient.closeSocket();
+                //System.exit(0);
+            }
+        });
     }
 
     public void setTextArea(String activity) {
@@ -96,13 +106,13 @@ public class GlobalClientGui extends JPanel {
 
 
             if (e.getSource() == btnON) {
-                globalClientController.send("on");
+                globalClient.send("on");
             } else if (e.getSource() == btnOFF) {
-                globalClientController.send("off");
-            }else if (e.getSource() == btnLock){
-                globalClientController.send("lock");
-            }else if (e.getSource() == btnUnlock){
-                globalClientController.send("unlock");
+                globalClient.send("off");
+            } else if (e.getSource() == btnLock) {
+                globalClient.send("lock");
+            } else if (e.getSource() == btnUnlock) {
+                globalClient.send("unlock");
 
             }
         }

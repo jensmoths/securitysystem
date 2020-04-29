@@ -10,6 +10,7 @@ public class MainFrame {
     private GlobalServerController globalServerController;
     private MainPanel mainPanel;
 
+
     public MainFrame (GlobalServerController globalServerController) {
         this.globalServerController = globalServerController;
         mainPanel = new MainPanel(globalServerController);
@@ -18,7 +19,7 @@ public class MainFrame {
             public void run() {
                 Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                 frame.setLocation(dim.width/3-frame.getSize().width/3, dim.height/3-frame.getSize().height/3);
-                frame.setSize(new Dimension(820,520));
+                frame.setSize(new Dimension(1000,580));
                 frame.setContentPane(mainPanel);
                 frame.setVisible(true);
                 frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -29,5 +30,10 @@ public class MainFrame {
 
     public RegisterPanel getRegisterPanel() {
         return mainPanel.getRegisterPanel();
+    }
+    public MainPanel getMainPanel (){
+
+        return mainPanel;
+
     }
 }

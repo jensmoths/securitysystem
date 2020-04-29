@@ -1,5 +1,7 @@
 package globalClient;
 
+import globalServerGUI.RegisterPanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -99,6 +101,7 @@ public class MainPanel extends JPanel {
     public void setTextArea(String activity) {
         textArea.setText(activity);
     }
+
 
     private class ButtonListener implements ActionListener {
         @Override

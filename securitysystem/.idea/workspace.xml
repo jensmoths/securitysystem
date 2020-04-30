@@ -8,10 +8,14 @@
   <component name="ChangeListManager">
     <list default="true" id="f23d00dd-a4f0-4e41-a861-60ea4533051d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/src/globalClient/GlobalClientGui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalClient/GlobalClientGui.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/globalServer/GlobalServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalServer/GlobalServerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/FireAlarm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/FireAlarm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/MagneticSensor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/MagneticSensor.java" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/src/globalServerGUI/MainPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/globalServerGUI/MainPanel.java" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,8 +55,26 @@
       <recent name="C:\Users\jensm\Downloads\MujEmaP1-2\securitysystem\src" />
     </key>
   </component>
+<<<<<<< Updated upstream
   <component name="RunManager" selected="Application.GlobalClientController">
     <configuration name="GlobalClientController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+=======
+  <component name="RunManager" selected="Application.GlobalServerController">
+    <configuration name="GlobalClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="globalClient.GlobalClient" />
+      <module name="securitysystem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="globalClient.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GlobalClientController" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+>>>>>>> Stashed changes
       <option name="MAIN_CLASS_NAME" value="globalClient.GlobalClientController" />
       <module name="securitysystem" />
       <extension name="coverage">
@@ -93,9 +115,15 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.GlobalClientController" />
         <item itemvalue="Application.GlobalServerController" />
+<<<<<<< Updated upstream
         <item itemvalue="Application.Main" />
+=======
+        <item itemvalue="Application.GlobalClientController" />
+        <item itemvalue="Application.GlobalClient" />
+        <item itemvalue="Application.User" />
+        <item itemvalue="Application.LogInPanel" />
+>>>>>>> Stashed changes
       </list>
     </recent_temporary>
   </component>
@@ -117,10 +145,12 @@
       <screen x="0" y="0" width="3840" height="2120" />
     </state>
     <state x="2557" y="1077" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.3840.2120@0.0.3840.2120" timestamp="1587556582232" />
-    <state x="1288" y="413" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1587558810495">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="1030" y="327" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1588233776527">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="1030" y="327" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1536.824@0.0.1536.824" timestamp="1588233776527" />
     <state x="1288" y="413" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587558810495" />
+<<<<<<< Updated upstream
     <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1587560583360">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -137,6 +167,56 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587560583360" />
+=======
+    <state x="648" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1588117760162">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="648" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1588117760162" />
+    <state x="364" y="7" key="CommitChangelistDialog2" timestamp="1588172926191">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="364" y="7" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1588172926190" />
+    <state width="1493" height="165" key="GridCell.Tab.0.bottom" timestamp="1588234157005">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="165" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588234157005" />
+    <state width="1877" height="204" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588178382437" />
+    <state width="1493" height="165" key="GridCell.Tab.0.center" timestamp="1588234157004">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="165" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1588234157004" />
+    <state width="1877" height="204" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588178382437" />
+    <state width="1493" height="165" key="GridCell.Tab.0.left" timestamp="1588234157004">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="165" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1588234157004" />
+    <state width="1877" height="204" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588178382437" />
+    <state width="1493" height="165" key="GridCell.Tab.0.right" timestamp="1588234157005">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="165" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1588234157005" />
+    <state width="1877" height="204" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588178382437" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1588177564586">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1588160307037" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1588177564586" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1588177564586">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1588160307037" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1588177564586" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1588177564586">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1588160307037" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1588177564586" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1588177564586">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1588160307037" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1588177564586" />
+>>>>>>> Stashed changes
     <state x="2307" y="868" key="SettingsEditor" timestamp="1587556599946">
       <screen x="0" y="0" width="3840" height="2120" />
     </state>

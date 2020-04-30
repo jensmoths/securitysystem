@@ -91,6 +91,7 @@ import java.awt.event.ActionListener;
             this.textArea = textArea;
         }
 
+<<<<<<< Updated upstream
         private class ButtonListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -98,6 +99,21 @@ import java.awt.event.ActionListener;
                     registerPanel = new RegisterPanel();
                 } else if (actionEvent.getSource() == btnDelete) {
                     System.out.println("Delete this mf");
+=======
+    private class ButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            if (actionEvent.getSource() == btnRegister) {
+                registerPanel = new RegisterPanel(globalServerController);
+            } else if (actionEvent.getSource() == btnDelete) {
+                if (getSelectedRow()!=-1) {
+                    String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
+                    globalServerController.deleteHome(username);
+                    globalServerController.getUserRegister().deleteUser(getSelectedRow());
+                }else{
+                    JOptionPane.showMessageDialog(null, "You have to choose a user to delete");
+
+>>>>>>> Stashed changes
                 }
             }
         }

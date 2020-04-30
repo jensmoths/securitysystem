@@ -5,18 +5,19 @@ import java.util.Random;
 
 public class User {
 
-    private String firstName, surName, street, zipCode, city, userName, password;
+    private String firstName, surName, street, zipCode, city, userName, password, email;
 
-    public User(String firstName, String surName, String street, String zipCode, String city) {
+    public User(String firstName, String surName, String street, String zipCode, String city, String email) {
+
 
         this.firstName = firstName;
         this.surName = surName;
         this.street = street;
         this.zipCode = zipCode;
         this.city = city;
+        this.email = email;
         password = "";
         userName = "";
-
 
     }
 
@@ -28,6 +29,7 @@ public class User {
         city = "";
         password = "";
         userName = "";
+        email = "";
     }
 
     public User(String firstName, String surName, String street) {
@@ -36,8 +38,17 @@ public class User {
         this.street = street;
         zipCode = "";
         city = "";
+        email = "";
         password = "";
         userName = "";
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void generateLogInDetails() {
@@ -116,7 +127,7 @@ public class User {
 
     public String[] getUserInfo(){
 
-        String[] userInfo = new String[7];
+        String[] userInfo = new String[8];
 
         userInfo[0] = firstName;
         userInfo[1] = surName;
@@ -125,6 +136,7 @@ public class User {
         userInfo[4] = city;
         userInfo[5] = userName;
         userInfo[6] = password;
+        userInfo[7] = email;
 
         return userInfo;
 

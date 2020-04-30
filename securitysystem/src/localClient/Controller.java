@@ -1,6 +1,5 @@
 package localClient;
 
-import localserver.PiServer;
 import model.SecurityComponent;
 
 import java.io.IOException;

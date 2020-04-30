@@ -122,9 +122,10 @@ public class Meny extends JFrame {
             if(e.getSource() == btnFingerprint){
                 fingerprintGui.setVisible(true);
             }
-            if(e.getSource() == btnGoOnline);
-            goOnline.setVisible(true);
-
+            if(e.getSource() == btnGoOnline)
+            {
+                goOnline.setVisible(true);
+            }
 
         }
     }

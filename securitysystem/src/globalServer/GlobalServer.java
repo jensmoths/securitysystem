@@ -77,21 +77,23 @@ public class GlobalServer {
             do {
                 try {
                     if (homes.containsKey(username)) {
-                        break;
+                        if (password.equals(homes.get(username).getUser().getPassword()) & socket != null) {
+                            break;
+                        }
                     } else {
                         System.out.println("failed login");
                         oos.writeObject("user unauthenticated");
                         username = (String) ois.readObject();
                         password = (String) ois.readObject();
                     }
+
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-            } while (!homes.containsKey(username) );
+            } while (!homes.containsKey(username));
 
             if (homes.containsKey(username)) {
                 if (password.equals(homes.get(username).getUser().getPassword()) & socket != null) {
-                    System.out.println("in if");
                     Home home = homes.get(username);
                     home.setClientHandler(this);
 
@@ -116,8 +118,8 @@ public class GlobalServer {
                                     e.printStackTrace();
                                     System.out.println(socket.getInetAddress() + " has disconnected");
                                     try {
+                                        home.setLocalServer(null);
                                         if (socket != null) {
-                                            home.setLocalServer(null);
                                             socket.close();
                                         }
                                     } catch (IOException ex) {
@@ -147,8 +149,8 @@ public class GlobalServer {
                                 } catch (IOException | ClassNotFoundException e) {
                                     System.out.println(socket.getInetAddress() + " has disconnected");
                                     try {
+                                        home.removeGlobalClient(this);
                                         if (socket != null) {
-                                            home.removeGlobalClient(this);
                                             socket.close();
                                         }
                                     } catch (IOException ex) {

@@ -391,9 +391,22 @@ class GlobalServer implements Runnable, Serializable {
                 if (obj instanceof Message) {
                     Message msg = (Message) obj;
 
+
                     if (msg.getInfo() == "shutdown") {
                         ShutdownSensor(msg);
                     }
+
+            while (socket.isConnected()) {
+
+                try {
+                    Object obj = ois.readObject();
+                    if (obj instanceof Message) {
+                        Message msg = (Message) obj;
+
+                        if (msg.getInfo() == "shutdown") {
+                            ShutdownSensor(msg);
+                        }
+
 
                     if (msg.getSecurityComponent() instanceof DoorLock) {
                         for (SecurityComponent s : map.keySet()) {
@@ -408,6 +421,15 @@ class GlobalServer implements Runnable, Serializable {
                         }
                     }
 
+
+
+
+                    }
+                    if(obj instanceof String){
+                        System.out.println(obj);
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
 
                 }
                 if (obj instanceof String) {

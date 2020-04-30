@@ -1,8 +1,6 @@
 package globalServer;
 
 import globalServerGUI.MainFrame;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -32,25 +30,21 @@ public class GlobalServerController implements Observer {
     }
 
     public UserRegister getUserRegister(){
-
         return userRegister;
-
     }
 
     public void setInfo(String[][] strings){
-
         mainFrame.getMainPanel().setTableInfo(strings);
-
     }
 
-
-    public static void main(String[] args) {
-        new GlobalServerController();
-    }
 
     @Override
     public void update(Observable observable, Object o) {
         setInfo((String[][]) o);
 
+    }
+
+    public static void main(String[] args) {
+        new GlobalServerController();
     }
 }

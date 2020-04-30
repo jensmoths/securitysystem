@@ -19,8 +19,12 @@ public class MainFrame extends JPanel implements ActionListener {
     private ChangeCode cc;
     Meny meny;
     Controller controller;
+
     FingerprintGui fingerprintGui;
     GoOnline goOnline;
+
+    JFrame frame;
+
 
 
     /*
@@ -29,7 +33,7 @@ public class MainFrame extends JPanel implements ActionListener {
      */
     public MainFrame(Controller controller) throws ParseException {
         this.controller = controller;
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         //frame.setSize(new Dimension(320, 420));
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setUndecorated(true);
@@ -207,6 +211,7 @@ public class MainFrame extends JPanel implements ActionListener {
             System.out.println(systemPinCode);
             if (pinCode.equals(systemPinCode)) {
                 meny.setVisible(true);
+                frame.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Please type again!");
             }

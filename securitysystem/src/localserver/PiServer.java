@@ -24,15 +24,16 @@ public class PiServer extends Thread implements Serializable {
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
     private GlobalServer globalServer;
-    private  transient Controller controller;
+    private transient Controller controller;
+    public transient StartServer startServer;
 
 
     public PiServer(Controller controller) throws IOException, InterruptedException {
         this.controller = controller;
-        new StartServer(Integer.parseInt(JOptionPane.showInputDialog(null, "Välj port"))).start();
+        startServer = new StartServer(controller);
 
-        globalServer = new GlobalServer();
-        new Thread(globalServer).start();
+        // globalServer = new GlobalServer();
+        //  new Thread(globalServer).start();
 
 
     }
@@ -66,22 +67,33 @@ public class PiServer extends Thread implements Serializable {
 
     }
 
+    public void sendToFinger(char c, int id) throws IOException {
+        System.out.println("SERVER SEND TO FINGER");
+        startServer.sendToFingerChar(c, id);
 
-    private class StartServer extends Thread {
+    }
+
+    public class StartServer extends Thread {
 
         private SecurityComponent sensor;
         private int port;
         private String location;
+        Controller controller;
 
-        StartServer(int port) {
-            this.port = port;
+        StartServer(Controller controller) {
+            this.controller = controller;
+            port = (Integer.parseInt(JOptionPane.showInputDialog(null, "Välj port")));
+            //  this.port = port;
             readKeySet();
             System.out.println(map.size() + " READ SIZE PÅ MAPFILEN PÅ HÅRDDISK");
+            start();
+
         }
 
         @Override
         public void run() {
             try {
+
                 Socket socket;
                 ServerSocket ss = new ServerSocket(port);
 
@@ -127,7 +139,7 @@ public class PiServer extends Thread implements Serializable {
                     }
                     allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
                     controller.updateMK(allOnlineSensors);
-                    globalServer.UpdateGlobal(allOnlineSensors);
+                    //   globalServer.UpdateGlobal(allOnlineSensors);
 
 
                     System.out.println("IP :" + socket.getInetAddress() + " Sensortype: " + sensor.getClass().getSimpleName() + " Location: " + sensor.getLocation() + " SensorID: " + sensor.getId());
@@ -163,8 +175,23 @@ public class PiServer extends Thread implements Serializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
+        }
+
+        public void sendToFingerChar(char msg, int id) throws IOException {
+            System.out.println("CH SEND TO FINGER");
+            for (SecurityComponent s : map.keySet()
+            ) {
+                if (s instanceof MagneticSensor) {
+                    map.get(s).sendMessage(msg);
+                    map.get(s).sendMessageID(id);
+                }
+
+            }
         }
     }
+
 
     class ClientHandler extends Thread implements Serializable {
         private transient BufferedReader bufferedReader;
@@ -194,10 +221,12 @@ public class PiServer extends Thread implements Serializable {
                     String stringMessage = bufferedReader.readLine();
                     if (stringMessage == null) continue;
                     lastRead = System.currentTimeMillis();
-                    if (stringMessage == "heartbeat") continue;
-
+                    if (stringMessage.equals("heartbeat")) {
+                        continue;
+                    }
                     String[] split = stringMessage.split("\\|");
                     String state = split[0]; //, location = split[1], type = split[2];
+                    System.out.println("DETTA ÄR FELET" + state);
                     boolean booleanState = state.equals("on");
 
 
@@ -210,11 +239,11 @@ public class PiServer extends Thread implements Serializable {
                             if (s instanceof MagneticSensor) {
                                 if (message.getSecurityComponent().isOpen()) {
                                     map.get(s).sendMessage('o');
-                                    globalServer.GlobalsendMessage(message);
+                                    // globalServer.GlobalsendMessage(message);
 
                                 } else {
                                     map.get(s).sendMessage('c');
-                                    globalServer.GlobalsendMessage(message);
+                                    //  globalServer.GlobalsendMessage(message);
                                 }
                             }
                         }
@@ -224,17 +253,17 @@ public class PiServer extends Thread implements Serializable {
                             if (s instanceof MagneticSensor) {
                                 if (message.getSecurityComponent().isOpen()) {
                                     map.get(s).sendMessage('o');
-                                    globalServer.GlobalsendMessage(message);
+                                    //   globalServer.GlobalsendMessage(message);
 
                                 } else {
                                     map.get(s).sendMessage('c');
-                                    globalServer.GlobalsendMessage(message);
+                                    //   globalServer.GlobalsendMessage(message);
                                 }
                             }
                         }
                     }
                     if (message.getSecurityComponent() instanceof FireAlarm) {
-                        globalServer.GlobalsendMessage(message);
+                        //  globalServer.GlobalsendMessage(message);
 
                         for (SecurityComponent s : map.keySet()) {
                             if (s instanceof MagneticSensor) {
@@ -261,7 +290,7 @@ public class PiServer extends Thread implements Serializable {
                             }
                         }
 
-                        globalServer.GlobalsendMessage(message);
+                        //  globalServer.GlobalsendMessage(message);
 
                     }
 
@@ -294,9 +323,14 @@ public class PiServer extends Thread implements Serializable {
             bufferedWriter.write(msg);
             bufferedWriter.flush();
             System.out.println("DET HÄR: " + msg + " HAR SKICKATS TILL MIKROKONTROLLER");
-
-
         }
+
+        public void sendMessageID(int id) throws IOException {
+            bufferedWriter.write(id);
+            bufferedWriter.flush();
+            System.out.println("DET HÄR: " + id + " HAR SKICKATS TILL MIKROKONTROLLER");
+        }
+
     }
 
 
@@ -360,47 +394,76 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("109.228.172.110", 8081);
+                connect("localhost", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            while (socket.isConnected()) {
+            while (true) {
 
                 try {
                     Object obj = ois.readObject();
                     if (obj instanceof Message) {
                         Message msg = (Message) obj;
 
+
                         if (msg.getInfo() == "shutdown") {
                             ShutdownSensor(msg);
                         }
 
-                        if (msg.getSecurityComponent() instanceof DoorLock) {
-                            for (SecurityComponent s : map.keySet()) {
-                                if (s instanceof MagneticSensor) {
-                                    if (msg.getSecurityComponent().isOpen()) {
-                                        map.get(s).sendMessage('o');
+                        while (socket.isConnected()) {
 
-                                    } else map.get(s).sendMessage('c');
+                            try {
+                                 obj = ois.readObject();
+                                if (obj instanceof Message) {
+                                     msg = (Message) obj;
+
+                                    if (msg.getInfo().equals("shutdown")) {
+                                        ShutdownSensor(msg);
+                                    }
+
+
+                                    if (msg.getSecurityComponent() instanceof DoorLock) {
+                                        for (SecurityComponent s : map.keySet()) {
+                                            if (s instanceof MagneticSensor) {
+                                                if (msg.getSecurityComponent().isOpen()) {
+                                                    map.get(s).sendMessage('o');
+
+                                                } else map.get(s).sendMessage('c');
+
+
+                                            }
+                                        }
+                                    }
 
 
                                 }
+                                if (obj instanceof String) {
+                                    System.out.println(obj);
+                                }
+                            } catch (IOException | ClassNotFoundException e) {
+                                e.printStackTrace();
+
                             }
+                            if (obj instanceof String) {
+                                System.out.println(obj);
+                            }
+
+
                         }
 
-
-                    }
-                    if(obj instanceof String){
-                        System.out.println(obj);
-                    }
-                } catch (IOException | ClassNotFoundException e) {
+                        }
+                    } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
+
         }
     }
 }
+
 
 

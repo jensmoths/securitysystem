@@ -5,4 +5,8 @@
 
 *.class
 
+securitysystem/.idea/
+*.xml
+*.xml
+securitysystem/.idea/workspace.xml
 securitysystem/.idea/workspace.xml

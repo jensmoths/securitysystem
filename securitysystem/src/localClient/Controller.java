@@ -1,8 +1,13 @@
 package localClient;
 
+
+import localserver.MicroClients;
+import localserver.PiServer;
+import model.FingerprintSensor;
 import model.SecurityComponent;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class Controller {
@@ -10,9 +15,10 @@ public class Controller {
 
     MainFrame mainFrame = new MainFrame(this);
     PiServer server = new PiServer(this);
-    private ArrayList SecurityComponent;
 
-    public Controller() throws IOException, InterruptedException {
+
+
+    public Controller() throws IOException, InterruptedException, ParseException {
 
     }
 
@@ -23,12 +29,19 @@ public class Controller {
         mainFrame.meny.updateStatusMK(MKarray);
 
     }
+    public void sendToMK(char c, int id) throws IOException {
+        System.out.println("CONTROLLER SEND TO MK");
+        server.sendToFinger(c, id);
+
+            }
+
+
 
     void setAlarmOn(boolean b) {
         alarmOn = b;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, ParseException {
         new Controller();
     }
 }

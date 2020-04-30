@@ -18,6 +18,7 @@ public class GlobalServerController implements Observer {
         homes = new HashMap<>();
         mainFrame = new MainFrame(this);
         globalServer = new GlobalServer(8081, homes);
+
     }
 
     public void addHome(String userName, Home home) {

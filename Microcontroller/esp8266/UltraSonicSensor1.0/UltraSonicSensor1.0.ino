@@ -17,6 +17,16 @@ const int echoPin = 2;
 // defines variables
 long duration;
 int distance; // previous state of the distance
+const int led = 13;
+int ledState = LOW;
+unsigned long preMillis = 0;
+unsigned long ms;
+unsigned long beatMs;
+unsigned long preBeat = 0;
+unsigned long connectMs;
+unsigned long preConnect = 0;
+unsigned long reconnectMs;
+unsigned long preReconnect = 0;
 WiFiClient client;
 
 
@@ -41,32 +51,63 @@ String setupWifiManager() {
   return location.getValue();
 }
 
+void ledBlink() {
+  ms = millis();
+  if ((ms - preMillis) >= 500 ) {
+    preMillis = ms;
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    } digitalWrite(led, ledState);
+  }
+}
+void heartBeat() {
+  beatMs = millis();
+  if ((beatMs - preBeat) >= 1000 ) {
+    preBeat = beatMs;
+    client.println("heartbeat");
+    Serial.println("heartbeat");
+  }
+}
+
+
 void connectToServer(String location) {
   while (true) {
-    Serial.println("connecting to server");
-    client.connect(IP, PORT);
-    client.print(ESP.getChipId());
-    client.print("|");
-    client.print(TYPE);
-    client.print("|");
-    client.print(location);
-    client.println();
+    ledBlink();
+    connectMs = millis();
+    if ((connectMs - preConnect) >= 5000 ) {
+      preConnect = connectMs;
+      Serial.println("connecting to server");
+      client.connect(IP, PORT);
+      client.print(ESP.getChipId());
+      client.print("|");
+      client.print(TYPE);
+      client.print("|");
+      client.print(location);
+      client.println();
+    }
+    yield();
     if (client.connected()) break;
-    delay(10000);
   }
   Serial.println("connected to server");
 }
 
 void reconnectToServer() {
   while (true) {
-    Serial.println("reconnecting to server");
-    client.connect(IP, PORT);
-    client.print(ESP.getChipId());
-    client.print("|");
-    client.println(TYPE);
-
+    ledBlink();
+    reconnectMs = millis();
+    if ((reconnectMs - preReconnect) >= 5000) {
+      preReconnect = reconnectMs;
+      Serial.println("reconnecting to server");
+      client.connect(IP, PORT);
+      client.print(ESP.getChipId());
+      client.print("|");
+      client.println(TYPE);
+    }
+    yield();
     if (client.connected()) break;
-    delay(10000);
+    //delay(5000);
   }
   Serial.println("connected to server");
 }
@@ -80,6 +121,8 @@ void setup() {
 
   //start serial for debugging
   Serial.begin(115200);
+  client.setTimeout(250);
+  pinMode(led, OUTPUT);
 
   //method for easy connection to a wifi
   String location = setupWifiManager();
@@ -88,7 +131,9 @@ void setup() {
 }
 
 void loop() {
-  while (client.connected()) {
+  if (client.connected()) {
+    heartBeat();
+    digitalWrite(led, HIGH);
     // Clears the trigPin
     digitalWrite(trigPin, LOW);
     delayMicroseconds(2);
@@ -106,18 +151,14 @@ void loop() {
 
     // Prints the distance on the Serial Monitor
     delay(500);
-     if ((lastDistance - distance) > 3 || (lastDistance - distance) <  -3  ) {
-    if (distance < 15) {
-      client.println("Wakanda forever ");
-      Serial.print("Distance: ");
-      Serial.println(distance);
-
-    
+    if ((lastDistance - distance) > 3 || (lastDistance - distance) <  -3  ) {
+      if (distance < 15) {
+        client.println("Intruder");
+        Serial.print("Distance: ");
+        Serial.println(distance);
+      }
+      lastDistance = distance;
     }
-    lastDistance = distance;
-     }
-
-
 
     //    if (client.available() > 0) {
     //      String message = client.readString();
@@ -130,6 +171,5 @@ void loop() {
     //        digitalWrite(LED_BUILTIN, HIGH);
     //      }
     //   }
-  }
-  reconnectToServer();
+  } else reconnectToServer();
 }

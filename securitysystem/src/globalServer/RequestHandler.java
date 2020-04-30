@@ -6,6 +6,8 @@ import java.io.IOException;
 
 public class RequestHandler {
 
+    private EmailSender emailSender = new EmailSender();
+
     public void handleServerRequest(Object requestObject, Home home) {
 
         if (requestObject instanceof String) {

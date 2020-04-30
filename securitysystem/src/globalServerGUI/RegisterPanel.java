@@ -13,12 +13,12 @@ import globalServer.UserRegister;
 import net.miginfocom.swing.MigLayout;
 
 public class RegisterPanel extends JPanel {
-    private JTextField tfFirstName, tfSurName, tfStreet, tfZipCode, tfCity;
-    private JLabel lblFirstName, lblSurName, lblStreet, lblZipCode, lblCity, lblCountry;
-    private JButton btnRegister;
+    private JTextField tfFirstName, tfSurName, tfStreet, tfZipCode, tfCity, tfEmail;
+    private JLabel lblFirstName, lblSurName, lblStreet, lblZipCode, lblCity, lblEmail;
     private GlobalServerController globalServerController;
     private JFrame frame;
     private UserRegister register;
+    private JButton btnRegister;
 
     public RegisterPanel(GlobalServerController globalServerController) {
         this.globalServerController = globalServerController;
@@ -34,18 +34,19 @@ public class RegisterPanel extends JPanel {
         tfFirstName = new JTextField();
         tfSurName = new JTextField();
         tfZipCode = new JTextField();
+        tfEmail = new JTextField();
 
         lblStreet = new JLabel("Street:");
         lblCity = new JLabel("City:");
-        lblCountry = new JLabel("Country:");
         lblFirstName = new JLabel("First name:");
         lblSurName = new JLabel("Surname:");
         lblZipCode = new JLabel("Zip code:");
+        lblEmail = new JLabel("Email:");
         draw();
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width / 3 - frame.getSize().width / 3, dim.height / 3 - frame.getSize().height / 3);
-        frame.setSize(new Dimension(350, 150));
+        frame.setSize(new Dimension(350, 200));
         frame.setContentPane(this);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -58,11 +59,11 @@ public class RegisterPanel extends JPanel {
         tfSurName.setPreferredSize(new Dimension(100, 20));
 
         lblCity.setForeground(Color.white);
-        lblCountry.setForeground(Color.white);
         lblFirstName.setForeground(Color.white);
         lblStreet.setForeground(Color.white);
         lblSurName.setForeground(Color.white);
         lblZipCode.setForeground(Color.white);
+        lblEmail.setForeground(Color.white);
         add(lblFirstName);
         add(tfFirstName);
         add(lblSurName, "gap unrelated");
@@ -73,6 +74,8 @@ public class RegisterPanel extends JPanel {
         add(tfCity, "grow");
         add(lblZipCode, "gap unrelated");
         add(tfZipCode, "span, grow");
+        add(lblEmail);
+        add(tfEmail, "span, grow");
         add(btnRegister, "span 2, grow,  wrap");
     }
 
@@ -83,13 +86,13 @@ public class RegisterPanel extends JPanel {
             /*
             if ((tfFirstName.getText().isEmpty() | tfFirstName.getText().length() < 2)
                     | (tfSurName.getText().isEmpty() | tfSurName.getText().length() < 2)
-                    | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3)) {
+                    | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3) | (tfEmail.getText().length()<5)) {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
             } else {*/
                 /*
                 User user = new User(tfFirstName.getText(), tfSurName.getText(),
-                                     tfStreet.getText(), tfZipCode.getText(), tfCity.getText());*/
-                User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö");
+                                     tfStreet.getText(), tfZipCode.getText(), tfCity.getText(), tfEmail.getText());*/
+                User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
                 //user.generateLogInDetails();
                 user.setUserName("admin");
                 user.setPassword("password");

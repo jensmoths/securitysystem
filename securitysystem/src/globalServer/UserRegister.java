@@ -27,7 +27,7 @@ public class UserRegister extends Observable {
 
     public void getUserInformation(){
 
-        userString = new String[users.size()][7];
+        userString = new String[users.size()][8];
 
         for(int i = 0 ; i<users.size(); i++){
             for (int j=0; j<userString[i].length; j++){

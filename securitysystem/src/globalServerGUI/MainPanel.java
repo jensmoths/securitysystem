@@ -77,7 +77,7 @@ public class MainPanel extends JPanel {
         pnlLeft.setBorder(borderContact);
         pnlRight.setBorder(borderLogger);
 
-        columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City", "Username", "Password"};
+        columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City", "Username", "Password", "Email"};
         tblInfo.setForeground(Color.WHITE);
 
 

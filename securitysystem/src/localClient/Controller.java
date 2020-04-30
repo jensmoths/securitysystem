@@ -35,6 +35,10 @@ public class Controller {
 
             }
 
+    public void connectToGlobal() {
+        new Thread(server.globalServer).start();
+    }
+
 
 
     void setAlarmOn(boolean b) {
@@ -43,5 +47,9 @@ public class Controller {
 
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {
         new Controller();
+    }
+
+    public void setOnline(boolean b) {
+        mainFrame.meny.btnGoOnline.setEnabled(b);
     }
 }

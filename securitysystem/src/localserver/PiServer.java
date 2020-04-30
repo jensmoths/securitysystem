@@ -23,7 +23,7 @@ public class PiServer extends Thread implements Serializable {
     private ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
-    private GlobalServer globalServer;
+    public GlobalServer globalServer;
     private transient Controller controller;
     public transient StartServer startServer;
 
@@ -32,8 +32,7 @@ public class PiServer extends Thread implements Serializable {
         this.controller = controller;
         startServer = new StartServer(controller);
 
-        // globalServer = new GlobalServer();
-        //  new Thread(globalServer).start();
+        globalServer = new GlobalServer();
 
 
     }
@@ -334,7 +333,7 @@ public class PiServer extends Thread implements Serializable {
     }
 
 
-    class GlobalServer implements Runnable, Serializable {
+    public class GlobalServer implements Runnable, Serializable {
         private transient Socket socket;
         private transient ObjectOutputStream oos;
         private transient ObjectInputStream ois;
@@ -343,7 +342,7 @@ public class PiServer extends Thread implements Serializable {
 
 
         public void readUserLoginInfo() {
-            try(BufferedReader reader = new BufferedReader(new FileReader("data/userdata"))){
+            try (BufferedReader reader = new BufferedReader(new FileReader("data/userdata.txt"))) {
                 userName = reader.readLine();
                 password = reader.readLine();
             } catch (IOException e) {
@@ -399,71 +398,39 @@ public class PiServer extends Thread implements Serializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            while (true) {
-
+            while (socket.isConnected()) {
                 try {
                     Object obj = ois.readObject();
                     if (obj instanceof Message) {
                         Message msg = (Message) obj;
-
-
-                        if (msg.getInfo() == "shutdown") {
+                        if (msg.getInfo().equals("shutdown")) {
                             ShutdownSensor(msg);
                         }
+                        if (msg.getSecurityComponent() instanceof DoorLock) {
+                            for (SecurityComponent s : map.keySet()) {
+                                if (s instanceof MagneticSensor) {
+                                    if (msg.getSecurityComponent().isOpen()) {
+                                        map.get(s).sendMessage('o');
 
-                        while (socket.isConnected()) {
-
-                            try {
-                                 obj = ois.readObject();
-                                if (obj instanceof Message) {
-                                     msg = (Message) obj;
-
-                                    if (msg.getInfo().equals("shutdown")) {
-                                        ShutdownSensor(msg);
-                                    }
-
-
-                                    if (msg.getSecurityComponent() instanceof DoorLock) {
-                                        for (SecurityComponent s : map.keySet()) {
-                                            if (s instanceof MagneticSensor) {
-                                                if (msg.getSecurityComponent().isOpen()) {
-                                                    map.get(s).sendMessage('o');
-
-                                                } else map.get(s).sendMessage('c');
-
-
-                                            }
-                                        }
-                                    }
-
-
+                                    } else map.get(s).sendMessage('c');
                                 }
-                                if (obj instanceof String) {
-                                    System.out.println(obj);
-                                }
-                            } catch (IOException | ClassNotFoundException e) {
-                                e.printStackTrace();
-
                             }
-                            if (obj instanceof String) {
-                                System.out.println(obj);
-                            }
-
-
                         }
-
-                        }
-                    } catch (IOException e) {
+                    }
+                    if (obj instanceof String) {
+                        System.out.println(obj);
+                        if (obj.equals("user authenticated")) controller.setOnline(false);
+                    }
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                    break;
                 }
             }
-
+            controller.setOnline(true);
         }
     }
 }
+
 
 
 

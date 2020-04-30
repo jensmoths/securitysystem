@@ -27,11 +27,10 @@ public class Meny extends JFrame {
     private MainFrame mainFrame;
     private ChangeCode changeCode;
     private FingerprintGui fingerprintGui;
-    private GoOnline goOnline;
+
 
 
     public Meny (MainFrame mainFrame, ChangeCode changeCode, FingerprintGui fingerprintGui, GoOnline goOnline){
-        this.goOnline = goOnline;
         this.mainFrame = mainFrame;
         this.changeCode = changeCode;
         this.fingerprintGui = fingerprintGui;
@@ -96,6 +95,7 @@ public class Meny extends JFrame {
 
 
 
+
     private class ButtonListener implements ActionListener{
 
         @Override
@@ -124,7 +124,7 @@ public class Meny extends JFrame {
             }
             if(e.getSource() == btnGoOnline)
             {
-                goOnline.setVisible(true);
+                mainFrame.controller.connectToGlobal();
             }
 
         }

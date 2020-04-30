@@ -73,6 +73,7 @@ public class GoOnline extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == ok){
+            mainFrame.controller.connectToGlobal();
             JOptionPane.showMessageDialog(null, "Du har loggat in: " + user.getText());
 
         }

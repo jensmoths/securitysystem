@@ -6,6 +6,7 @@ import model.FingerprintSensor;
 import model.SecurityComponent;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class Controller {
@@ -16,7 +17,7 @@ public class Controller {
 
 
 
-    public Controller() throws IOException, InterruptedException {
+    public Controller() throws IOException, InterruptedException, ParseException {
 
     }
 
@@ -27,8 +28,9 @@ public class Controller {
         mainFrame.meny.updateStatusMK(MKarray);
 
     }
-    public void sendToMK(char c) throws IOException {
-        server.sendToFinger(c);
+    public void sendToMK(char c, int id) throws IOException {
+        System.out.println("CONTROLLER SEND TO MK");
+        server.sendToFinger(c, id);
 
             }
 
@@ -38,7 +40,7 @@ public class Controller {
         alarmOn = b;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, ParseException {
         new Controller();
     }
 }

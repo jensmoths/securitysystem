@@ -1,20 +1,23 @@
 package localClient;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.ParseException;
 
 public class FingerprintGui extends JFrame implements ActionListener {
     private MainFrame mainFrame;
     private JFrame fingerFrame;
     private JButton add, delete, empty;
     private JPanel panel;
-    private JTextArea addText, deleteText, clearText;
+    private JFormattedTextField addText, deleteText, clearText;
     private JList list;
+    private MaskFormatter mask;
 
-    public FingerprintGui(MainFrame mainFrame) {
+    public FingerprintGui(MainFrame mainFrame) throws ParseException {
         this.mainFrame = mainFrame;
 
         fingerFrame = new JFrame();
@@ -24,12 +27,14 @@ public class FingerprintGui extends JFrame implements ActionListener {
         draw();
 
     }
-    public void draw(){
+    public void draw() throws ParseException {
+        mask = new MaskFormatter();
         panel = new JPanel(new GridLayout(6,6));
-            addText = new JTextArea();
-            deleteText = new JTextArea();
-            clearText = new JTextArea();
+            addText = new JFormattedTextField(mask);
+            deleteText = new JFormattedTextField(mask);
+            clearText = new JFormattedTextField(mask);
             list = new JList();
+            mask.setMask("###");
                 add = new JButton("Add");
                 delete = new JButton("Delete");
                 empty = new JButton("Clear");
@@ -56,21 +61,25 @@ public class FingerprintGui extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == add){
             try {
-                mainFrame.controller.sendToMK('a');
+
+                int i = Integer.parseInt((String) addText.getValue());
+                mainFrame.controller.sendToMK('a',i);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         if (actionEvent.getSource() == delete){
             try {
-                mainFrame.controller.sendToMK('d');
+                int i = Integer.parseInt((String) deleteText.getValue());
+                mainFrame.controller.sendToMK('d',i);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         if (actionEvent.getSource() == empty){
             try {
-                mainFrame.controller.sendToMK('e');
+                int i = Integer.parseInt((String) clearText.getValue());
+                mainFrame.controller.sendToMK('e',i);
             } catch (IOException e) {
                 e.printStackTrace();
             }

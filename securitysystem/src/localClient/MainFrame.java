@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 
 public class MainFrame extends JPanel implements ActionListener {
     private JButton btnNum0, btnNum1, btnNum2, btnNum3, btnNum4, btnNum5, btnNum6, btnNum7,
@@ -19,13 +20,14 @@ public class MainFrame extends JPanel implements ActionListener {
     Meny meny;
     Controller controller;
     FingerprintGui fingerprintGui;
+    GoOnline goOnline;
 
 
     /*
     Instantiates the global GUI (the virtual numberpad) and hardcodes a value as the correct pincode.
     Also sets up all the necessary graphical components, using the draw() method.
      */
-    public MainFrame(Controller controller) {
+    public MainFrame(Controller controller) throws ParseException {
         this.controller = controller;
         JFrame frame = new JFrame();
         //frame.setSize(new Dimension(320, 420));
@@ -37,8 +39,9 @@ public class MainFrame extends JPanel implements ActionListener {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         fingerprintGui = new FingerprintGui(this);
+        goOnline = new GoOnline(this);
         cc = new ChangeCode(this);
-        meny = new Meny(this, cc, fingerprintGui);
+        meny = new Meny(this, cc, fingerprintGui, goOnline);
         cc.setVisible(false);
         meny.setVisible(false);
         meny.setBackground(new Color(83,86,91));

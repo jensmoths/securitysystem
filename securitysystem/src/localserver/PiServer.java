@@ -25,15 +25,15 @@ public class PiServer extends Thread implements Serializable {
     private ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
     private GlobalServer globalServer;
     private transient Controller controller;
-     StartServer startServer;
+    public transient StartServer  startServer;
 
 
     public PiServer(Controller controller) throws IOException, InterruptedException {
         this.controller = controller;
        startServer = new StartServer(controller);
 
-        globalServer = new GlobalServer();
-        new Thread(globalServer).start();
+       // globalServer = new GlobalServer();
+      //  new Thread(globalServer).start();
 
 
     }
@@ -66,8 +66,10 @@ public class PiServer extends Thread implements Serializable {
     public void setDoor(boolean open) {
 
     }
-   public void sendToFinger(char c) throws IOException {
-        startServer.sendToFinger(c);
+   public void sendToFinger(char c, int id) throws IOException {
+       System.out.println("SERVER SEND TO FINGER");
+        startServer.sendToFingerChar(c, id);
+
    }
 
     public class StartServer extends Thread {
@@ -135,7 +137,7 @@ public class PiServer extends Thread implements Serializable {
                     }
                     allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
                     controller.updateMK(allOnlineSensors);
-                    globalServer.UpdateGlobal(allOnlineSensors);
+                 //   globalServer.UpdateGlobal(allOnlineSensors);
 
 
                     System.out.println("IP :" + socket.getInetAddress() + " Sensortype: " + sensor.getClass().getSimpleName() + " Location: " + sensor.getLocation() + " SensorID: " + sensor.getId());
@@ -174,11 +176,13 @@ public class PiServer extends Thread implements Serializable {
 
 
     }
-        public void sendToFinger(char msg) throws IOException {
+        public void sendToFingerChar(char msg, int id) throws IOException {
+            System.out.println("CH SEND TO FINGER");
             for (SecurityComponent s: map.keySet()
             ) {
-                if(s instanceof FingerprintSensor){
+                if(s instanceof MagneticSensor){
                     map.get(s).sendMessage(msg);
+                    map.get(s).sendMessageID(id);
                 }
 
             }
@@ -214,10 +218,12 @@ class ClientHandler extends Thread implements Serializable {
                 String stringMessage = bufferedReader.readLine();
                 if (stringMessage == null) continue;
                 lastRead = System.currentTimeMillis();
-                if (stringMessage == "heartbeat") continue;
-
+                if (stringMessage.equals("heartbeat")) {
+                    continue;
+                }
                 String[] split = stringMessage.split("\\|");
                 String state = split[0]; //, location = split[1], type = split[2];
+                System.out.println("DETTA ÄR FELET" +state);
                 boolean booleanState = state.equals("on");
 
 
@@ -230,11 +236,11 @@ class ClientHandler extends Thread implements Serializable {
                         if (s instanceof MagneticSensor) {
                             if (message.getSecurityComponent().isOpen()) {
                                 map.get(s).sendMessage('o');
-                                globalServer.GlobalsendMessage(message);
+                               // globalServer.GlobalsendMessage(message);
 
                             } else {
                                 map.get(s).sendMessage('c');
-                                globalServer.GlobalsendMessage(message);
+                              //  globalServer.GlobalsendMessage(message);
                             }
                         }
                     }
@@ -244,17 +250,17 @@ class ClientHandler extends Thread implements Serializable {
                         if (s instanceof MagneticSensor) {
                             if (message.getSecurityComponent().isOpen()) {
                                 map.get(s).sendMessage('o');
-                                globalServer.GlobalsendMessage(message);
+                             //   globalServer.GlobalsendMessage(message);
 
                             } else {
                                 map.get(s).sendMessage('c');
-                                globalServer.GlobalsendMessage(message);
+                             //   globalServer.GlobalsendMessage(message);
                             }
                         }
                     }
                 }
                 if (message.getSecurityComponent() instanceof FireAlarm) {
-                    globalServer.GlobalsendMessage(message);
+                  //  globalServer.GlobalsendMessage(message);
 
                     for (SecurityComponent s : map.keySet()) {
                         if (s instanceof MagneticSensor) {
@@ -314,6 +320,11 @@ class ClientHandler extends Thread implements Serializable {
         bufferedWriter.write(msg);
         bufferedWriter.flush();
         System.out.println("DET HÄR: " + msg + " HAR SKICKATS TILL MIKROKONTROLLER");
+    }
+    public void sendMessageID(int id) throws IOException {
+        bufferedWriter.write(id);
+        bufferedWriter.flush();
+        System.out.println("DET HÄR: " + id + " HAR SKICKATS TILL MIKROKONTROLLER");
     }
 
 }

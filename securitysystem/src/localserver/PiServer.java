@@ -22,7 +22,7 @@ public class PiServer extends Thread implements Serializable {
     private ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
-    private ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
+    public ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
     public GlobalServer globalServer;
     private transient Controller controller;
     public transient StartServer startServer;
@@ -62,8 +62,17 @@ public class PiServer extends Thread implements Serializable {
         }
     }
 
-    public void setDoor(boolean open) {
+    public void setDoor(boolean open) throws IOException {
+        for (SecurityComponent s : map.keySet()) {
+            if (s instanceof MagneticSensor) {
+                if (open) {
+                    map.get(s).sendMessage('o');
 
+
+                } else{ map.get(s).sendMessage('c');}
+                map.get(s).sensor.setOpen(open);
+            }
+        }
     }
 
     public void sendToFinger(char c, int id) throws IOException {
@@ -218,6 +227,7 @@ public class PiServer extends Thread implements Serializable {
             while (!interrupted()) {
                 try {
                     String stringMessage = bufferedReader.readLine();
+
                     if (stringMessage == null) continue;
                     lastRead = System.currentTimeMillis();
                     if (stringMessage.equals("heartbeat")) {
@@ -225,11 +235,12 @@ public class PiServer extends Thread implements Serializable {
                     }
                     String[] split = stringMessage.split("\\|");
                     String state = split[0]; //, location = split[1], type = split[2];
-                    System.out.println("DETTA ÄR FELET" + state);
+                    System.out.println("DETTA ÄR FELET: " + state);
                     boolean booleanState = state.equals("on");
 
 
                     sensor.setOpen(booleanState);
+                    controller.updateMK(allOnlineSensors);
                     Message message = new Message("", sensor);
 
 
@@ -238,6 +249,8 @@ public class PiServer extends Thread implements Serializable {
                             if (s instanceof MagneticSensor) {
                                 if (message.getSecurityComponent().isOpen()) {
                                     map.get(s).sendMessage('o');
+
+                                    controller.takePicture();
                                     // globalServer.GlobalsendMessage(message);
 
                                 } else {

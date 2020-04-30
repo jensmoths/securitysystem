@@ -338,6 +338,18 @@ public class PiServer extends Thread implements Serializable {
         private transient Socket socket;
         private transient ObjectOutputStream oos;
         private transient ObjectInputStream ois;
+        String userName;
+        String password;
+
+
+        public void readUserLoginInfo() {
+            try(BufferedReader reader = new BufferedReader(new FileReader("data/userdata"))){
+                userName = reader.readLine();
+                password = reader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         public void connect(String ip, int port) throws IOException {
             socket = new Socket(ip, port);
@@ -345,10 +357,10 @@ public class PiServer extends Thread implements Serializable {
             oos = new ObjectOutputStream(socket.getOutputStream());
 
             String clientType = "server";
+
+            readUserLoginInfo();
             oos.writeObject(clientType);
-            String name = "admin";
-            oos.writeObject(name);
-            String password = "password";
+            oos.writeObject(userName);
             oos.writeObject(password);
 
 

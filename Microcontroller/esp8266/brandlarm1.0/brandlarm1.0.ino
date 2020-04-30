@@ -6,7 +6,8 @@
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
 //String locationString = "location";
-const String IP = "83.254.129.68";
+//const String IP = "83.254.129.68"; //per
+const String IP = "82.209.130.123"; //jens
 const int PORT = 40000;
 const String TYPE = "firealarm";
 const int larm = 15;
@@ -60,7 +61,7 @@ void heartBeat() {
   beatMs = millis();
   if ((beatMs - preBeat) >= 1000 ) {
     preBeat = beatMs;
-    client.print("heartbeat");
+    client.println("heartbeat");
     Serial.println("heartbeat");
   }
 }
@@ -135,6 +136,10 @@ void loop() {
       client.println("Fire");
       Serial.println("Fire");
       delay(3000);
+    }
+    if (client.available() > 0) {
+      char message = client.read();
+      Serial.println(message);
     }
   } else reconnectToServer();
 }

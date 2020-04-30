@@ -367,7 +367,7 @@ class GlobalServer implements Runnable, Serializable {
     @Override
     public void run() {
         try {
-            connect("localhost", 40000);
+            connect("localhost", 8081);
             System.out.println("connected to server");
         } catch (IOException e) {
             e.printStackTrace();

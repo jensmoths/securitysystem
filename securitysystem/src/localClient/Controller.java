@@ -13,7 +13,7 @@ public class Controller {
 
     MainFrame mainFrame = new MainFrame(this);
     PiServer server = new PiServer(this);
-    MicroClients map;
+
 
 
     public Controller() throws IOException, InterruptedException {

@@ -1,4 +1,7 @@
 package globalClient;
+
+import globalServer.Logger;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,7 +24,6 @@ public class GlobalClient {
         this.globalClientController = globalClientController;
         connect();
     }
-
 
 
     public void connect() {
@@ -61,7 +63,6 @@ public class GlobalClient {
     }
 
     private class Receiver extends Thread {
-        String logger = "";
 
         @Override
         public void run() {
@@ -73,14 +74,17 @@ public class GlobalClient {
 
             while (true) {
                 try {
-                    String objectRead = (String) ois.readObject();
-                    //logger += objectRead + "\n";
-                    System.out.println("You have received: " + objectRead);
-                    //mainFrame.setTextArea(logger);
-                    if (objectRead.equals("user authenticated")) {
-                        globalClientController.authenticateUser();
-                    } else if (objectRead.equals("user unauthenticated")) {
-                        JOptionPane.showMessageDialog(null, "username or password are incorrect");
+                    Object objectRead = ois.readObject();
+
+                    if (objectRead instanceof String) {
+                        System.out.println("You have received: " + objectRead);
+                        if (objectRead.equals("user authenticated")) {
+                            globalClientController.authenticateUser();
+                        } else if (objectRead.equals("user unauthenticated")) {
+                            JOptionPane.showMessageDialog(null, "username or password are incorrect");
+                        }
+                    } else if (objectRead instanceof Logger) {
+                        globalClientController.updateLog((Logger) objectRead);
                     }
 
                 } catch (IOException | ClassNotFoundException e) {

@@ -18,7 +18,6 @@ public class GlobalServerController implements Observer {
         homes = new HashMap<>();
         mainFrame = new MainFrame(this);
         globalServer = new GlobalServer(8081, homes);
-
     }
 
     public void addHome(String userName, Home home) {
@@ -26,7 +25,12 @@ public class GlobalServerController implements Observer {
     }
 
     public void deleteHome(String userName) {
+        homes.get(userName).logger.deleteLog();
         homes.remove(userName);
+    }
+
+    public Logger getClientLogger(String username) {
+        return homes.get(username).logger;
     }
 
     public UserRegister getUserRegister(){
@@ -37,11 +41,9 @@ public class GlobalServerController implements Observer {
         mainFrame.getMainPanel().setTableInfo(strings);
     }
 
-
     @Override
     public void update(Observable observable, Object o) {
         setInfo((String[][]) o);
-
     }
 
     public static void main(String[] args) {

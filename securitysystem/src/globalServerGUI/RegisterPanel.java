@@ -83,14 +83,14 @@ public class RegisterPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO: 29-Apr-20 Avkommentera alla kommentaren nedan för slutversion
-            /*
+/*
             if ((tfFirstName.getText().isEmpty() | tfFirstName.getText().length() < 2)
                     | (tfSurName.getText().isEmpty() | tfSurName.getText().length() < 2)
                     | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3) | (tfEmail.getText().length()<5)) {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
-            } else {*/
-                /*
-                User user = new User(tfFirstName.getText(), tfSurName.getText(),
+            } else {
+*/
+                /*User user = new User(tfFirstName.getText(), tfSurName.getText(),
                                      tfStreet.getText(), tfZipCode.getText(), tfCity.getText(), tfEmail.getText());*/
                 User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
                 //user.generateLogInDetails();
@@ -105,7 +105,7 @@ public class RegisterPanel extends JPanel {
                         RegisterPanel.this.frame.dispose();
                     }
                 });
-            /*}*/
+            //}
         }
     }
 }

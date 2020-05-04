@@ -15,10 +15,8 @@ public class UserRegister extends Observable {
     }
 
     public void deleteUser(int index){
-
         users.remove(index);
         getUserInformation();
-
     }
 
     public User getUser(int index) {

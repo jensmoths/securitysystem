@@ -7,9 +7,12 @@ public class Home {
     User user;
     GlobalServer.ClientHandler localServer;
     LinkedList<GlobalServer.ClientHandler> globalClients;
+    Logger logger;
 
     public Home(User user) {
         globalClients = new LinkedList<>();
+        logger = new Logger();
+        logger.createLogger(user.getUserName());
         this.user = user;
     }
 

@@ -97,9 +97,24 @@ public class MainPanel extends JPanel {
             }
         });
     }
+    // TODO: 30-Apr-20 add this code to GUI for microcontroller gui
+//    public void setTestJlist(ArrayList<SecurityComponent> rey) {
+//        testListModel.clear();
+//
+//        for (SecurityComponent s: rey
+//        ) {
+//            String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+//            testListModel.addElement(hej);
+//        }
+//        testJlist.setModel(testListModel);
+//        testJlist.repaint();
+//
+//
+//    }
 
-    public void setTextArea(String activity) {
-        textArea.setText(activity);
+
+    public void setTextArea(String text) {
+        textArea.setText(text);
     }
 
 

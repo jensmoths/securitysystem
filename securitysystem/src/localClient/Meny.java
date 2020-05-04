@@ -120,7 +120,7 @@ public class Meny extends JFrame {
                 mainFrame.controller.setAlarmOn(true);
             }
             if (e.getSource() == btnChangeCode){
-                changeCode.setVisible(true);
+                mainFrame.cc = new ChangeCode(mainFrame);
                 //JFrame ChangeCode = new JFrame();
                 //ChangeCode.setSize(new Dimension(320, 420));
                 //ChangeCode.setTitle("Ändra kod");

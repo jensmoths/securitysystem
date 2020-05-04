@@ -81,10 +81,17 @@ public class Meny extends JFrame {
 
     public void updateStatusMK(ArrayList<SecurityComponent> sensors) {
         defaultListModel.clear();
-
+        String status;
         for (SecurityComponent s: sensors
         ) {
-            String onlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            if(s.isOpen() == true) {
+
+                status = "Öppen";
+            }
+            else status = "Stängd";
+
+
+            String onlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation()+ " Dörren är :" + status;
             defaultListModel.addElement(onlineMK);
         }
         tfonlineMK.setModel(defaultListModel);

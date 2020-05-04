@@ -1,6 +1,7 @@
 package localClient;
 
 
+import localserver.CommandLine;
 import localserver.MicroClients;
 import localserver.PiServer;
 import model.FingerprintSensor;
@@ -18,12 +19,19 @@ public class Controller {
 
 
 
+
+
     public Controller() throws IOException, InterruptedException, ParseException {
 
     }
 
-    void setDoorOpen(boolean b) {
-        server.setDoor(b);
+    void setDoorOpen(boolean b)  {
+        try {
+            server.setDoor(b);
+            updateMK(server.allOnlineSensors);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public void updateMK(ArrayList<SecurityComponent> MKarray){
         mainFrame.meny.updateStatusMK(MKarray);
@@ -37,6 +45,10 @@ public class Controller {
 
     public void connectToGlobal() {
         new Thread(server.globalServer).start();
+    }
+
+    public void takePicture() {
+        new Thread(new CommandLine()).start();
     }
 
 

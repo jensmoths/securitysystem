@@ -17,7 +17,7 @@ public class MainFrame extends JPanel implements ActionListener {
     private Font font = new Font("Courier", Font.BOLD, 30);
     private String systemPinCode;
     private Color numberPadColor = new Color(74, 77, 82);
-    private ChangeCode cc;
+    ChangeCode cc;
     Meny meny;
     Controller controller;
 
@@ -45,9 +45,7 @@ public class MainFrame extends JPanel implements ActionListener {
 
         fingerprintGui = new FingerprintGui(this);
         goOnline = new GoOnline(this);
-        cc = new ChangeCode(this);
         meny = new Meny(this, cc, fingerprintGui, goOnline);
-        cc.setVisible(false);
         meny.setVisible(false);
         meny.setBackground(new Color(83,86,91));
 
@@ -242,6 +240,7 @@ public class MainFrame extends JPanel implements ActionListener {
     }
 
     public void setSystemPinCode(String newSystemPinCode) {
+
         String userdata = null;
         try (BufferedReader reader = new BufferedReader(new FileReader("data/userdata.txt"))) {
             userdata = reader.readLine();

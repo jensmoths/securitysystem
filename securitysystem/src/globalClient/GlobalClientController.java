@@ -17,7 +17,8 @@ public class GlobalClientController {
     }
 
     public void updateLog(Logger logger) {
-        mainFrame.setTextArea(logger.getLog(23, 47, 23, 49));
+        mainFrame.setTextArea(logger.getLog(2020,5 ,5 , 1, 6,
+                2020, 5, 5, 1, 26));
     }
 
     public static void main(String[] args) {

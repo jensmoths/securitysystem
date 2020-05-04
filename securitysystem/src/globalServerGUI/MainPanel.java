@@ -110,6 +110,7 @@ public class MainPanel extends JPanel {
 
     public void setTextArea(JTextArea textArea) {
         this.textArea = textArea;
+        loggerScrollPane.repaint();
     }
 
     public void setTableInfo(String[][] info){

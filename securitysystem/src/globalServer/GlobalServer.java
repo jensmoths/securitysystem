@@ -55,7 +55,6 @@ public class GlobalServer {
             this.socket = socket;
             this.oos = oos;
             this.ois = ois;
-            requestHandler = new RequestHandler();
         }
 
         public String getServerOrClient() {
@@ -96,12 +95,13 @@ public class GlobalServer {
                 if (password.equals(homes.get(username).getUser().getPassword()) & socket != null) {
                     Home home = homes.get(username);
                     home.setClientHandler(this);
-
+                    requestHandler = new RequestHandler(home);
                     try {
                         oos.writeObject("user authenticated");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    home.logger.addToLogger(socket.getInetAddress() + "has logged in");
 
                     switch (serverOrClient) {
 
@@ -115,7 +115,6 @@ public class GlobalServer {
                                     requestHandler.handleServerRequest(requestObject, home);
 
                                 } catch (IOException | ClassNotFoundException e) {
-                                    e.printStackTrace();
                                     System.out.println(socket.getInetAddress() + " has disconnected");
                                     try {
                                         home.setLocalServer(null);
@@ -132,14 +131,13 @@ public class GlobalServer {
 
                         case "globalClient":
                             ObjectOutputStream localServerOos;
-                            ClientHandler localServer = home.getLocalServer();
 
                             while (true) {
                                 try {
                                     requestObject = ois.readObject();
                                     String requestString = requestObject.toString();
 
-                                    if (localServer != null) {
+                                    if (home.localServer != null) {
                                         localServerOos = home.getLocalServer().getOos();
                                         localServerOos.writeObject(requestHandler.handleClientRequest(requestString));
                                     } else {
@@ -149,6 +147,7 @@ public class GlobalServer {
                                 } catch (IOException | ClassNotFoundException e) {
                                     System.out.println(socket.getInetAddress() + " has disconnected");
                                     try {
+                                        home.logger.addToLogger(socket.getInetAddress() + "has logged out");
                                         home.removeGlobalClient(this);
                                         if (socket != null) {
                                             socket.close();

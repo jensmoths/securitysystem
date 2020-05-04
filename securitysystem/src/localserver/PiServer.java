@@ -146,7 +146,6 @@ public class PiServer extends Thread implements Serializable {
 
                     }
                     allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
-                    controller.updateMK(allOnlineSensors);
                     //   globalServer.UpdateGlobal(allOnlineSensors);
 
 
@@ -176,6 +175,7 @@ public class PiServer extends Thread implements Serializable {
                     System.out.println("GLOBALMAPSIZE: " + globalMap.size());
 
 
+                    controller.updateMK(allOnlineSensors); //TODO FLYTTADE DEN HÄR RADEN TILL 178
                     saveKeySet();
 
 

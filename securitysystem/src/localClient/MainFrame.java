@@ -216,8 +216,11 @@ public class MainFrame extends JPanel implements ActionListener {
         } else if (buttonNumber.equals("OK") && pinCode.length() == 4) {
             System.out.println(systemPinCode);
             if (pinCode.equals(systemPinCode)) {
-                meny.setVisible(true);
-                frame.setVisible(false);
+               // meny.setVisible(true);
+               // frame.setVisible(false);
+                controller.setAlarmOn(false); //TODO TESTA DETTA
+
+
             } else {
                 JOptionPane.showMessageDialog(null, "Please type again!");
             }

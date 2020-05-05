@@ -1,6 +1,8 @@
 package localClient;
 
 
+import model.FireAlarm;
+import model.MagneticSensor;
 import model.SecurityComponent;
 import net.miginfocom.swing.MigLayout;
 
@@ -23,7 +25,8 @@ public class Meny extends JFrame {
 
     JList tfonlineMK = new JList();
     JList tfofflineMK = new JList();
-    DefaultListModel defaultListModel = new DefaultListModel();
+    DefaultListModel OnlineListModel = new DefaultListModel();
+    DefaultListModel OfflineListModel = new DefaultListModel();
     private MainFrame mainFrame;
     private ChangeCode changeCode;
     private FingerprintGui fingerprintGui;
@@ -79,25 +82,49 @@ public class Meny extends JFrame {
 
     }
 
-    public void updateStatusMK(ArrayList<SecurityComponent> sensors) {
-        defaultListModel.clear();
-        String status;
-        for (SecurityComponent s: sensors
-        ) {
-            if(s.isOpen() == true) {
+    public void updateOnlineMK(ArrayList<SecurityComponent> sensors) {
+        OnlineListModel.clear();
+        String status = "";
 
-                status = "Öppen";
+        for (SecurityComponent s: sensors) {
+
+                if (s instanceof MagneticSensor) {
+                    if(s.isOpen()) {
+                    status = " Dörren är: Öppen";
+
+                } else status = " Dörren är: Stängd";
             }
-            else status = "Stängd";
+           if(s instanceof FireAlarm){
+               if(s.isOpen()) {
+               status = " Det brinner";
+           } else status = "";
+           }
 
 
-            String onlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation()+ " Dörren är :" + status;
-            defaultListModel.addElement(onlineMK);
+
+
+            String onlineMK;
+
+                onlineMK = s.getClass().getSimpleName() + " ID: " + s.getId() + " Location: " + s.getLocation() + status;
+
+
+            OnlineListModel.addElement(onlineMK);
         }
-        tfonlineMK.setModel(defaultListModel);
+        tfonlineMK.setModel(OnlineListModel);
         tfonlineMK.repaint();
 
 
+    }
+    public void updateOfflineMK(ArrayList<SecurityComponent> sensor){
+        OfflineListModel.clear();
+
+
+        for (SecurityComponent s: sensor){
+            String offlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            OfflineListModel.addElement(offlineMK);
+        }
+        tfofflineMK.setModel(OfflineListModel);
+        tfofflineMK.repaint();
     }
 
 

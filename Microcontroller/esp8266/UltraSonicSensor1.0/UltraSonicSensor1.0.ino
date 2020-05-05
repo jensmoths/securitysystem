@@ -153,7 +153,7 @@ void loop() {
     delay(500);
     if ((lastDistance - distance) > 3 || (lastDistance - distance) <  -3  ) {
       if (distance < 15) {
-        client.println("Intruder");
+        client.println("on");
         Serial.print("Distance: ");
         Serial.println(distance);
       }

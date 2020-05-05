@@ -108,9 +108,12 @@ public class MainPanel extends JPanel {
         btnDelete.addActionListener(buttonListener);
     }
 
+    // TODO: 05-May-20 add code to make it possible for server to see logs for individual homes
+    //  Do this by fixing the lowest to do
+    // TODO: 05-May-20 You need to have a search bar exactly like with the client. This means you just access
+    //  their logger from Home and getLog applying filter though this gui
     public void setTextArea(JTextArea textArea) {
         this.textArea = textArea;
-        loggerScrollPane.repaint();
     }
 
     public void setTableInfo(String[][] info){
@@ -129,8 +132,12 @@ public class MainPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == btnRegister) {
+                // TODO: 05-May-20 Make it so that you can't register more than one user of the
+                //  same info. OR you can just inplement a system where the username is added by an index if its the same.
                 registerPanel = new RegisterPanel(globalServerController);
             } else if (actionEvent.getSource() == btnDelete) {
+                // TODO: 05-May-20 make a way to get the username of a user from the table
+                // TODO: 05-May-20 Then change the way you delete users by using object and not index in User Register
                 String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
                 globalServerController.deleteHome(username);
                 globalServerController.getUserRegister().deleteUser(getSelectedRow());

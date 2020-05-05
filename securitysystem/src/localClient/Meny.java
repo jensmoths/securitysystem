@@ -1,6 +1,9 @@
 package localClient;
 
 
+import model.FireAlarm;
+import model.MagneticSensor;
+import model.ProximitySensor;
 import model.SecurityComponent;
 import net.miginfocom.swing.MigLayout;
 
@@ -23,7 +26,8 @@ public class Meny extends JFrame {
 
     JList tfonlineMK = new JList();
     JList tfofflineMK = new JList();
-    DefaultListModel defaultListModel = new DefaultListModel();
+    DefaultListModel OnlineListModel = new DefaultListModel();
+    DefaultListModel OfflineListModel = new DefaultListModel();
     private MainFrame mainFrame;
     private ChangeCode changeCode;
     private FingerprintGui fingerprintGui;
@@ -79,18 +83,50 @@ public class Meny extends JFrame {
 
     }
 
-    public void updateStatusMK(ArrayList<SecurityComponent> sensors) {
-        defaultListModel.clear();
+    public void updateOnlineMK(ArrayList<SecurityComponent> sensors) {
+        OnlineListModel.clear();
+        String status = "";
 
-        for (SecurityComponent s: sensors
-        ) {
-            String onlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
-            defaultListModel.addElement(onlineMK);
+        for (SecurityComponent s: sensors) {
+
+                if (s instanceof MagneticSensor) {
+                    if(s.isOpen()) {
+                    status = " Dörren är: Öppen";
+
+                } else status = " Dörren är: Stängd";
+            }
+           if(s instanceof FireAlarm){
+               if(s.isOpen()) {
+               status = " Det brinner";
+           } else status = "";
+           }
+
+           if(s instanceof ProximitySensor){   //TODO TESTA DET HÄR, DEN BLIR ALDRIG BOOLEAN FALSE???
+               if(s.isOpen()){
+                   status = " Rörelse upptäckt";
+               }else status="";
+           }
+            String onlineMK;
+                onlineMK = s.getClass().getSimpleName() + " ID: " + s.getId() + " Location: " + s.getLocation() + status;
+
+
+            OnlineListModel.addElement(onlineMK);
         }
-        tfonlineMK.setModel(defaultListModel);
+        tfonlineMK.setModel(OnlineListModel);
         tfonlineMK.repaint();
 
 
+    }
+    public void updateOfflineMK(ArrayList<SecurityComponent> sensor){
+        OfflineListModel.clear();
+
+
+        for (SecurityComponent s: sensor){
+            String offlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            OfflineListModel.addElement(offlineMK);
+        }
+        tfofflineMK.setModel(OfflineListModel);
+        tfofflineMK.repaint();
     }
 
 
@@ -113,7 +149,7 @@ public class Meny extends JFrame {
                 mainFrame.controller.setAlarmOn(true);
             }
             if (e.getSource() == btnChangeCode){
-                changeCode.setVisible(true);
+                mainFrame.cc = new ChangeCode(mainFrame);
                 //JFrame ChangeCode = new JFrame();
                 //ChangeCode.setSize(new Dimension(320, 420));
                 //ChangeCode.setTitle("Ändra kod");

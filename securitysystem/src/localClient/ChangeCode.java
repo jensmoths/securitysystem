@@ -16,6 +16,7 @@ public class ChangeCode extends JFrame implements ActionListener {
     private Color numberPadColor = new Color(74, 77, 82);
     private MainFrame mainFrame;
     Frame ChangeCodeFrame;
+    boolean pinOK = false;
 
 
     public ChangeCode(MainFrame mainFrame) {
@@ -24,9 +25,12 @@ public class ChangeCode extends JFrame implements ActionListener {
         JFrame ChangeCodeFrame = new JFrame();
         ChangeCodeFrame.setTitle("Ändra kod");
         ChangeCodeFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setSize(500,500);
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setUndecorated(true);
         drawChangeCode();
+        setVisible(true);
 
+        JOptionPane.showMessageDialog(null, "Ange nuvarande pinkod");
     }
 
     public void drawChangeCode() {
@@ -174,23 +178,31 @@ public class ChangeCode extends JFrame implements ActionListener {
 
         if (pinCode.length() < 4 && !buttonNumber.equals("OK") && !buttonNumber.equals("CLR")) {
             pinCode += buttonNumber;
-        } if (buttonNumber.equals("CLR")) {
+        }
+        if (buttonNumber.equals("CLR")) {
             pinCode = "";
-        } if (buttonNumber.equals("OK") && pinCode.length() == 4) {
+        }
+        if (buttonNumber.equals("OK") && pinCode.length() == 4 && !pinOK) {
+            String num = tfNumPad.getText();
+            if (num.equals(mainFrame.getSystemPinCode())) {
+                pinOK = true;
+                pinCode = "";
+                JOptionPane.showMessageDialog(null, "Ange ny pinkod");
+            }
+        } else if (buttonNumber.equals("OK") && pinCode.length() == 4) {
             String num = tfNumPad.getText();
             mainFrame.setSystemPinCode(num);
+            JOptionPane.showMessageDialog(null, "Pinkod ändrad");
+            setVisible(false);
         }
         // TODO: 2020-04-14 Lägg till kod som berättar vad som händer med OK
-      if(buttonNumber.equals("OK")&&pinCode.length()<4)
-
-    {
-        JOptionPane.showMessageDialog(null, "Invalid: Enter a 4 digit number");
-    } if(pinCode.length()>4)
-
-    {
-        JOptionPane.showMessageDialog(null, "Invalid: Maximum 4 digits");
-    }
+        else if (buttonNumber.equals("OK") && pinCode.length() < 4) {
+            JOptionPane.showMessageDialog(null, "Invalid: Enter a 4 digit number");
+        }
+        if (pinCode.length() > 4) {
+            JOptionPane.showMessageDialog(null, "Invalid: Maximum 4 digits");
+        }
         tfNumPad.setText(pinCode);
-}
+    }
 
 }

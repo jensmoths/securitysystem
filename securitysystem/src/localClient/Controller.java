@@ -1,20 +1,22 @@
 package localClient;
 
 
-import localserver.MicroClients;
+import localserver.CommandLine;
 import localserver.PiServer;
-import model.FingerprintSensor;
 import model.SecurityComponent;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
 public class Controller {
-    boolean alarmOn = false;
+   public boolean alarmOn = false;
 
     MainFrame mainFrame = new MainFrame(this);
     PiServer server = new PiServer(this);
+
+
 
 
 
@@ -22,12 +24,21 @@ public class Controller {
 
     }
 
-    void setDoorOpen(boolean b) {
-        server.setDoor(b);
+    void setDoorOpen(boolean b)  {
+        try {
+            server.setDoor(b);
+            updateOnlineMK(server.allOnlineSensors);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    public void updateMK(ArrayList<SecurityComponent> MKarray){
-        mainFrame.meny.updateStatusMK(MKarray);
+    public void updateOnlineMK(ArrayList<SecurityComponent> MKarray){
+        mainFrame.meny.updateOnlineMK(MKarray);
 
+    }
+
+    public void updateOfflineMK(ArrayList<SecurityComponent> MKarray){
+        mainFrame.meny.updateOfflineMK(MKarray);
     }
     public void sendToMK(char c, int id) throws IOException {
         System.out.println("CONTROLLER SEND TO MK");
@@ -39,10 +50,40 @@ public class Controller {
         new Thread(server.globalServer).start();
     }
 
+    public void takePicture() {
+
+       Thread t = new Thread(new CommandLine(this));
+        t.start();
+    }
+
+    public void pictureTaken(int number) throws IOException {
+      ImageIcon icon = new ImageIcon ("/home/pi/pic/cam"+number);
+      JOptionPane.showMessageDialog(null, icon);
+        server.globalServer.globalsendPicture(icon);
+
+    }
 
 
-    void setAlarmOn(boolean b) {
+    public void soundAlarm(String file){
+        //play."/home/pi/sound/"+file;
+
+
+
+    }
+
+
+
+  public void setAlarmOn(boolean b) {
         alarmOn = b;
+
+        if(alarmOn) {
+            mainFrame.frame.setVisible(true);
+            mainFrame.meny.setVisible(false);
+        }
+       else {
+            mainFrame.frame.setVisible(false);
+            mainFrame.meny.setVisible(true);
+        }
     }
 
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {

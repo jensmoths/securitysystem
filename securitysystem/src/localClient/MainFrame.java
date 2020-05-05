@@ -4,7 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.text.ParseException;
+import java.util.Objects;
 
 public class MainFrame extends JPanel implements ActionListener {
     private JButton btnNum0, btnNum1, btnNum2, btnNum3, btnNum4, btnNum5, btnNum6, btnNum7,
@@ -14,9 +16,9 @@ public class MainFrame extends JPanel implements ActionListener {
     private JTextField tfNumber;
     private String pinCode = "";
     private Font font = new Font("Courier", Font.BOLD, 30);
-    private String systemPinCode = "1234";
+    private String systemPinCode;
     private Color numberPadColor = new Color(74, 77, 82);
-    private ChangeCode cc;
+    ChangeCode cc;
     Meny meny;
     Controller controller;
 
@@ -44,12 +46,17 @@ public class MainFrame extends JPanel implements ActionListener {
 
         fingerprintGui = new FingerprintGui(this);
         goOnline = new GoOnline(this);
-        cc = new ChangeCode(this);
         meny = new Meny(this, cc, fingerprintGui, goOnline);
-        cc.setVisible(false);
         meny.setVisible(false);
         meny.setBackground(new Color(83,86,91));
 
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/userdata.txt"))) {
+            reader.readLine();
+            reader.readLine();
+            systemPinCode = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         draw();
     }
 
@@ -210,8 +217,11 @@ public class MainFrame extends JPanel implements ActionListener {
         } else if (buttonNumber.equals("OK") && pinCode.length() == 4) {
             System.out.println(systemPinCode);
             if (pinCode.equals(systemPinCode)) {
-                meny.setVisible(true);
-                frame.setVisible(false);
+               // meny.setVisible(true);
+               // frame.setVisible(false);
+                controller.setAlarmOn(false); //TODO TESTA DETTA
+
+
             } else {
                 JOptionPane.showMessageDialog(null, "Please type again!");
             }
@@ -233,8 +243,26 @@ public class MainFrame extends JPanel implements ActionListener {
         this.pinCode = pinCode;
     }
 
-    public void setSystemPinCode(String systemPinCode) {
-        this.systemPinCode = systemPinCode;
+    public void setSystemPinCode(String newSystemPinCode) {
+
+        String userdata = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/userdata.txt"))) {
+            userdata = reader.readLine();
+            userdata += "\n";
+            userdata += reader.readLine();
+            userdata += "\n";
+            userdata += reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/userdata.txt"))) {
+            userdata = Objects.requireNonNull(userdata).replace(systemPinCode, newSystemPinCode);
+            writer.write(userdata);
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.systemPinCode = newSystemPinCode;
     }
 
     public String getSystemPinCode() {

@@ -22,7 +22,8 @@ public class PiServer extends Thread implements Serializable {
     private ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
-    private ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
+    public ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
+    public ArrayList<SecurityComponent> allOfflineSensors = new ArrayList<>();
     public GlobalServer globalServer;
     private transient Controller controller;
     public transient StartServer startServer;
@@ -62,8 +63,19 @@ public class PiServer extends Thread implements Serializable {
         }
     }
 
-    public void setDoor(boolean open) {
+    public void setDoor(boolean open) throws IOException {
+        for (SecurityComponent s : map.keySet()) {
+            if (s instanceof DoorLock) {
+                if (open) {
+                    map.get(s).sendMessage('o');
 
+
+                } else {
+                    map.get(s).sendMessage('c');
+                }
+                map.get(s).sensor.setOpen(open);
+            }
+        }
     }
 
     public void sendToFinger(char c, int id) throws IOException {
@@ -137,7 +149,7 @@ public class PiServer extends Thread implements Serializable {
 
                     }
                     allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
-                    controller.updateMK(allOnlineSensors);
+                    allOfflineSensors.remove(sensor);
                     //   globalServer.UpdateGlobal(allOnlineSensors);
 
 
@@ -167,6 +179,8 @@ public class PiServer extends Thread implements Serializable {
                     System.out.println("GLOBALMAPSIZE: " + globalMap.size());
 
 
+                    controller.updateOnlineMK(allOnlineSensors); //TODO FLYTTADE DEN HÄR RADEN TILL 178
+                    controller.updateOfflineMK(allOfflineSensors);
                     saveKeySet();
 
 
@@ -218,6 +232,7 @@ public class PiServer extends Thread implements Serializable {
             while (!interrupted()) {
                 try {
                     String stringMessage = bufferedReader.readLine();
+
                     if (stringMessage == null) continue;
                     lastRead = System.currentTimeMillis();
                     if (stringMessage.equals("heartbeat")) {
@@ -225,73 +240,97 @@ public class PiServer extends Thread implements Serializable {
                     }
                     String[] split = stringMessage.split("\\|");
                     String state = split[0]; //, location = split[1], type = split[2];
-                    System.out.println("DETTA ÄR FELET" + state);
+                    System.out.println("DETTA HAR SKICKATS FRÅN MK: " + state);
                     boolean booleanState = state.equals("on");
 
 
                     sensor.setOpen(booleanState);
+                    controller.updateOnlineMK(allOnlineSensors);
                     Message message = new Message("", sensor);
 
 
                     if (message.getSecurityComponent() instanceof MagneticSensor) {
-                        for (SecurityComponent s : map.keySet()) {
-                            if (s instanceof MagneticSensor) {
-                                if (message.getSecurityComponent().isOpen()) {
-                                    map.get(s).sendMessage('o');
-                                    // globalServer.GlobalsendMessage(message);
-
-                                } else {
-                                    map.get(s).sendMessage('c');
-                                    //  globalServer.GlobalsendMessage(message);
+                        if (message.getSecurityComponent().isOpen()) {
+                            if (controller.alarmOn) {
+                                for (SecurityComponent s : map.keySet()) {
+                                    if (s instanceof DoorLock) {
+                                        map.get(s).sendMessage('c');
+                                    }
                                 }
+                                controller.soundAlarm("Intruder");
+                                controller.takePicture();
+                                message.setInfo("Någon har brutit sig in");
+                            } else {
+                                message.setInfo("Någon har öppnat dörren");
                             }
+                        } else {
+                            message.setInfo("Någon har stängt dörren");
+
                         }
+                        globalServer.globalsendMessage(message);
                     }
+
                     if (message.getSecurityComponent() instanceof ProximitySensor) {
-                        for (SecurityComponent s : map.keySet()) {
-                            if (s instanceof MagneticSensor) {
-                                if (message.getSecurityComponent().isOpen()) {
-                                    map.get(s).sendMessage('o');
-                                    //   globalServer.GlobalsendMessage(message);
+                        if (message.getSecurityComponent().isOpen()) {
 
-                                } else {
-                                    map.get(s).sendMessage('c');
-                                    //   globalServer.GlobalsendMessage(message);
+                            for (SecurityComponent s : map.keySet()) {
+                                if (s instanceof DoorLock) {
+                                    if (controller.alarmOn) {
+                                        map.get(s).sendMessage('c');
+
+                                    } else map.get(s).sendMessage('o');
                                 }
                             }
+                            if (controller.alarmOn) {
+                                controller.soundAlarm("Intruder");
+                                message.setInfo("Rörelse alarm");
+                            } else message.setInfo("Rörelse");
+
                         }
+                        globalServer.globalsendMessage(message);
+
                     }
+
+
                     if (message.getSecurityComponent() instanceof FireAlarm) {
-                        //  globalServer.GlobalsendMessage(message);
+                        message.setInfo("Det brinner");
+                        globalServer.globalsendMessage(message);
+                        controller.soundAlarm("Brinner");
 
                         for (SecurityComponent s : map.keySet()) {
-                            if (s instanceof MagneticSensor) {
-                                map.get(s).sendMessage('c');
+                            if (s instanceof DoorLock) {
+                                map.get(s).sendMessage('o');
                             }
                         }
 
 
                     }
                     if (message.getSecurityComponent() instanceof FingerprintSensor) {
-                        String userName = null;
-                        char[] password = new char[0];
-                        PasswordAuthentication login = new PasswordAuthentication(userName, password);
-
-                        if (message.getInfo().equals(password)) {
-                            for (SecurityComponent s : map.keySet()) {
-                                if (s instanceof MagneticSensor) {
-                                    map.get(s).sendMessage('o');
-                                }
-                            }
-                        } else for (SecurityComponent s : map.keySet()) {
-                            if (s instanceof MagneticSensor) {
-                                map.get(s).sendMessage('c');
-                            }
+                       if(message.getSecurityComponent().isOpen()){
+                           controller.setAlarmOn(false);
+                           controller.soundAlarm("Welcome");
+                           message.setInfo("Fingerläsaren har öppnat dörren");
+                           for (SecurityComponent s : map.keySet()) {
+                               if (s instanceof DoorLock) {
+                                   map.get(s).sendMessage('o');
+                               }
+                           }
+                       }
+                       else{
+                           if(controller.alarmOn) {
+                               message.setInfo("Fingerläsaren har larmat");
+                               controller.soundAlarm("Alarm för någon har försökt 3 gånger på fingerläsaren");
+                           } else {
+                               message.setInfo("Fingerläsaren har läst fel 3 gånger");
+                               controller.soundAlarm("Fingerläsaren har läst fel 3 gånger");
+                           }
+                       }
+                        globalServer.globalsendMessage(message);
                         }
 
-                        //  globalServer.GlobalsendMessage(message);
 
-                    }
+
+
 
                     System.out.println("CH " + "IP: " + socket.getInetAddress() + " ID: " + sensor.getId() + " TYPE: " + sensor.getClass().getSimpleName() + " " + message.getSecurityComponent().isOpen());
 
@@ -309,10 +348,12 @@ public class PiServer extends Thread implements Serializable {
                 }
             }
             allOnlineSensors.remove(sensor);//TODO NYTT KOPPLA FRÅN SENSOR
+            allOfflineSensors.add(sensor);
 
             try {
-                controller.updateMK(allOnlineSensors);
-                globalServer.UpdateGlobal(allOnlineSensors);
+                controller.updateOnlineMK(allOnlineSensors);
+                controller.updateOfflineMK(allOfflineSensors);
+                globalServer.updateGlobal(allOnlineSensors);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -367,35 +408,47 @@ public class PiServer extends Thread implements Serializable {
         }
 
 
-        public void GlobalsendMessage(Message msg) throws IOException {
-            oos = new ObjectOutputStream(socket.getOutputStream());  //FUNGERADE INTE ATT LÄSA OBJEKTETS BOOLEAN OM VI INTE GJORDE NYA STREAMS VARJE GÅNG VI SKICKADE
-            oos.writeObject(msg);
-            oos.flush();
+        public void globalsendMessage(Message msg) throws IOException {
+            if (socket != null && !socket.isClosed()) {
+                oos = new ObjectOutputStream(socket.getOutputStream());  //FUNGERADE INTE ATT LÄSA OBJEKTETS BOOLEAN OM VI INTE GJORDE NYA STREAMS VARJE GÅNG VI SKICKADE
+                oos.writeObject(msg);
+                oos.flush();
 
-            System.out.println("sent message " + msg.getInfo() + "to GlobalServer: " + socket.toString());
-
+                System.out.println("sent message " + msg.getInfo() + "to GlobalServer: " + socket.toString());
+            }
         }
 
-        public void UpdateGlobal(ArrayList<SecurityComponent> msg) throws IOException { //TODO EJ TESTAD METOD
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            oos.writeObject(msg);
-            oos.flush();
-
+        public void updateGlobal(ArrayList<SecurityComponent> msg) throws IOException { //TODO EJ TESTAD METOD
+            if (socket != null && !socket.isClosed()) {
+                oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.writeObject(msg);
+                oos.flush();
+            }
         }
 
-        public void ShutdownSensor(Message msg) throws IOException {  //TODO EJ TESTAD METOD
+        public void shutdownSensor(Message msg) throws IOException {  //TODO EJ TESTAD METOD
 
             //  map.get(msg.getSecurityComponent()).socket.close();
             map.get(msg.getSecurityComponent()).sendMessage('k');
+        }
+
+        public void globalsendPicture(ImageIcon icon) throws IOException {
+            if (socket != null && !socket.isClosed()) {
+                oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.writeObject(icon);
+                oos.flush();
+
+            }
         }
 
 
         @Override
         public void run() {
             try {
-                connect("localhost", 8081);
+                connect("109.228.172.110", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Kunde inte ansluta till servern \n" + e.getMessage());
                 e.printStackTrace();
             }
             while (socket.isConnected()) {
@@ -404,24 +457,37 @@ public class PiServer extends Thread implements Serializable {
                     if (obj instanceof Message) {
                         Message msg = (Message) obj;
                         if (msg.getInfo().equals("shutdown")) {
-                            ShutdownSensor(msg);
+                            shutdownSensor(msg);
                         }
                         if (msg.getSecurityComponent() instanceof DoorLock) {
                             for (SecurityComponent s : map.keySet()) {
-                                if (s instanceof MagneticSensor) {
+                                if (s instanceof DoorLock) {
                                     if (msg.getSecurityComponent().isOpen()) {
                                         map.get(s).sendMessage('o');
 
+
                                     } else map.get(s).sendMessage('c');
+
                                 }
+                            }
+                            if (allOnlineSensors.contains(msg.getSecurityComponent())) {
+                                allOnlineSensors.set(allOnlineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
+                                controller.updateOnlineMK(allOnlineSensors);
                             }
                         }
                     }
                     if (obj instanceof String) {
-                        System.out.println(obj);
+                        System.out.println("String object vi fått från Global: " + obj);
                         if (obj.equals("user authenticated")) controller.setOnline(false);
+
+                        if (obj.equals("Take photo")) controller.takePicture();
                     }
                 } catch (IOException | ClassNotFoundException e) {
+                    try {
+                        socket.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                     e.printStackTrace();
                     break;
                 }

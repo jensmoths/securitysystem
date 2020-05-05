@@ -2,6 +2,8 @@ package globalServer;
 
 import model.*;
 
+import javax.mail.MessagingException;
+
 public class RequestHandler {
 
     private EmailSender emailSender = new EmailSender();
@@ -11,7 +13,7 @@ public class RequestHandler {
         this.home = home;
     }
 
-    public void handleServerRequest(Object requestObject, Home home) {
+    public void handleServerRequest(Object requestObject, Home home) throws MessagingException {
 
         if (requestObject instanceof String) {
             home.logger.addToLog((String) requestObject);
@@ -38,6 +40,7 @@ public class RequestHandler {
             if (securityComponent instanceof FireAlarm) {
                 home.sendToAllClients("Brandlarmet har upptäckt rök i byggnaden");
                 home.logger.addToLog("Brandlarmet har upptäckt rök i byggnaden");
+                emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Brandlarmet har utlösts");
                 home.sendToAllClients(home.logger);
             }
 

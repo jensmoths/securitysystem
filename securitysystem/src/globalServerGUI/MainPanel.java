@@ -134,17 +134,11 @@ public class MainPanel extends JPanel {
         btnRegister.setText("Register");
 
         TitledBorder borderContact = new TitledBorder("User Information");
-        borderContact.setTitleColor(new Color(255, 123, 0, 231));
-
         TitledBorder borderLogger = new TitledBorder("Logger");
-        borderLogger.setTitleColor(new Color(255, 123, 0, 231));
         borderContact.setTitleColor(new Color(62, 134, 160));
-
-//        TitledBorder borderLogger = new TitledBorder("Logger");
-//        borderLogger.setTitleColor(new Color(62, 134, 160));
+        borderLogger.setTitleColor(new Color(62, 134, 160));
 
         taLogger.setEditable(false);
-
         pnlLeft.setBorder(borderContact);
         pnlRight.setBorder(borderLogger);
 

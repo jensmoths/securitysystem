@@ -27,7 +27,7 @@ public class RegisterPanel extends JPanel {
         frame = new JFrame();
         this.setLayout(new MigLayout());
         setPreferredSize(new Dimension(250, 200));
-        setBackground(new Color(83, 86, 91));
+        setBackground(new Color(60, 63, 65));
 
         btnRegister = new JButton("Register Client");
         tfStreet = new JTextField();
@@ -44,6 +44,7 @@ public class RegisterPanel extends JPanel {
         lblZipCode = new JLabel("Zip code:");
         lblEmail = new JLabel("Email:");
         draw();
+
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width / 3 - frame.getSize().width / 3, dim.height / 3 - frame.getSize().height / 3);
@@ -84,40 +85,39 @@ public class RegisterPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO: 29-Apr-20 Avkommentera alla kommentaren nedan för slutversion
-/*
-            if ((tfFirstName.getText().isEmpty() | tfFirstName.getText().length() < 2)
+
+            /*if ((tfFirstName.getText().isEmpty() | tfFirstName.getText().length() < 2)
                     | (tfSurName.getText().isEmpty() | tfSurName.getText().length() < 2)
                     | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3) | (tfEmail.getText().length()<5)) {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
             } else {
-*/
+
                 User user = new User(tfFirstName.getText().toLowerCase(), tfSurName.getText().toLowerCase(),
                                      tfStreet.getText().toLowerCase(), tfZipCode.getText().toLowerCase(), tfCity.getText().toLowerCase()
                         , tfEmail.getText().toLowerCase());
-                //User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
+
+             */
+                User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
                 //user.generateLogInDetails();
                 user.setUserName("admin");
                 user.setPassword("password");
                 globalServerController.getUserRegister().addUser(user);
                 globalServerController.addHome(user.getUserName(), new Home(user));
+                RegisterPanel.this.frame.dispose();
 
-                String loginInfo = "Hej! \nHär nedan kommer dina inloggningsuppgifter\nAnvändarnamn: " + user.getUserName()
+
+            String loginInfo = "Hej! \nHär nedan kommer dina inloggningsuppgifter\nAnvändarnamn: " + user.getUserName()
                         + "\nLösenord: " + user.getPassword();
-            /*try {
-               globalServerController.sendEmail(user.getEmail(), "SecureHomesMAU", loginInfo);
+            try {
+                globalServerController.sendEmail(user.getEmail(), "SecureHomesMAU", loginInfo);
             } catch (MessagingException ex) {
                 ex.printStackTrace();
             }
 
-             */
+
+
             System.out.println("created and added home");
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        RegisterPanel.this.frame.dispose();
-                    }
-                });
-            //}
+            }
         }
     }
-}
+//}

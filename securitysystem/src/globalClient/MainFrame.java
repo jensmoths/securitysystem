@@ -22,6 +22,6 @@ public class MainFrame extends JFrame {
     }
 
     public void setTextArea(String text) {
-        mainPanel.setTextArea(text);
+        mainPanel.setTaLogger(text);
     }
 }

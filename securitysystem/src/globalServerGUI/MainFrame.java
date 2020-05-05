@@ -27,6 +27,10 @@ public class MainFrame {
             }
         });
     }
+
+    public RegisterPanel getRegisterPanel() {
+        return mainPanel.getRegisterPanel();
+    }
     public MainPanel getMainPanel (){
 
         return mainPanel;

@@ -1,6 +1,5 @@
 package globalServer;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -115,7 +114,7 @@ public class GlobalServer {
                                     System.out.println(requestObject.toString());
                                     requestHandler.handleServerRequest(requestObject, home);
 
-                                } catch (IOException | ClassNotFoundException | MessagingException e) {
+                                } catch (IOException | ClassNotFoundException e) {
                                     System.out.println(socket.getInetAddress() + " has disconnected");
                                     try {
                                         home.setLocalServer(null);
@@ -135,8 +134,6 @@ public class GlobalServer {
 
                             while (true) {
                                 try {
-
-
                                     requestObject = ois.readObject();
                                     String requestString = requestObject.toString();
 

@@ -312,4 +312,3 @@ public class MainPanel extends JPanel {
         return registerPanel;
     }
 }
-

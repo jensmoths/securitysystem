@@ -29,6 +29,8 @@ public class RequestHandler {
                     home.sendToAllClients("Magnetsensorn larmar");
                     home.logger.addToLog("Magnetsensorn larmar");
                     home.sendToAllClients(home.logger);
+                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n\n Magnetsensorn har larmat");
+
 
                 } else if (!securityComponent.isOpen()) {
                     home.sendToAllClients("Magnetsensorn är aktiv");
@@ -40,13 +42,21 @@ public class RequestHandler {
             if (securityComponent instanceof FireAlarm) {
                 home.sendToAllClients("Brandlarmet har upptäckt rök i byggnaden");
                 home.logger.addToLog("Brandlarmet har upptäckt rök i byggnaden");
-                emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Brandlarmet har utlösts");
+                try {
+                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Brandlarmet har utlösts");
+
+                }catch (Exception e){
+
+                    e.printStackTrace();
+                }
                 home.sendToAllClients(home.logger);
             }
 
             if (securityComponent instanceof ProximitySensor) {
                 home.sendToAllClients("Rörelsedetektorn har upptäckt rörelse i byggnaden");
                 home.logger.addToLog("Rörelsedetektorn har upptäckt rörelse i byggnaden");
+                emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Rörelsedetektorn har upptäckt rörelse i byggnaden");
+
                 home.sendToAllClients(home.logger);
 
             }

@@ -1,5 +1,6 @@
 package globalServerGUI;
 
+import javax.mail.MessagingException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -90,15 +91,26 @@ public class RegisterPanel extends JPanel {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
             } else {
 */
-                /*User user = new User(tfFirstName.getText(), tfSurName.getText(),
-                                     tfStreet.getText(), tfZipCode.getText(), tfCity.getText(), tfEmail.getText());*/
-                User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
+                User user = new User(tfFirstName.getText().toLowerCase(), tfSurName.getText().toLowerCase(),
+                                     tfStreet.getText().toLowerCase(), tfZipCode.getText().toLowerCase(), tfCity.getText().toLowerCase()
+                        , tfEmail.getText().toLowerCase());
+                //User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
                 //user.generateLogInDetails();
                 user.setUserName("admin");
                 user.setPassword("password");
                 globalServerController.getUserRegister().addUser(user);
                 globalServerController.addHome(user.getUserName(), new Home(user));
-                System.out.println("created and added home");
+
+                String loginInfo = "Hej! \nHär nedan kommer dina inloggningsuppgifter\nAnvändarnamn: " + user.getUserName()
+                        + "\nLösenord: " + user.getPassword();
+            /*try {
+               globalServerController.sendEmail(user.getEmail(), "SecureHomesMAU", loginInfo);
+            } catch (MessagingException ex) {
+                ex.printStackTrace();
+            }
+
+             */
+            System.out.println("created and added home");
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {

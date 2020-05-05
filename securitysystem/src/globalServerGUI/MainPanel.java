@@ -6,11 +6,14 @@ import globalServer.User;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class MainPanel extends JPanel {
     private RegisterPanel registerPanel;
@@ -18,7 +21,9 @@ public class MainPanel extends JPanel {
     private JPanel pnlRight;
     private JButton btnRegister;
     private JButton btnDelete;
-    private JButton btnUpdate;
+    private JTextField tfSearch;
+    private JLabel lblSearch;
+    private JLabel lblEmpty;
     private JScrollPane loggerScrollPane;
     private JTextArea taLogger;
     private JTable tblInfo;
@@ -81,7 +86,11 @@ public class MainPanel extends JPanel {
 
         btnRegister = new JButton();
         btnDelete = new JButton();
-        btnUpdate = new JButton();
+
+        tfSearch = new JTextField();
+
+        lblSearch = new JLabel();
+        lblEmpty = new JLabel();
 
         taLogger = new JTextArea();
         tblInfo = new JTable();
@@ -90,23 +99,37 @@ public class MainPanel extends JPanel {
         tblScrollPane = new JScrollPane(tblInfo);
 
         this.setBackground(new Color(83, 86, 91));
-        pnlLeft.setBackground(new Color(83, 86, 91));
-        pnlRight.setBackground(new Color(83, 86, 91));
+//        pnlLeft.setBackground(new Color(83, 86, 91));
+//        pnlRight.setBackground(new Color(83, 86, 91));
 
-        taLogger.setBackground(new Color(83, 86, 91));
+        taLogger.setBackground(new Color(43,43,43));
         tblInfo.setBackground(new Color(83, 86, 91));
+        this.setBackground(new Color(60, 63, 65));
+        pnlLeft.setBackground(new Color(60, 63, 65));
+        pnlRight.setBackground(new Color(60, 63, 65));
+
+        //textArea.setBackground(new Color(43,43,43));
+//        tblScrollPane.getViewport().setBackground(new Color(43,43,43));
 
         this.setLayout(new BorderLayout());
         pnlLeft.setLayout(new FlowLayout());
         pnlRight.setLayout(new BorderLayout());
 
         this.setPreferredSize(new Dimension(1250, 486));
-        pnlLeft.setPreferredSize(new Dimension(800, 485));
+//        pnlLeft.setPreferredSize(new Dimension(800, 485));
         pnlRight.setPreferredSize(new Dimension(610, 485));
-        tblScrollPane.setPreferredSize(new Dimension(750, 370));
+//        tblScrollPane.setPreferredSize(new Dimension(750, 370));
         tblScrollPane.getViewport().setBackground(new Color(43,43,43));
         loggerScrollPane.setPreferredSize(new Dimension(605, 370));
+        this.setPreferredSize(new Dimension(1250,600));
+        pnlLeft.setPreferredSize(new Dimension(800,580));
+//        pnlRight.setPreferredSize(new Dimension(450,580));
+        tblScrollPane.setPreferredSize(new Dimension(750,370));
+//        loggerScrollPane.setPreferredSize(new Dimension(420,370));
+        lblEmpty.setPreferredSize(new Dimension(290,40));
+        tfSearch.setPreferredSize(new Dimension(200,20));
 
+        lblSearch.setText("Search:");
         btnDelete.setText("Delete");
         btnRegister.setText("Register");
 
@@ -115,6 +138,10 @@ public class MainPanel extends JPanel {
 
         TitledBorder borderLogger = new TitledBorder("Logger");
         borderLogger.setTitleColor(new Color(255, 123, 0, 231));
+        borderContact.setTitleColor(new Color(62, 134, 160));
+
+//        TitledBorder borderLogger = new TitledBorder("Logger");
+//        borderLogger.setTitleColor(new Color(62, 134, 160));
 
         taLogger.setEditable(false);
 
@@ -122,26 +149,37 @@ public class MainPanel extends JPanel {
         pnlRight.setBorder(borderLogger);
 
         columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City", "Username", "Password", "Email"};
-        tblInfo.setForeground(Color.white);
+//        tblInfo.setForeground(Color.white);
 
 
+//        tblInfo.setForeground(Color.WHITE);
         model.setColumnIdentifiers(columns);
 
         tblInfo.setRowHeight(30);
         tblInfo.setModel(model);
         tblInfo.setBackground(new Color(83, 86, 91));
 
-
         btnRegister.setPreferredSize(new Dimension(100, 40));
         btnDelete.setPreferredSize(new Dimension(100, 40));
 
         taLogger.setForeground(Color.white);
+        btnRegister.setBackground(new Color(43,43,43));
+        btnDelete.setBackground(new Color(43,43,43));
+
+        btnRegister.setForeground(Color.white);
+        btnDelete.setForeground(Color.white);
+
+        lblSearch.setForeground(Color.white);
+//        taLogger.setForeground(Color.white);
 
         loggerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         pnlLeft.add(tblScrollPane);
         pnlLeft.add(btnRegister);
         pnlLeft.add(btnDelete);
+        pnlLeft.add(lblEmpty);
+        pnlLeft.add(lblSearch);
+        pnlLeft.add(tfSearch);
 
         pnlRight.add(BorderLayout.NORTH, loggerScrollPane);
         drawPnlDateTime();
@@ -153,6 +191,7 @@ public class MainPanel extends JPanel {
         btnDelete.addActionListener(buttonListener);
 
 
+        tfSearch.addKeyListener(new KeyReleasedListener());
     }
 
 
@@ -222,6 +261,17 @@ public class MainPanel extends JPanel {
         return tblInfo.getSelectedRow();
     }
 
+    public void searchTable(){
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblInfo.getModel();
+        String search = tfSearch.getText().toLowerCase();
+        TableRowSorter<DefaultTableModel> rowSorter = new TableRowSorter<>(tableModel);
+        tblInfo.setRowSorter(rowSorter);
+        rowSorter.setRowFilter(RowFilter.regexFilter(search));
+
+    }
+
+
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
@@ -242,6 +292,25 @@ public class MainPanel extends JPanel {
                     JOptionPane.showMessageDialog(null, "You have to choose a user first!");
                 }
             }
+        }
+    }
+
+    private class KeyReleasedListener implements KeyListener {
+
+
+        @Override
+        public void keyTyped(KeyEvent keyEvent) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent keyEvent) {
+            searchTable();
+        }
+
+        @Override
+        public void keyReleased(KeyEvent keyEvent) {
+            searchTable();
         }
     }
 

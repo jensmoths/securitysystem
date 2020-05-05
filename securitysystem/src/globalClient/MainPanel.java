@@ -1,6 +1,8 @@
 package globalClient;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -44,6 +46,9 @@ public class MainPanel extends JPanel {
         ButtonListener buttonListener = new ButtonListener();
         this.setPreferredSize(new Dimension(1200, 630));
         this.setLayout(new BorderLayout());
+        this.setBackground(new Color(60, 63, 65));
+        LineBorder border = new LineBorder(new Color(184, 207, 229));
+        this.setBorder(border);
 
         Dimension btnDimension = new Dimension(200, 20);
 
@@ -58,6 +63,10 @@ public class MainPanel extends JPanel {
         taLogger = new JTextArea();
         taOffline = new JTextArea();
         taOnline = new JTextArea();
+
+        taOnline.setForeground(Color.white);
+        taOffline.setForeground(Color.white);
+        taLogger.setForeground(Color.white);
 
         leftPanel.setPreferredSize(new Dimension(280, 600));
         centerPanel.setPreferredSize(new Dimension(430,600));
@@ -154,7 +163,7 @@ public class MainPanel extends JPanel {
         btnOFF.setForeground(Color.white);
         btnUnlock.setForeground(Color.white);
         btnLock.setForeground(Color.white);
-        
+
         add(leftPanel, BorderLayout.WEST);
         add(centerPanel, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);

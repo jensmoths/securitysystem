@@ -57,12 +57,12 @@ public class MainPanel extends JPanel {
         loggerScrollPane = new JScrollPane(textArea);
         tblScrollPane = new JScrollPane(tblInfo);
 
-        this.setBackground(new Color(83,86,91));
-        pnlLeft.setBackground(new Color(83,86,91));
-        pnlRight.setBackground(new Color(83,86,91));
+        this.setBackground(new Color(60, 63, 65));
+        pnlLeft.setBackground(new Color(60, 63, 65));
+        pnlRight.setBackground(new Color(60, 63, 65));
 
-        textArea.setBackground(new Color(83,86,91));
-        tblInfo.setBackground(new Color(83,86,91));
+        textArea.setBackground(new Color(43,43,43));
+        tblScrollPane.getViewport().setBackground(new Color(43,43,43));
 
         this.setLayout(new BorderLayout());
         pnlLeft.setLayout(new FlowLayout());
@@ -81,11 +81,10 @@ public class MainPanel extends JPanel {
         btnRegister.setText("Register");
 
         TitledBorder borderContact = new TitledBorder("User Information");
-        borderContact.setTitleColor(new Color(255, 123,0, 231));
+        borderContact.setTitleColor(new Color(62, 134, 160));
 
         TitledBorder borderLogger = new TitledBorder("Logger");
-        borderLogger.setTitleColor(new Color(255, 123,0, 231));
-
+        borderLogger.setTitleColor(new Color(62, 134, 160));
 
         textArea.setEditable(false);
 
@@ -94,17 +93,21 @@ public class MainPanel extends JPanel {
 
         columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City", "Username", "Password", "Email"};
         tblInfo.setForeground(Color.WHITE);
-
         model.setColumnIdentifiers(columns);
 
         tblInfo.setRowHeight(30);
         tblInfo.setModel(model);
-        tblInfo.setBackground(new Color(83,86,91));
 
         btnRegister.setPreferredSize(new Dimension(100,40));
         btnDelete.setPreferredSize(new Dimension(100, 40));
 
-        lblSearch.setForeground(new Color(251, 248, 255, 231));
+        btnRegister.setBackground(new Color(43,43,43));
+        btnDelete.setBackground(new Color(43,43,43));
+
+        btnRegister.setForeground(Color.white);
+        btnDelete.setForeground(Color.white);
+
+        lblSearch.setForeground(Color.white);
         textArea.setForeground(Color.white);
 
         loggerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

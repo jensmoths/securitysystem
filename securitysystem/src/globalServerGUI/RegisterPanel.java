@@ -66,6 +66,10 @@ public class RegisterPanel extends JPanel {
         lblSurName.setForeground(Color.white);
         lblZipCode.setForeground(Color.white);
         lblEmail.setForeground(Color.white);
+
+        btnRegister.setForeground(Color.white);
+        btnRegister.setBackground(new Color(43,43,43));
+
         add(lblFirstName);
         add(tfFirstName);
         add(lblSurName, "gap unrelated");

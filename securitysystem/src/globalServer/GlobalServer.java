@@ -135,6 +135,8 @@ public class GlobalServer {
 
                             while (true) {
                                 try {
+
+
                                     requestObject = ois.readObject();
                                     String requestString = requestObject.toString();
 

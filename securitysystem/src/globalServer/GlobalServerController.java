@@ -14,9 +14,11 @@ public class GlobalServerController implements Observer {
     private HashMap<String, Home> homes;
     private MainFrame mainFrame;
     private UserRegister userRegister;
+    private EmailSender emailSender;
 
     public GlobalServerController() {
 
+        emailSender = new EmailSender();
         userRegister = new UserRegister();
         this.userRegister.addObserver(this);
         homes = new HashMap<>();
@@ -60,6 +62,12 @@ public class GlobalServerController implements Observer {
                 e.printStackTrace();
         }
         return "";
+    }
+
+    public void sendEmail(String recipient, String subject, String information) throws MessagingException {
+
+        emailSender.sendMail(recipient,subject,information);
+
     }
 
     public UserRegister getUserRegister(){

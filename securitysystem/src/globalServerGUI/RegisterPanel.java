@@ -1,5 +1,6 @@
 package globalServerGUI;
 
+import javax.mail.MessagingException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +27,7 @@ public class RegisterPanel extends JPanel {
         frame = new JFrame();
         this.setLayout(new MigLayout());
         setPreferredSize(new Dimension(250, 200));
-        setBackground(new Color(83, 86, 91));
+        setBackground(new Color(60, 63, 65));
 
         btnRegister = new JButton("Register Client");
         tfStreet = new JTextField();
@@ -43,6 +44,7 @@ public class RegisterPanel extends JPanel {
         lblZipCode = new JLabel("Zip code:");
         lblEmail = new JLabel("Email:");
         draw();
+
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width / 3 - frame.getSize().width / 3, dim.height / 3 - frame.getSize().height / 3);
@@ -64,6 +66,10 @@ public class RegisterPanel extends JPanel {
         lblSurName.setForeground(Color.white);
         lblZipCode.setForeground(Color.white);
         lblEmail.setForeground(Color.white);
+
+        btnRegister.setForeground(Color.white);
+        btnRegister.setBackground(new Color(43,43,43));
+
         add(lblFirstName);
         add(tfFirstName);
         add(lblSurName, "gap unrelated");
@@ -92,19 +98,28 @@ public class RegisterPanel extends JPanel {
 */
                 /*User user = new User(tfFirstName.getText(), tfSurName.getText(),
                                      tfStreet.getText(), tfZipCode.getText(), tfCity.getText(), tfEmail.getText());*/
-                User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
-                //user.generateLogInDetails();
-                user.setUserName("admin");
-                user.setPassword("password");
-                globalServerController.getUserRegister().addUser(user);
-                globalServerController.addHome(user.getUserName(), new Home(user));
-                System.out.println("created and added home");
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        RegisterPanel.this.frame.dispose();
-                    }
-                });
+            User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
+            //user.generateLogInDetails();
+            user.setUserName("admin");
+            user.setPassword("password");
+            globalServerController.getUserRegister().addUser(user);
+            globalServerController.addHome(user.getUserName(), new Home(user));
+            System.out.println("created and added home");
+
+            String loginInfo = "Hej! \nHär nedan kommer dina inloggningsuppgifter\nAnvändarnamn: " + user.getUserName()
+                    + "\nLösenord: " + user.getPassword();
+            try {
+                globalServerController.sendEmail(user.getEmail(), "SecureHomesMAU", loginInfo);
+            } catch (MessagingException ex) {
+                ex.printStackTrace();
+            }
+
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    RegisterPanel.this.frame.dispose();
+                }
+            });
             //}
         }
     }

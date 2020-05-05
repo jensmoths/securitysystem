@@ -2,6 +2,7 @@ package globalClient;
 
 import javax.swing.*;
 
+
 public class MainFrame extends JFrame {
     private MainPanel mainPanel;
     private LogInPanel logInPanel;
@@ -21,6 +22,6 @@ public class MainFrame extends JFrame {
     }
 
     public void setTextArea(String text) {
-        mainPanel.setTextArea(text);
+        mainPanel.setTaLogger(text);
     }
 }

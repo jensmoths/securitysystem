@@ -23,7 +23,9 @@ public class Message implements Serializable {
     public String getInfo() {
         return info;
     }
-
+    public void setInfo(String info) {
+        this.info = info;
+    }
     public SecurityComponent getSecurityComponent() {
         return securityComponent;
     }

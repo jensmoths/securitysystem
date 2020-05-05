@@ -19,7 +19,7 @@ public class GlobalClientController {
     // TODO: 05-May-20 Add code to make it possible for client to typ in own time
     public void updateLog(Logger logger) {
         mainFrame.setTextArea(logger.getLog(2020,5 ,5 , 1, 6,
-                2020, 5, 5, 1, 44));
+                2021, 5, 5, 1, 44));
     }
 
     public static void main(String[] args) {

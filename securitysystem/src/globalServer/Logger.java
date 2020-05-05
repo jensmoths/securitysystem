@@ -1,5 +1,6 @@
 package globalServer;
 
+import javax.swing.*;
 import java.io.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Logger implements Serializable {
-
+    // TODO: 05-May-20 Use HashMap instead of arraylists, time as key, event as value
     private ArrayList<Long> timeStamps;
     private ArrayList<String> events;
     private String userName;
@@ -100,9 +101,11 @@ public class Logger implements Serializable {
             temp = new Timestamp(timeStamps.get(i));
             if (temp.after(startingTime) & temp.before(endingTime)) {
                 res += (temp.toLocalDateTime() + ": " + events.get(i) + "\n");
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid time filter!");
+                return "";
             }
         }
-        
         return res;
     }
 }

@@ -6,11 +6,17 @@ import globalServer.User;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+<<<<<<< HEAD
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+=======
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+>>>>>>> Malek8.2
 
 public class MainPanel extends JPanel {
     private RegisterPanel registerPanel;
@@ -18,7 +24,9 @@ public class MainPanel extends JPanel {
     private JPanel pnlRight;
     private JButton btnRegister;
     private JButton btnDelete;
-    private JButton btnUpdate;
+    private JTextField tfSearch;
+    private JLabel lblSearch;
+    private JLabel lblEmpty;
     private JScrollPane loggerScrollPane;
     private JTextArea taLogger;
     private JTable tblInfo;
@@ -81,7 +89,11 @@ public class MainPanel extends JPanel {
 
         btnRegister = new JButton();
         btnDelete = new JButton();
-        btnUpdate = new JButton();
+
+        tfSearch = new JTextField();
+
+        lblSearch = new JLabel();
+        lblEmpty = new JLabel();
 
         taLogger = new JTextArea();
         tblInfo = new JTable();
@@ -89,32 +101,59 @@ public class MainPanel extends JPanel {
         loggerScrollPane = new JScrollPane(taLogger);
         tblScrollPane = new JScrollPane(tblInfo);
 
+<<<<<<< HEAD
         this.setBackground(new Color(83, 86, 91));
         pnlLeft.setBackground(new Color(83, 86, 91));
         pnlRight.setBackground(new Color(83, 86, 91));
 
         taLogger.setBackground(new Color(83, 86, 91));
         tblInfo.setBackground(new Color(83, 86, 91));
+=======
+        this.setBackground(new Color(60, 63, 65));
+        pnlLeft.setBackground(new Color(60, 63, 65));
+        pnlRight.setBackground(new Color(60, 63, 65));
+
+        textArea.setBackground(new Color(43,43,43));
+        tblScrollPane.getViewport().setBackground(new Color(43,43,43));
+>>>>>>> Malek8.2
 
         this.setLayout(new BorderLayout());
         pnlLeft.setLayout(new FlowLayout());
         pnlRight.setLayout(new BorderLayout());
 
+<<<<<<< HEAD
         this.setPreferredSize(new Dimension(1250, 486));
         pnlLeft.setPreferredSize(new Dimension(800, 485));
         pnlRight.setPreferredSize(new Dimension(610, 485));
         tblScrollPane.setPreferredSize(new Dimension(750, 370));
         tblScrollPane.getViewport().setBackground(new Color(43,43,43));
         loggerScrollPane.setPreferredSize(new Dimension(605, 370));
+=======
+        this.setPreferredSize(new Dimension(1250,600));
+        pnlLeft.setPreferredSize(new Dimension(800,580));
+        pnlRight.setPreferredSize(new Dimension(450,580));
+        tblScrollPane.setPreferredSize(new Dimension(750,370));
+        loggerScrollPane.setPreferredSize(new Dimension(420,370));
+        lblEmpty.setPreferredSize(new Dimension(290,40));
+        tfSearch.setPreferredSize(new Dimension(200,20));
+>>>>>>> Malek8.2
 
+        lblSearch.setText("Search:");
         btnDelete.setText("Delete");
         btnRegister.setText("Register");
 
         TitledBorder borderContact = new TitledBorder("User Information");
+<<<<<<< HEAD
         borderContact.setTitleColor(new Color(255, 123, 0, 231));
 
         TitledBorder borderLogger = new TitledBorder("Logger");
         borderLogger.setTitleColor(new Color(255, 123, 0, 231));
+=======
+        borderContact.setTitleColor(new Color(62, 134, 160));
+
+        TitledBorder borderLogger = new TitledBorder("Logger");
+        borderLogger.setTitleColor(new Color(62, 134, 160));
+>>>>>>> Malek8.2
 
         taLogger.setEditable(false);
 
@@ -122,26 +161,47 @@ public class MainPanel extends JPanel {
         pnlRight.setBorder(borderLogger);
 
         columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City", "Username", "Password", "Email"};
+<<<<<<< HEAD
         tblInfo.setForeground(Color.white);
 
 
+=======
+        tblInfo.setForeground(Color.WHITE);
+>>>>>>> Malek8.2
         model.setColumnIdentifiers(columns);
 
         tblInfo.setRowHeight(30);
         tblInfo.setModel(model);
+<<<<<<< HEAD
         tblInfo.setBackground(new Color(83, 86, 91));
 
+=======
+>>>>>>> Malek8.2
 
         btnRegister.setPreferredSize(new Dimension(100, 40));
         btnDelete.setPreferredSize(new Dimension(100, 40));
 
+<<<<<<< HEAD
         taLogger.setForeground(Color.white);
+=======
+        btnRegister.setBackground(new Color(43,43,43));
+        btnDelete.setBackground(new Color(43,43,43));
+
+        btnRegister.setForeground(Color.white);
+        btnDelete.setForeground(Color.white);
+
+        lblSearch.setForeground(Color.white);
+        textArea.setForeground(Color.white);
+>>>>>>> Malek8.2
 
         loggerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         pnlLeft.add(tblScrollPane);
         pnlLeft.add(btnRegister);
         pnlLeft.add(btnDelete);
+        pnlLeft.add(lblEmpty);
+        pnlLeft.add(lblSearch);
+        pnlLeft.add(tfSearch);
 
         pnlRight.add(BorderLayout.NORTH, loggerScrollPane);
         drawPnlDateTime();
@@ -151,8 +211,12 @@ public class MainPanel extends JPanel {
 
         btnRegister.addActionListener(buttonListener);
         btnDelete.addActionListener(buttonListener);
+<<<<<<< HEAD
 
 
+=======
+        tfSearch.addKeyListener(new KeyReleasedListener());
+>>>>>>> Malek8.2
     }
 
 
@@ -222,6 +286,17 @@ public class MainPanel extends JPanel {
         return tblInfo.getSelectedRow();
     }
 
+    public void searchTable(){
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblInfo.getModel();
+        String search = tfSearch.getText().toLowerCase();
+        TableRowSorter<DefaultTableModel> rowSorter = new TableRowSorter<>(tableModel);
+        tblInfo.setRowSorter(rowSorter);
+        rowSorter.setRowFilter(RowFilter.regexFilter(search));
+
+    }
+
+
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
@@ -234,6 +309,7 @@ public class MainPanel extends JPanel {
                 User user = globalServerController.getUser(username);
                 globalServerController.getUserRegister().deleteUser(user);
                 globalServerController.deleteHome(username);
+<<<<<<< HEAD
             } else if (actionEvent.getSource() == btnGetLog) {
                 if (getSelectedRow() != -1) {
                     String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
@@ -241,7 +317,28 @@ public class MainPanel extends JPanel {
                 } else {
                     JOptionPane.showMessageDialog(null, "You have to choose a user first!");
                 }
+=======
+>>>>>>> Malek8.2
             }
+        }
+    }
+
+    private class KeyReleasedListener implements KeyListener {
+
+
+        @Override
+        public void keyTyped(KeyEvent keyEvent) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent keyEvent) {
+            searchTable();
+        }
+
+        @Override
+        public void keyReleased(KeyEvent keyEvent) {
+            searchTable();
         }
     }
 

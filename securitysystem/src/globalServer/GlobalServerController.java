@@ -2,7 +2,11 @@ package globalServer;
 
 import globalServerGUI.MainFrame;
 
+<<<<<<< HEAD
 import javax.swing.*;
+=======
+import javax.mail.MessagingException;
+>>>>>>> Malek8.2
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -12,9 +16,11 @@ public class GlobalServerController implements Observer {
     private HashMap<String, Home> homes;
     private MainFrame mainFrame;
     private UserRegister userRegister;
+    private EmailSender emailSender;
 
     public GlobalServerController() {
 
+        emailSender = new EmailSender();
         userRegister = new UserRegister();
         this.userRegister.addObserver(this);
         homes = new HashMap<>();
@@ -28,6 +34,18 @@ public class GlobalServerController implements Observer {
 
     public void addHome(String userName, Home home) {
         homes.put(userName, home);
+    }
+
+    public void sendEmail(String recipient, String subject, String information) throws MessagingException {
+
+        emailSender.sendMail(recipient,subject,information);
+
+    }
+
+    public User getUser(String userName){
+
+        return homes.get(userName).getUser();
+
     }
 
     public void deleteHome(String userName) {

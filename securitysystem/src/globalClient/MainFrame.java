@@ -1,6 +1,9 @@
 package globalClient;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.StrokeBorder;
+import javax.swing.border.TitledBorder;
 
 public class MainFrame extends JFrame {
     private MainPanel mainPanel;
@@ -21,6 +24,6 @@ public class MainFrame extends JFrame {
     }
 
     public void setTextArea(String text) {
-        mainPanel.setTextArea(text);
+        mainPanel.setTaLogger(text);
     }
 }

@@ -5,6 +5,7 @@ import localserver.CommandLine;
 import localserver.PiServer;
 import model.SecurityComponent;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -50,8 +51,18 @@ public class Controller {
     }
 
     public void takePicture() {
-        new Thread(new CommandLine()).start();
+
+       Thread t = new Thread(new CommandLine(this));
+        t.start();
     }
+
+    public void pictureTaken(int number) throws IOException {
+      ImageIcon icon = new ImageIcon ("/home/pi/pic/cam"+number);
+      JOptionPane.showMessageDialog(null, icon);
+        server.globalServer.globalsendPicture(icon);
+
+    }
+
 
     public void soundAlarm(){
 

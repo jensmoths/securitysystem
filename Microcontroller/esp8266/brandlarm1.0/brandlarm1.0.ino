@@ -6,8 +6,8 @@
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
 //String locationString = "location";
-//const String IP = "83.254.129.68"; //per
-const String IP = "82.209.130.123"; //jens
+const String IP = "83.254.129.68"; //per
+//const String IP = "82.209.130.123"; //jens
 const int PORT = 40000;
 const String TYPE = "firealarm";
 const int larm = 15;
@@ -133,7 +133,7 @@ void loop() {
     digitalWrite(led, HIGH);
     larmSignal = digitalRead(larm);
     if (larmSignal == HIGH) {
-      client.println("Fire");
+      client.println("on");
       Serial.println("Fire");
       delay(3000);
     }

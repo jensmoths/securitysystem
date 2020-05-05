@@ -7,7 +7,6 @@ public class MainFrame extends JFrame {
     private LogInPanel logInPanel;
     private GlobalClient globalClient;
 
-
     public MainFrame(GlobalClient globalClient) {
         this.globalClient = globalClient;
         logInPanel = new LogInPanel(globalClient);

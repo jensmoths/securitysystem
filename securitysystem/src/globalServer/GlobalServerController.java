@@ -1,6 +1,8 @@
 package globalServer;
 
 import globalServerGUI.MainFrame;
+
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -20,6 +22,10 @@ public class GlobalServerController implements Observer {
         globalServer = new GlobalServer(8081, homes);
     }
 
+    public User getUser (String userName) {
+        return homes.get(userName).getUser();
+    }
+
     public void addHome(String userName, Home home) {
         homes.put(userName, home);
     }
@@ -29,8 +35,29 @@ public class GlobalServerController implements Observer {
         homes.remove(userName);
     }
 
-    public Logger getClientLogger(String username) {
-        return homes.get(username).logger;
+    public String getClientLoggerText(String username) {
+        String []  startDateArray = mainFrame.getMainPanel().getStartDate();
+        String []  startTimeArray = mainFrame.getMainPanel().getStartTime();
+        String []  endDateArray = mainFrame.getMainPanel().getEndDate();
+        String []  endTimeArray = mainFrame.getMainPanel().getEndTime();
+        try {
+            int startDateYear = Integer.parseInt(startDateArray[0]);
+            int startDateMonth = Integer.parseInt(startDateArray[1]);
+            int startDateDay = Integer.parseInt(startDateArray[2]);
+            int startTimeHour = Integer.parseInt(startTimeArray[0]);
+            int startTimeMin = Integer.parseInt(startTimeArray[1]);
+            int endDateYear = Integer.parseInt(endDateArray[0]);
+            int endDateMonth = Integer.parseInt(endDateArray[1]);
+            int endDateDay = Integer.parseInt(endDateArray[2]);
+            int endTimeHour = Integer.parseInt(endTimeArray[0]);
+            int endTimeMin = Integer.parseInt(endTimeArray[1]);
+
+            return homes.get(username).logger.getLog(startDateYear, startDateMonth, startDateDay, startTimeHour,
+                    startTimeMin, endDateYear, endDateMonth, endDateDay, endTimeHour, endTimeMin);
+        } catch (NullPointerException e) {
+                e.printStackTrace();
+        }
+        return "";
     }
 
     public UserRegister getUserRegister(){

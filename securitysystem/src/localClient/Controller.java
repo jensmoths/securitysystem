@@ -64,13 +64,16 @@ public class Controller {
     }
 
 
-    public void soundAlarm(){
+    public void soundAlarm(String file){
+        //play."/home/pi/sound/"+file;
+
+
 
     }
 
 
 
-    void setAlarmOn(boolean b) {
+  public void setAlarmOn(boolean b) {
         alarmOn = b;
 
         if(alarmOn) {

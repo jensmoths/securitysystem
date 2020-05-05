@@ -250,76 +250,87 @@ public class PiServer extends Thread implements Serializable {
 
 
                     if (message.getSecurityComponent() instanceof MagneticSensor) {
-                        for (SecurityComponent s : map.keySet()) {
-                            if (s instanceof DoorLock) {
-                                if (message.getSecurityComponent().isOpen()) {   //TODO LARMET GÅR
+                        if (message.getSecurityComponent().isOpen()) {
+                            if (controller.alarmOn) {
+                                for (SecurityComponent s : map.keySet()) {
+                                    if (s instanceof DoorLock) {
+                                        map.get(s).sendMessage('c');
+                                    }
+                                }
+                                controller.soundAlarm("Intruder");
+                                controller.takePicture();
+                                message.setInfo("Någon har brutit sig in");
+                            } else {
+                                message.setInfo("Någon har öppnat dörren");
+                            }
+                        } else {
+                            message.setInfo("Någon har stängt dörren");
 
-                                    //TODO ÄNDRAT VAD SOM HÄNDER NÄR MAGNETSENSORN BRYTS
-                                    System.out.println("Någon har öppnat dörren");
+                        }
+                        globalServer.globalsendMessage(message);
+                    }
+
+                    if (message.getSecurityComponent() instanceof ProximitySensor) {
+                        if (message.getSecurityComponent().isOpen()) {
+
+                            for (SecurityComponent s : map.keySet()) {
+                                if (s instanceof DoorLock) {
                                     if (controller.alarmOn) {
                                         map.get(s).sendMessage('c');
-                                        controller.soundAlarm();
-                                        controller.takePicture();
-                                        message.setInfo("Någon har brutit sig in");
-                                    } else {
-                                        message.setInfo("Någon har öppnat dörren");
-                                    }
-                                    globalServer.globalsendMessage(message);
-                                } else {
 
-                                    //Någon stänger dörren! Vad händer då?
-                                    //map.get(s).sendMessage('c');
-                                    message.setInfo("Någon har stängt dörren");
-                                    globalServer.globalsendMessage(message);
+                                    } else map.get(s).sendMessage('o');
                                 }
                             }
-                        }
-                    }
-                    if (message.getSecurityComponent() instanceof ProximitySensor) {
-                        for (SecurityComponent s : map.keySet()) {
-                            if (s instanceof DoorLock) {
-                                if (message.getSecurityComponent().isOpen()) {
-                                    map.get(s).sendMessage('o');
-                                    //   globalServer.GlobalsendMessage(message);
+                            if (controller.alarmOn) {
+                                controller.soundAlarm("Intruder");
+                                message.setInfo("Rörelse alarm");
+                            } else message.setInfo("Rörelse");
 
-                                } else {
-                                    map.get(s).sendMessage('c');
-                                    //   globalServer.GlobalsendMessage(message);
-                                }
-                            }
                         }
-                    }
-                    if (message.getSecurityComponent() instanceof FireAlarm) {
                         globalServer.globalsendMessage(message);
 
+                    }
+
+
+                    if (message.getSecurityComponent() instanceof FireAlarm) {
+                        message.setInfo("Det brinner");
+                        globalServer.globalsendMessage(message);
+                        controller.soundAlarm("Brinner");
+
                         for (SecurityComponent s : map.keySet()) {
-                            if (s instanceof MagneticSensor) {
-                                map.get(s).sendMessage('c');
+                            if (s instanceof DoorLock) {
+                                map.get(s).sendMessage('o');
                             }
                         }
 
 
                     }
                     if (message.getSecurityComponent() instanceof FingerprintSensor) {
-                        String userName = null;
-                        char[] password = new char[0];
-                        PasswordAuthentication login = new PasswordAuthentication(userName, password);
-
-                        if (message.getInfo().equals(password)) {
-                            for (SecurityComponent s : map.keySet()) {
-                                if (s instanceof MagneticSensor) {
-                                    map.get(s).sendMessage('o');
-                                }
-                            }
-                        } else for (SecurityComponent s : map.keySet()) {
-                            if (s instanceof MagneticSensor) {
-                                map.get(s).sendMessage('c');
-                            }
+                       if(message.getSecurityComponent().isOpen()){
+                           controller.setAlarmOn(false);
+                           controller.soundAlarm("Welcome");
+                           message.setInfo("Fingerläsaren har öppnat dörren");
+                           for (SecurityComponent s : map.keySet()) {
+                               if (s instanceof DoorLock) {
+                                   map.get(s).sendMessage('o');
+                               }
+                           }
+                       }
+                       else{
+                           if(controller.alarmOn) {
+                               message.setInfo("Fingerläsaren har larmat");
+                               controller.soundAlarm("Alarm för någon har försökt 3 gånger på fingerläsaren");
+                           } else {
+                               message.setInfo("Fingerläsaren har läst fel 3 gånger");
+                               controller.soundAlarm("Fingerläsaren har läst fel 3 gånger");
+                           }
+                       }
+                        globalServer.globalsendMessage(message);
                         }
 
-                        //  globalServer.GlobalsendMessage(message);
 
-                    }
+
+
 
                     System.out.println("CH " + "IP: " + socket.getInetAddress() + " ID: " + sensor.getId() + " TYPE: " + sensor.getClass().getSimpleName() + " " + message.getSecurityComponent().isOpen());
 
@@ -422,7 +433,7 @@ public class PiServer extends Thread implements Serializable {
         }
 
         public void globalsendPicture(ImageIcon icon) throws IOException {
-            if (socket != null && !socket.isClosed()){
+            if (socket != null && !socket.isClosed()) {
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 oos.writeObject(icon);
                 oos.flush();
@@ -459,17 +470,17 @@ public class PiServer extends Thread implements Serializable {
 
                                 }
                             }
-                            if(allOnlineSensors.contains(msg.getSecurityComponent())) {
+                            if (allOnlineSensors.contains(msg.getSecurityComponent())) {
                                 allOnlineSensors.set(allOnlineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
                                 controller.updateOnlineMK(allOnlineSensors);
                             }
                         }
                     }
                     if (obj instanceof String) {
-                        System.out.println("String object vi fått från Global: " +obj);
+                        System.out.println("String object vi fått från Global: " + obj);
                         if (obj.equals("user authenticated")) controller.setOnline(false);
 
-                        if(obj.equals("Take photo")) controller.takePicture();
+                        if (obj.equals("Take photo")) controller.takePicture();
                     }
                 } catch (IOException | ClassNotFoundException e) {
                     try {

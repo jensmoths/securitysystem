@@ -3,6 +3,7 @@ package localClient;
 
 import model.FireAlarm;
 import model.MagneticSensor;
+import model.ProximitySensor;
 import model.SecurityComponent;
 import net.miginfocom.swing.MigLayout;
 
@@ -100,11 +101,12 @@ public class Meny extends JFrame {
            } else status = "";
            }
 
-
-
-
+           if(s instanceof ProximitySensor){   //TODO TESTA DET HÄR, DEN BLIR ALDRIG BOOLEAN FALSE???
+               if(s.isOpen()){
+                   status = " Rörelse upptäckt";
+               }else status="";
+           }
             String onlineMK;
-
                 onlineMK = s.getClass().getSimpleName() + " ID: " + s.getId() + " Location: " + s.getLocation() + status;
 
 

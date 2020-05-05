@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.text.ParseException;
+import java.util.Objects;
 
 public class MainFrame extends JPanel implements ActionListener {
     private JButton btnNum0, btnNum1, btnNum2, btnNum3, btnNum4, btnNum5, btnNum6, btnNum7,
@@ -255,7 +256,7 @@ public class MainFrame extends JPanel implements ActionListener {
             e.printStackTrace();
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/userdata.txt"))) {
-            userdata = userdata.replace(systemPinCode, newSystemPinCode);
+            userdata = Objects.requireNonNull(userdata).replace(systemPinCode, newSystemPinCode);
             writer.write(userdata);
             writer.flush();
         } catch (IOException e) {

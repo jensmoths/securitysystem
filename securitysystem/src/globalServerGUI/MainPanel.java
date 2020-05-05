@@ -4,9 +4,11 @@ import globalServer.GlobalServerController;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 public class MainPanel extends JPanel {
     private RegisterPanel registerPanel;
@@ -14,7 +16,8 @@ public class MainPanel extends JPanel {
     private JPanel pnlRight;
     private JButton btnRegister;
     private JButton btnDelete;
-    private JButton btnUpdate;
+    private JLabel lblSearch;
+    private JTextField tfSearch;
     private JScrollPane loggerScrollPane;
     private JTextArea textArea;
     private JTable tblInfo;
@@ -23,6 +26,7 @@ public class MainPanel extends JPanel {
     private DefaultTableModel model;
     private String[] columns;
     private JScrollPane tblScrollPane;
+    private JLabel lblEmpty;
 
     public MainPanel(GlobalServerController globalServerController) {
         this.globalServerController = globalServerController;
@@ -36,9 +40,13 @@ public class MainPanel extends JPanel {
         pnlLeft = new JPanel();
         pnlRight = new JPanel();
 
+        lblEmpty = new JLabel();
+
+        tfSearch = new JTextField();
+        lblSearch = new JLabel();
+
         btnRegister = new JButton();
         btnDelete = new JButton();
-        btnUpdate = new JButton();
 
         textArea = new JTextArea();
         tblInfo = new JTable();
@@ -62,7 +70,11 @@ public class MainPanel extends JPanel {
         pnlRight.setPreferredSize(new Dimension(450,580));
         tblScrollPane.setPreferredSize(new Dimension(750,370));
         loggerScrollPane.setPreferredSize(new Dimension(420,370));
+        tfSearch.setPreferredSize(new Dimension(200,20));
+        lblEmpty.setPreferredSize(new Dimension(290,20));
 
+
+        lblSearch.setText("Search:");
         btnDelete.setText("Delete");
         btnRegister.setText("Register");
 
@@ -80,24 +92,26 @@ public class MainPanel extends JPanel {
         columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City", "Username", "Password", "Email"};
         tblInfo.setForeground(Color.WHITE);
 
-
         model.setColumnIdentifiers(columns);
 
         tblInfo.setRowHeight(30);
         tblInfo.setModel(model);
         tblInfo.setBackground(new Color(83,86,91));
 
-
         btnRegister.setPreferredSize(new Dimension(100,40));
         btnDelete.setPreferredSize(new Dimension(100, 40));
 
         textArea.setForeground(Color.white);
+        lblSearch.setForeground(Color.white);
 
         loggerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         pnlLeft.add(tblScrollPane);
         pnlLeft.add(btnRegister);
         pnlLeft.add(btnDelete);
+        pnlLeft.add(lblEmpty);
+        pnlLeft.add(lblSearch);
+        pnlLeft.add(tfSearch);
 
         pnlRight.add(loggerScrollPane);
 
@@ -105,7 +119,18 @@ public class MainPanel extends JPanel {
         add(pnlRight , BorderLayout.EAST);
 
         btnRegister.addActionListener(buttonListener);
+        tfSearch.addKeyListener(new KeyListener());
         btnDelete.addActionListener(buttonListener);
+    }
+
+    public void searchTable(){
+
+        String searchText = tfSearch.getText().toLowerCase();
+        DefaultTableModel modelTable = (DefaultTableModel) tblInfo.getModel();
+        TableRowSorter<DefaultTableModel> tableRowSorter = new TableRowSorter<>(modelTable);
+        tblInfo.setRowSorter(tableRowSorter);
+        tableRowSorter.setRowFilter(RowFilter.regexFilter(searchText));
+
     }
 
     public void setTextArea(JTextArea textArea) {
@@ -134,6 +159,25 @@ public class MainPanel extends JPanel {
                 globalServerController.deleteHome(username);
                 globalServerController.getUserRegister().deleteUser(getSelectedRow());
             }
+        }
+    }
+
+    private class KeyListener implements java.awt.event.KeyListener{
+
+
+        @Override
+        public void keyTyped(KeyEvent keyEvent) {
+            searchTable();
+        }
+
+        @Override
+        public void keyPressed(KeyEvent keyEvent) {
+            searchTable();
+        }
+
+        @Override
+        public void keyReleased(KeyEvent keyEvent) {
+            searchTable();
         }
     }
 

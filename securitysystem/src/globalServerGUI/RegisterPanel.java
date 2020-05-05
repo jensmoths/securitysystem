@@ -17,12 +17,10 @@ public class RegisterPanel extends JPanel {
     private JLabel lblFirstName, lblSurName, lblStreet, lblZipCode, lblCity, lblEmail;
     private GlobalServerController globalServerController;
     private JFrame frame;
-    private UserRegister register;
     private JButton btnRegister;
 
     public RegisterPanel(GlobalServerController globalServerController) {
         this.globalServerController = globalServerController;
-        register = new UserRegister();
         frame = new JFrame();
         this.setLayout(new MigLayout());
         setPreferredSize(new Dimension(250, 200));
@@ -83,19 +81,21 @@ public class RegisterPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO: 29-Apr-20 Avkommentera alla kommentaren nedan för slutversion
-            /*
+
             if ((tfFirstName.getText().isEmpty() | tfFirstName.getText().length() < 2)
                     | (tfSurName.getText().isEmpty() | tfSurName.getText().length() < 2)
-                    | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3) | (tfEmail.getText().length()<5)) {
+                    | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3) | (tfEmail.getText().length() < 5)) {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
-            } else {*/
-                /*
+            } else {
+
                 User user = new User(tfFirstName.getText(), tfSurName.getText(),
-                                     tfStreet.getText(), tfZipCode.getText(), tfCity.getText(), tfEmail.getText());*/
-                User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
-                //user.generateLogInDetails();
-                user.setUserName("admin");
-                user.setPassword("password");
+                        tfStreet.getText(), tfZipCode.getText(), tfCity.getText(), tfEmail.getText());
+               // User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
+                user.generateLogInDetails();
+                /*user.setUserName("admin");
+                user.setPassword("password");'
+
+                */
                 globalServerController.getUserRegister().addUser(user);
                 globalServerController.addHome(user.getUserName(), new Home(user));
                 System.out.println("created and added home");
@@ -105,7 +105,7 @@ public class RegisterPanel extends JPanel {
                         RegisterPanel.this.frame.dispose();
                     }
                 });
-            /*}*/
+                }
+            }
         }
     }
-}

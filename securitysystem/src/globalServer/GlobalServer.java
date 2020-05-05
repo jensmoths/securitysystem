@@ -1,5 +1,6 @@
 package globalServer;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -85,7 +86,6 @@ public class GlobalServer {
                         username = (String) ois.readObject();
                         password = (String) ois.readObject();
                     }
-
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -101,7 +101,8 @@ public class GlobalServer {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    home.logger.addToLogger(socket.getInetAddress() + "has logged in");
+                    home.logger.addToLog(socket.getInetAddress() + "has logged in");
+                    home.sendToAllClients(home.logger);
 
                     switch (serverOrClient) {
 
@@ -114,7 +115,7 @@ public class GlobalServer {
                                     System.out.println(requestObject.toString());
                                     requestHandler.handleServerRequest(requestObject, home);
 
-                                } catch (IOException | ClassNotFoundException e) {
+                                } catch (IOException | ClassNotFoundException | MessagingException e) {
                                     System.out.println(socket.getInetAddress() + " has disconnected");
                                     try {
                                         home.setLocalServer(null);
@@ -147,7 +148,7 @@ public class GlobalServer {
                                 } catch (IOException | ClassNotFoundException e) {
                                     System.out.println(socket.getInetAddress() + " has disconnected");
                                     try {
-                                        home.logger.addToLogger(socket.getInetAddress() + "has logged out");
+                                        home.logger.addToLog(socket.getInetAddress() + "has logged out");
                                         home.removeGlobalClient(this);
                                         if (socket != null) {
                                             socket.close();

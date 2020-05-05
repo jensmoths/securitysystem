@@ -20,10 +20,9 @@ public class LogInPanel extends JPanel {
         this.globalClient = globalClient;
         frame = new JFrame();
         this.setLayout(new MigLayout());
-        setBackground(new Color(60, 63, 65));
+        setBackground(new Color(83, 86, 91));
 
         btnLogIn = new JButton("Log In");
-        btnLogIn.setForeground(Color.white);
         lblUsername = new JLabel("Username:");
         lblPassword = new JLabel("Password:");
         tfPassword = new JTextField();
@@ -45,7 +44,6 @@ public class LogInPanel extends JPanel {
         tfUsername.setPreferredSize(new Dimension(120, 20));
         lblUsername.setForeground(Color.white);
         lblPassword.setForeground(Color.white);
-        btnLogIn.setBackground(new Color(43, 43, 43));
         add(lblUsername);
         add(tfUsername, "span");
         add(lblPassword);

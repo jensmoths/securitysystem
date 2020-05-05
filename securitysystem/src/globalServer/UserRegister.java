@@ -15,10 +15,6 @@ public class UserRegister extends Observable {
     }
 
     public void deleteUser(User user){
-<<<<<<< HEAD
-=======
-
->>>>>>> Malek8.2
         users.remove(user);
         getUserInformation();
     }

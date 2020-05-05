@@ -3,6 +3,8 @@ package globalServer;
 import globalServerGUI.MainFrame;
 
 import javax.swing.*;
+import javax.mail.MessagingException;
+
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;

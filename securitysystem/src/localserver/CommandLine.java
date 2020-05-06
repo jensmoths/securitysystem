@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class CommandLine implements Runnable {
 
-    String[] commandTakePic = {"raspistill", "-o", "/home/pi/pic/cam" + number + ".jpg"};        //skriv in kommandot "raspistill","-o", "/home/pi/pic/cam"+number+".jpg"
+
     static int number = 0;
     Controller controller;
 
@@ -21,6 +21,15 @@ public class CommandLine implements Runnable {
 
     @Override
     public void run() {
+        while (!controller.cameraReady) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        String[] commandTakePic = {"raspistill", "-o", "/home/pi/pic/cam" + number + ".jpg"};
+        controller.cameraReady = false;
         ProcessBuilder processBuilder = new ProcessBuilder(commandTakePic);
         processBuilder.directory(new File(System.getProperty("user.home")));
         try {
@@ -33,13 +42,10 @@ public class CommandLine implements Runnable {
             int exitCode = process.waitFor();
             System.out.println("\nExited with error code: " + exitCode);
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
-        try {
-            number++;
-            controller.pictureTaken(number);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        controller.pictureTaken(number);
+        number++;
+        controller.cameraReady = true;
     }
 }

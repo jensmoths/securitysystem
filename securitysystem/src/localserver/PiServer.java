@@ -433,10 +433,12 @@ public class PiServer extends Thread implements Serializable {
         }
 
         public void globalsendPicture(ImageIcon icon) throws IOException {
+            //JOptionPane.showMessageDialog(null, icon);
             if (socket != null && !socket.isClosed()) {
                 oos = new ObjectOutputStream(socket.getOutputStream());
                 oos.writeObject(icon);
                 oos.flush();
+
 
             }
         }

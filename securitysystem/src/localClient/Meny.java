@@ -8,6 +8,7 @@ import model.SecurityComponent;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -39,11 +40,20 @@ public class Meny extends JFrame {
         this.changeCode = changeCode;
         this.fingerprintGui = fingerprintGui;
 
+        this.setBackground(new Color(83,86,91));
+        getContentPane().setBackground(new Color(83,86,91));
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setUndecorated(true);
+
+
+        tfonlineMK .setBackground(new Color(43, 43, 43));
+        tfofflineMK .setBackground(new Color(43, 43, 43));
+
+
         this.setLayout(new MigLayout());
-        setSize(600,1000);
-        setBackground(new Color(83, 86, 91));
+        //setSize(600,1000);
         setVisible(true);
-        setLocation(500,200);
+        //setLocation(500,200);
 
         DrawMeny();
 
@@ -68,6 +78,20 @@ public class Meny extends JFrame {
         btnFingerprint.setPreferredSize(new Dimension(90,90));
         btnGoOnline.setPreferredSize(new Dimension(90,90));
 
+        btnOpenDoor.setBackground(new Color(60, 63, 65));
+        btnCloseDoor.setBackground(new Color(60, 63, 65));
+        btnAlarmOn.setBackground(new Color(60, 63, 65));
+        btnChangeCode.setBackground(new Color(60, 63, 65));
+        btnFingerprint.setBackground(new Color(60, 63, 65));
+        btnGoOnline.setBackground(new Color(60, 63, 65));
+
+        btnOpenDoor.setForeground(Color.white);
+        btnCloseDoor.setForeground(Color.white);
+        btnAlarmOn.setForeground(Color.white);
+        btnChangeCode.setForeground(Color.white);
+        btnFingerprint.setForeground(Color.white);
+        btnGoOnline.setForeground(Color.white);
+
         add(tfonlineMK,"span");
         add(tfofflineMK,"wrap, span");
         add(btnOpenDoor);
@@ -76,9 +100,13 @@ public class Meny extends JFrame {
         add(btnChangeCode);
         add(btnFingerprint);
         add(btnGoOnline);
-
-        tfofflineMK.setBorder(BorderFactory.createTitledBorder("Offline"));
-        tfonlineMK.setBorder(BorderFactory.createTitledBorder("Online"));
+        Color color;
+        TitledBorder offlineBorder = new TitledBorder(BorderFactory.createEtchedBorder(new Color(62, 134, 160), new Color(62, 134, 160)), "Offline");
+        TitledBorder onlineBorder = new TitledBorder(BorderFactory.createEtchedBorder(new Color(62, 134, 160), new Color(62, 134, 160)), "Online");
+        offlineBorder.setTitleColor(new Color(62, 134, 160));
+        onlineBorder.setTitleColor(new Color(62, 134, 160));
+        tfofflineMK.setBorder(offlineBorder);
+        tfonlineMK.setBorder(onlineBorder);
 
 
     }

@@ -15,7 +15,7 @@ public class MainFrame extends JPanel implements ActionListener {
     JPanel numPadPanel;
     private JTextField tfNumber;
     private String pinCode = "";
-    private Font font = new Font("Courier", Font.BOLD, 30);
+    private Font font = new Font("Courier", Font.BOLD, 45);
     private String systemPinCode;
     private Color numberPadColor = new Color(74, 77, 82);
     ChangeCode cc;
@@ -195,10 +195,10 @@ public class MainFrame extends JPanel implements ActionListener {
 
     public void drawTextFieldPanel() {
         tfPanel.add(tfNumber, BorderLayout.CENTER);
-        tfPanel.setPreferredSize(new Dimension(300, 50));
+        tfPanel.setPreferredSize(new Dimension(300, 100));
         tfNumber.setHorizontalAlignment(JTextField.CENTER);
         tfNumber.setEditable(false);
-        tfNumber.setFont(new Font("Courier", Font.BOLD, 35));
+        tfNumber.setFont(new Font("Courier", Font.BOLD, 65));
         tfNumber.setForeground(Color.DARK_GRAY);
     }
 

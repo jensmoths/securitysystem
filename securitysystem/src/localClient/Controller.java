@@ -6,12 +6,14 @@ import localserver.PiServer;
 import model.SecurityComponent;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
 public class Controller {
     public boolean alarmOn = false;
+    public boolean cameraReady = true;
 
     MainFrame mainFrame = new MainFrame(this);
     PiServer server = new PiServer(this);
@@ -48,14 +50,22 @@ public class Controller {
     }
 
     public void takePicture() {
+        System.out.println("Startar ny kameratråd" + cameraReady);
         Thread t = new Thread(new CommandLine(this));
         t.start();
     }
 
-    public void pictureTaken(int number) throws IOException {
+    public void pictureTaken(int number)  {
         ImageIcon icon = new ImageIcon("/home/pi/pic/cam" + number + ".jpg");
-        server.globalServer.globalsendPicture(icon);
+        System.out.println(icon.getImageLoadStatus());
 
+        if (icon.getImageLoadStatus() == MediaTracker.COMPLETE) {
+            try {
+                server.globalServer.globalsendPicture(icon);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void soundAlarm(String file) {

@@ -25,7 +25,7 @@ public class MainFrame extends JPanel implements ActionListener {
     FingerprintGui fingerprintGui;
     GoOnline goOnline;
 
-    JFrame frame;
+    JFrame numpad;
 
 
 
@@ -35,14 +35,14 @@ public class MainFrame extends JPanel implements ActionListener {
      */
     public MainFrame(Controller controller) throws ParseException {
         this.controller = controller;
-        frame = new JFrame();
+        numpad = new JFrame();
         //frame.setSize(new Dimension(320, 420));
-        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
-        frame.setContentPane(this);
-        frame.setTitle("Numpad");
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        numpad.setExtendedState(Frame.MAXIMIZED_BOTH);
+        numpad.setUndecorated(true);
+        numpad.setContentPane(this);
+        numpad.setTitle("Numpad");
+        numpad.setVisible(true);
+        numpad.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         fingerprintGui = new FingerprintGui(this);
         goOnline = new GoOnline(this);

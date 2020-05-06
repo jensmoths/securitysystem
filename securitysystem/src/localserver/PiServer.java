@@ -5,7 +5,6 @@ import model.*;
 
 import javax.swing.*;
 import java.io.*;
-import java.net.PasswordAuthentication;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -17,6 +16,7 @@ public class PiServer extends Thread implements Serializable {
     // private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
     private HashMap<String, SecurityComponent> globalMap = new HashMap<>();
     private MicroClients map = new MicroClients();
+
 
     private ArrayList<SecurityComponent> firesensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
@@ -251,85 +251,71 @@ public class PiServer extends Thread implements Serializable {
 
                     if (message.getSecurityComponent() instanceof MagneticSensor) {
                         if (message.getSecurityComponent().isOpen()) {
-                            if (controller.alarmOn) {
+                            if (Controller.alarmOn) {
                                 for (SecurityComponent s : map.keySet()) {
                                     if (s instanceof DoorLock) {
                                         map.get(s).sendMessage('c');
                                     }
                                 }
-                                controller.soundAlarm("Intruder");
+                                controller.alarmOnDelay("magnet");
                                 controller.takePicture();
                                 message.setInfo("Någon har brutit sig in");
                             } else {
                                 message.setInfo("Någon har öppnat dörren");
+                                controller.soundAlarm("greeting");
                             }
                         } else {
                             message.setInfo("Någon har stängt dörren");
-
                         }
                         globalServer.globalsendMessage(message);
                     }
 
                     if (message.getSecurityComponent() instanceof ProximitySensor) {
                         if (message.getSecurityComponent().isOpen()) {
-
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
-                                    if (controller.alarmOn) {
+                                    if (Controller.alarmOn) {
                                         map.get(s).sendMessage('c');
-
                                     } else map.get(s).sendMessage('o');
                                 }
                             }
-                            if (controller.alarmOn) {
-                                controller.soundAlarm("Intruder");
-                                message.setInfo("Rörelse alarm");
-                            } else message.setInfo("Rörelse");
-
+                            controller.alarmOnDelay("magnet");
+                            message.setInfo("Rörelse alarm");
                         }
                         globalServer.globalsendMessage(message);
-
                     }
-
 
                     if (message.getSecurityComponent() instanceof FireAlarm) {
                         message.setInfo("Det brinner");
                         globalServer.globalsendMessage(message);
-                        controller.soundAlarm("Brinner");
-
+                        controller.alarmOnDelay("fire");
                         for (SecurityComponent s : map.keySet()) {
                             if (s instanceof DoorLock) {
                                 map.get(s).sendMessage('o');
                             }
                         }
-
-
                     }
                     if (message.getSecurityComponent() instanceof FingerprintSensor) {
-                       if(message.getSecurityComponent().isOpen()){
-                           controller.setAlarmOn(false);
-                           controller.soundAlarm("Welcome");
-                           message.setInfo("Fingerläsaren har öppnat dörren");
-                           for (SecurityComponent s : map.keySet()) {
-                               if (s instanceof DoorLock) {
-                                   map.get(s).sendMessage('o');
-                               }
-                           }
-                       }
-                       else{
-                           if(controller.alarmOn) {
-                               message.setInfo("Fingerläsaren har larmat");
-                               controller.soundAlarm("Alarm för någon har försökt 3 gånger på fingerläsaren");
-                           } else {
-                               message.setInfo("Fingerläsaren har läst fel 3 gånger");
-                               controller.soundAlarm("Fingerläsaren har läst fel 3 gånger");
-                           }
-                       }
-                        globalServer.globalsendMessage(message);
+                        if (message.getSecurityComponent().isOpen()) {
+                            controller.setAlarmOn(false);
+                            controller.soundAlarm("Welcome");
+                            message.setInfo("Fingerläsaren har öppnat dörren");
+                            for (SecurityComponent s : map.keySet()) {
+                                if (s instanceof DoorLock) {
+                                    map.get(s).sendMessage('o');
+                                }
+                            }
+                        } else {
+                            if (Controller.alarmOn) {
+                                message.setInfo("Fingerläsaren har larmat");
+                                controller.soundAlarm("Alarm för någon har försökt 3 gånger på fingerläsaren");
+                            } else {
+                                message.setInfo("Fingerläsaren har läst fel 3 gånger");
+                                controller.soundAlarm("Fingerläsaren har läst fel 3 gånger");
+                            }
                         }
-
-
-
+                        globalServer.globalsendMessage(message);
+                    }
 
 
                     System.out.println("CH " + "IP: " + socket.getInetAddress() + " ID: " + sensor.getId() + " TYPE: " + sensor.getClass().getSimpleName() + " " + message.getSecurityComponent().isOpen());

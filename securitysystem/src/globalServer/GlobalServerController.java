@@ -5,6 +5,7 @@ import globalServerGUI.MainFrame;
 import javax.swing.*;
 import javax.mail.MessagingException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -38,6 +39,7 @@ public class GlobalServerController implements Observer {
         homes.get(userName).logger.deleteLog();
         homes.remove(userName);
     }
+
 
     public String getClientLoggerText(String username) {
         String []  startDateArray = mainFrame.getMainPanel().getStartDate();
@@ -76,6 +78,15 @@ public class GlobalServerController implements Observer {
 
     public void setInfo(String[][] strings){
         mainFrame.getMainPanel().setTableInfo(strings);
+    }
+
+    // TODO: 06-May-20 method below is experimental
+    public void sendTakePhoto (String userName) {
+        try {
+            homes.get(userName).getLocalServer().getOos().writeObject("Take photo");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

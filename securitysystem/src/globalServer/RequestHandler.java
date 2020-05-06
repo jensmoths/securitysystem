@@ -3,6 +3,7 @@ package globalServer;
 import model.*;
 
 import javax.mail.MessagingException;
+import javax.swing.*;
 
 public class RequestHandler {
 
@@ -19,7 +20,12 @@ public class RequestHandler {
             home.logger.addToLog((String) requestObject);
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
-        } else if (requestObject instanceof Message) {
+
+        } else if(requestObject instanceof ImageIcon) {
+            home.logger.addToLog("received an image");
+            home.sendToAllClients(home.logger);
+            home.sendToAllClients(requestObject);
+        }else if (requestObject instanceof Message) {
             Message message = (Message) requestObject;
             SecurityComponent securityComponent = message.getSecurityComponent();
 

@@ -84,7 +84,9 @@ public class GlobalClient {
                             JOptionPane.showMessageDialog(null, "username or password are incorrect");
                         }
                     } else if (objectRead instanceof Logger) {
-                        globalClientController.updateLog((Logger) objectRead);
+                        globalClientController.setLogger((Logger) objectRead);
+                    } else if (objectRead instanceof ImageIcon) {
+                        globalClientController.showImage((ImageIcon) objectRead);
                     }
 
                 } catch (IOException | ClassNotFoundException e) {

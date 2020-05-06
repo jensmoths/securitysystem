@@ -109,7 +109,11 @@ public class Controller {
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(10000);
+                        for (int i = 9; i >= 0; i--) {
+                            Thread.sleep(1000);
+                            jd.add(new JOptionPane("Larmar om " + i + " sekunder", JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}));
+                            jd.pack();
+                        }
                         jd.dispose();
                     } catch (InterruptedException e) {
                         e.printStackTrace();

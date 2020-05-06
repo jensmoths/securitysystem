@@ -9,19 +9,15 @@ import java.io.InputStreamReader;
 import java.util.Observable;
 import java.util.Scanner;
 
-public class CommandLine  implements Runnable {
+public class CommandLine implements Runnable {
 
-    String[] commandTakePic = {"ping", "google.se"};        //skriv in kommandot "raspistill","-o", "/home/pi/pic/cam"+number+".jpg"
+    String[] commandTakePic = {"raspistill", "-o", "/home/pi/pic/cam" + number + ".jpg"};        //skriv in kommandot "raspistill","-o", "/home/pi/pic/cam"+number+".jpg"
     static int number = 0;
     Controller controller;
 
-
     public CommandLine(Controller controller) {
-     this.controller = controller;
-
-
+        this.controller = controller;
     }
-
 
     @Override
     public void run() {
@@ -31,28 +27,19 @@ public class CommandLine  implements Runnable {
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
-
-           while ((line = reader.readLine()) != null) {
-
+            while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
-
             int exitCode = process.waitFor();
-
             System.out.println("\nExited with error code: " + exitCode);
-
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-
         }
         try {
+            number++;
             controller.pictureTaken(number);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
-
 }

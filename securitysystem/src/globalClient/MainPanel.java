@@ -19,6 +19,7 @@ public class MainPanel extends JPanel {
     private JPanel rightPanel;
     private JPanel leftPanelNorth;
     private JPanel leftPanelSouth;
+    private JPanel leftPanelCenter;
     private JPanel centerPanelNorth;
     private JPanel centerPanelSouth;
     private JPanel pnlDateTime = new JPanel();
@@ -43,6 +44,8 @@ public class MainPanel extends JPanel {
     private JScrollPane scrollPaneOffline;
 
     private JButton btnGetLog;
+    private JButton btnPhoto;
+    private JButton btnLocation;
     private JTextField tfStartDate;
     private JTextField tfEndDate;
     private JTextField tfStartTime;
@@ -105,6 +108,7 @@ public class MainPanel extends JPanel {
         rightPanel = new JPanel();
         leftPanelNorth = new JPanel();
         leftPanelSouth = new JPanel();
+        leftPanelCenter = new JPanel();
         centerPanelNorth = new JPanel();
         centerPanelSouth = new JPanel();
         drawPnlDateTime();
@@ -138,6 +142,7 @@ public class MainPanel extends JPanel {
 
         leftPanelSouth.setPreferredSize(new Dimension(260, 285));
         leftPanelNorth.setPreferredSize(new Dimension(260, 285));
+        leftPanelCenter.setPreferredSize(new Dimension(260, 285));
 
         centerPanelSouth.setPreferredSize(new Dimension(420, 300));
         centerPanelNorth.setPreferredSize(new Dimension(420, 300));
@@ -159,6 +164,8 @@ public class MainPanel extends JPanel {
 
         btnOFF = new JButton("Off");
         btnON = new JButton("On");
+        btnLocation = new JButton("Välj location");
+        btnPhoto = new JButton("Ta foto bror");
 
         btnUnlock.setPreferredSize(new Dimension(btnDimension));
         btnLock.setPreferredSize(new Dimension(btnDimension));
@@ -174,6 +181,8 @@ public class MainPanel extends JPanel {
 
         leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         leftPanelNorth.add(btnON, BorderLayout.CENTER);
+        leftPanelNorth.add(btnPhoto);
+        leftPanelNorth.add(btnLocation);
 
         leftPanel.add(leftPanelNorth, BorderLayout.NORTH);
         leftPanel.add(leftPanelSouth, BorderLayout.SOUTH);
@@ -186,18 +195,21 @@ public class MainPanel extends JPanel {
         TitledBorder onlineBorder = new TitledBorder("Online Components");
         TitledBorder onOffBorder = new TitledBorder("Turn On/Off");
         TitledBorder doorBorder = new TitledBorder("Door");
+        TitledBorder camera = new TitledBorder("Kamera");
 
         loggerBorder.setTitleColor(new Color(62, 134, 160));
         onlineBorder.setTitleColor(new Color(62, 134, 160));
         offlineBorder.setTitleColor(new Color(62, 134, 160));
         onOffBorder.setTitleColor(new Color(62, 134, 160));
         doorBorder.setTitleColor(new Color(62, 134, 160));
+        camera.setTitleColor(new Color(62,134,160));
 
         centerPanelNorth.setBorder(onlineBorder);
         centerPanelSouth.setBorder(offlineBorder);
 
         leftPanelNorth.setBorder(onOffBorder);
         leftPanelSouth.setBorder(doorBorder);
+        leftPanelCenter.setBorder(camera);
 
         rightPanel.setBorder(loggerBorder);
 
@@ -206,6 +218,7 @@ public class MainPanel extends JPanel {
         leftPanel.setBackground(new Color(60, 63, 65));
         leftPanelSouth.setBackground(new Color(60, 63, 65));
         leftPanelNorth.setBackground(new Color(60, 63, 65));
+        leftPanelCenter.setBackground(new Color(60, 63, 65));
 
         centerPanelSouth.setBackground(new Color(60, 63, 65));
         centerPanelNorth.setBackground(new Color(60, 63, 65));
@@ -222,7 +235,10 @@ public class MainPanel extends JPanel {
 
         btnLock.setBackground(new Color(43, 43, 43));
         btnUnlock.setBackground(new Color(43, 43, 43));
-
+        btnPhoto.setBackground(new Color(43, 43, 43));
+        btnPhoto.setForeground(Color.white);
+        btnLocation.setBackground(new Color(43, 43, 43));
+        btnLocation.setForeground(Color.white);
         btnON.setForeground(Color.white);
         btnOFF.setForeground(Color.white);
         btnUnlock.setForeground(Color.white);
@@ -236,7 +252,8 @@ public class MainPanel extends JPanel {
         btnON.addActionListener(buttonListener);
         btnLock.addActionListener(buttonListener);
         btnUnlock.addActionListener(buttonListener);
-
+        btnPhoto.addActionListener(buttonListener);
+        btnLocation.addActionListener(buttonListener);
         frame.setSize(new Dimension(1500, 650));
         frame.setContentPane(MainPanel.this);
         frame.setBackground(new Color(83, 86, 91));
@@ -352,6 +369,16 @@ public class MainPanel extends JPanel {
             }else if (e.getSource() == btnGetLog) {
 
                 setTaLogger(globalClientController.getClientLoggerText());
+            }
+            else if (e.getSource() == btnPhoto) {
+               //TA FOTO SOM FAN
+
+            }
+            else if (e.getSource() == btnLocation) {
+               // taOnline.getMouseListeners()
+
+                //set location
+
             }
         }
     }

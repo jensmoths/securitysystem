@@ -106,8 +106,8 @@ public class RegisterPanel extends JPanel {
                         tfStreet.getText().toLowerCase(), tfZipCode.getText().toLowerCase(), tfCity.getText().toLowerCase()
                         , tfEmail.getText().toLowerCase());
 
-                String city = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getCity());
-                String street = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getStreet());
+               // String city = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getCity());
+              //  String street = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getStreet());
 
                 //User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
                 user.generateLogInDetails();
@@ -115,7 +115,8 @@ public class RegisterPanel extends JPanel {
                 if (!globalServerController.getHomes().containsKey(user.getUserName())) {
                     globalServerController.addUserToSystem(user);
 
-                } else if ((removeStringSpace(user.getStreet()).equals(street)) & removeStringSpace(user.getCity()).equals(city)) {
+                } else if ((removeStringSpace(user.getStreet()).equals(removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getStreet()))) &
+                        removeStringSpace(user.getCity()).equals(removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getCity()))) {
                     JOptionPane.showMessageDialog(null, "Prohibited entry! User already exits");
                     disposePanel();
                 } else {

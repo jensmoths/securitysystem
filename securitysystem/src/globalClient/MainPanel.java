@@ -156,6 +156,8 @@ public class MainPanel extends JPanel {
 
         btnOFF.setPreferredSize(new Dimension(btnDimension));
         btnON.setPreferredSize(new Dimension(btnDimension));
+        btnPhoto.setPreferredSize(new Dimension(btnDimension));
+        btnLocation.setPreferredSize(new Dimension(btnDimension));
 
         centerPanelNorth.add(scrollPaneOnline);
         centerPanelSouth.add(scrollPaneOffline);
@@ -163,13 +165,14 @@ public class MainPanel extends JPanel {
         leftPanelSouth.add(btnLock, BorderLayout.SOUTH);
         leftPanelSouth.add(btnUnlock, BorderLayout.SOUTH);
 
-        leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         leftPanelNorth.add(btnON, BorderLayout.CENTER);
-        leftPanelNorth.add(btnPhoto);
-        leftPanelNorth.add(btnLocation);
+        leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
+        leftPanelCenter.add(btnPhoto);
+       //leftPanelNorth.add(btnLocation);
 
         leftPanel.add(leftPanelNorth, BorderLayout.NORTH);
         leftPanel.add(leftPanelSouth, BorderLayout.SOUTH);
+        leftPanel.add(leftPanelCenter,BorderLayout.CENTER);
 
         centerPanel.add(centerPanelNorth, BorderLayout.NORTH);
         centerPanel.add(centerPanelSouth, BorderLayout.SOUTH);

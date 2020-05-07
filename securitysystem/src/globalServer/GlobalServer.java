@@ -37,6 +37,7 @@ public class GlobalServer {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                start();
             }
         }
     }
@@ -46,11 +47,9 @@ public class GlobalServer {
         private Socket socket;
         private ObjectInputStream ois;
         private ObjectOutputStream oos;
-        private Object requestObject;
         private String serverOrClient;
         private String username;
         private String password;
-        private RequestHandler requestHandler;
 
         public ClientHandler(Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
             this.socket = socket;
@@ -95,7 +94,7 @@ public class GlobalServer {
                 if (password.equals(homes.get(username).getUser().getPassword()) & socket != null) {
                     Home home = homes.get(username);
                     home.setClientHandler(this);
-                    requestHandler = new RequestHandler(home);
+                    RequestHandler requestHandler = new RequestHandler(home);
                     try {
                         oos.writeObject("user authenticated");
                     } catch (IOException e) {
@@ -104,6 +103,7 @@ public class GlobalServer {
                     home.logger.addToLog(socket.getInetAddress() + "has logged in");
                     home.sendToAllClients(home.logger);
 
+                    Object requestObject;
                     switch (serverOrClient) {
 
                         case "server":

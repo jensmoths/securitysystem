@@ -7,6 +7,9 @@ public class Message implements Serializable {
     boolean alarmOn;
     ArrayList<SecurityComponent> onlineSensors;
     ArrayList<SecurityComponent> offlineSensors;
+
+
+
     String info;
     SecurityComponent securityComponent;
 

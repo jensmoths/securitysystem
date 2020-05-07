@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 import globalServer.GlobalServerController;
 import globalServer.Home;
@@ -68,7 +67,7 @@ public class RegisterPanel extends JPanel {
         lblEmail.setForeground(Color.white);
 
         btnRegister.setForeground(Color.white);
-        btnRegister.setBackground(new Color(43,43,43));
+        btnRegister.setBackground(new Color(43, 43, 43));
 
         add(lblFirstName);
         add(tfFirstName);
@@ -85,42 +84,45 @@ public class RegisterPanel extends JPanel {
         add(btnRegister, "span 2, grow,  wrap");
     }
 
+    public void disposePanel() {
+        frame.dispose();
+    }
+
+    public String removeStringSpace(String string) {
+        return string.replaceAll("\\s+","");
+    }
+
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO: 29-Apr-20 Avkommentera alla kommentaren nedan för slutversion
-/*
+
             if ((tfFirstName.getText().isEmpty() | tfFirstName.getText().length() < 2)
                     | (tfSurName.getText().isEmpty() | tfSurName.getText().length() < 2)
-                    | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3) | (tfEmail.getText().length()<5)) {
+                    | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3) | (tfEmail.getText().length() < 5)) {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
             } else {
-*/
-                /*User user = new User(tfFirstName.getText(), tfSurName.getText(),
-                                     tfStreet.getText(), tfZipCode.getText(), tfCity.getText(), tfEmail.getText());*/
-            User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
-            //user.generateLogInDetails();
-            user.setUserName("admin");
-            user.setPassword("password");
-            globalServerController.getUserRegister().addUser(user);
-            globalServerController.addHome(user.getUserName(), new Home(user));
-            System.out.println("created and added home");
+                User user = new User(tfFirstName.getText().toLowerCase(), tfSurName.getText().toLowerCase(),
+                        tfStreet.getText().toLowerCase(), tfZipCode.getText().toLowerCase(), tfCity.getText().toLowerCase()
+                        , tfEmail.getText().toLowerCase());
 
-            String loginInfo = "Hej! \nHär nedan kommer dina inloggningsuppgifter\nAnvändarnamn: " + user.getUserName()
-                    + "\nLösenord: " + user.getPassword();
-            try {
-                globalServerController.sendEmail(user.getEmail(), "SecureHomesMAU", loginInfo);
-            } catch (MessagingException ex) {
-                ex.printStackTrace();
-            }
+                String city = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getCity());
+                String street = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getStreet());
 
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    RegisterPanel.this.frame.dispose();
+                //User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
+                user.generateLogInDetails();
+
+                if (!globalServerController.getHomes().containsKey(user.getUserName())) {
+                    globalServerController.addUserToSystem(user);
+
+                } else if ((removeStringSpace(user.getStreet()).equals(street)) & removeStringSpace(user.getCity()).equals(city)) {
+                    JOptionPane.showMessageDialog(null, "Prohibited entry! User already exits");
+                    disposePanel();
+                } else {
+                    user.generateRandomUserName();
+                    globalServerController.addUserToSystem(user);
                 }
-            });
-            //}
+            }
         }
     }
 }

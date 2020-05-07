@@ -55,11 +55,11 @@ public class GlobalClient {
         }
     }
 
-    public void send(String string) {
+    public void send(Object obj) {
         try {
-            oos.writeObject(string);
+            oos.writeObject(obj);
             oos.flush();
-            System.out.println("You have sent: " + string);
+            System.out.println("You have sent: " + obj);
         } catch (IOException e) {
             e.printStackTrace();
         }

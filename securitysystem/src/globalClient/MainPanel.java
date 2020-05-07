@@ -1,5 +1,6 @@
 package globalClient;
 
+import model.Message;
 import model.SecurityComponent;
 
 import javax.swing.*;
@@ -35,6 +36,7 @@ public class MainPanel extends JPanel {
     private SecurityComponent valdSensor;
     private JPopupMenu popup;
     private JPanel popupPanel;
+    //
 
     private JTextArea taLogger;
     private JList taOnline;
@@ -137,8 +139,7 @@ public class MainPanel extends JPanel {
         centerPanelNorth.setPreferredSize(new Dimension(420, 300));
 
         taLogger.setEditable(false);
-        // taOffline.setEditable(false);
-        // taOnline.setEditable(false);
+
 
         scrollPaneLogger = new JScrollPane(taLogger);
         scrollPaneOffline = new JScrollPane(taOffline);
@@ -173,7 +174,7 @@ public class MainPanel extends JPanel {
         leftPanelNorth.add(btnON, BorderLayout.CENTER);
         leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         leftPanelCenter.add(btnPhoto);
-        //leftPanelNorth.add(btnLocation);
+
 
         leftPanel.add(leftPanelNorth, BorderLayout.NORTH);
         leftPanel.add(leftPanelSouth, BorderLayout.SOUTH);
@@ -271,7 +272,6 @@ public class MainPanel extends JPanel {
 
         for (SecurityComponent s : rey
         ) {
-            //  String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
             dlmOnline.addElement(s);
         }
         taOnline.setModel(dlmOnline);
@@ -283,7 +283,6 @@ public class MainPanel extends JPanel {
 
         for (SecurityComponent s : rey
         ) {
-            //  String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
             dlmOffline.addElement(s);
         }
         taOffline.setModel(dlmOffline);
@@ -361,7 +360,7 @@ public class MainPanel extends JPanel {
         public void mouseClicked(MouseEvent e) {
 
 
-          //  taOnline.setSelectedIndex(taOnline.locationToIndex(e.getPoint()));
+            //  taOnline.setSelectedIndex(taOnline.locationToIndex(e.getPoint()));
 
             if (SwingUtilities.isRightMouseButton(e) && !taOnline.isSelectionEmpty() && taOnline.locationToIndex(e.getPoint()) == taOnline.getSelectedIndex()) {
 
@@ -373,7 +372,7 @@ public class MainPanel extends JPanel {
                 popup.add(popupPanel);
                 popupPanel.add(label1);
 
-               // popup.getRootPane().setDefaultButton(btnOk); Fungerar ej, att trycka enter istället för ok
+                // popup.getRootPane().setDefaultButton(btnOk); Fungerar ej, att trycka enter istället för ok
 
 
                 btnOk = new JButton("OK");
@@ -392,15 +391,9 @@ public class MainPanel extends JPanel {
                 popup.show(taOnline, e.getX(), e.getY());
 
                 System.out.println("Du högerklickade på :" + valdSensor.getId());
-
-                //Skicka till global -> lokalserver location
-
-
             }
 
         }
-
-
 
         @Override
 
@@ -430,12 +423,10 @@ public class MainPanel extends JPanel {
                 popup.setVisible(false);
 
 
-                // dlmOnline.add(taOnline.getSelectedIndex(), valdSensor);
+                globalClientController.send(new Message("ny location", valdSensor));
 
-
-                //globalClientController.send(valdSensor);
-                //TODO SKICKA TILLBAKA Sensorn i som Message objekt?
-                // Eller skicka hela listan?
+                //TODO GLOBALA SKA TA EMOT RADEN OVANFÖR. SEN SKICKA VIDARE SENSOROBJEKTET TILL
+                // LOKALSERVER SOM SEDAN ÄNDRAR LOCATION
 
 
             }

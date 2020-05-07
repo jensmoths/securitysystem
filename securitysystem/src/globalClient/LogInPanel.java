@@ -14,10 +14,10 @@ public class LogInPanel extends JPanel {
     private JLabel lblUsername, lblPassword;
     private JButton btnLogIn;
     private JFrame frame;
-    private GlobalClient globalClient;
+    private GlobalClientController globalClientController;
 
-    public LogInPanel(GlobalClient globalClient) {
-        this.globalClient = globalClient;
+    public LogInPanel(GlobalClientController globalClientController) {
+        this.globalClientController = globalClientController;
         frame = new JFrame();
         this.setLayout(new MigLayout());
         setBackground(new Color(60, 63, 65));
@@ -62,8 +62,8 @@ public class LogInPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == btnLogIn) {
                 if (!tfUsername.getText().equals("") | !tfPassword.getText().equals("")) {
-                    globalClient.send(tfUsername.getText());
-                    globalClient.send(tfPassword.getText());
+                    globalClientController.send(tfUsername.getText());
+                    globalClientController.send(tfPassword.getText());
                 } else {
                     JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
                 }

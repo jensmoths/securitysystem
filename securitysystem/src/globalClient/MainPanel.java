@@ -358,7 +358,7 @@ public class MainPanel extends JPanel {
 
         public void mouseClicked(MouseEvent e) {
             //if (e.getModifiers() == MouseEvent.BUTTON3_MASK)
-            taOnline.setSelectedIndex(taOnline.locationToIndex(e.getPoint()));
+           
 
             if (SwingUtilities.isRightMouseButton(e) && !taOnline.isSelectionEmpty() && taOnline.locationToIndex(e.getPoint()) == taOnline.getSelectedIndex()) {
 

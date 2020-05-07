@@ -60,7 +60,6 @@ public class MainPanel extends JPanel {
     private JTextField tfStartTime;
     private JTextField tfEndTime;
     private ButtonListener buttonListener = new ButtonListener();
-    JPopupMenu popup = new JPopupMenu();
 
     public MainPanel(GlobalClientController globalClientController) {
         this.globalClientController = globalClientController;

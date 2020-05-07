@@ -429,7 +429,6 @@ public class PiServer extends Thread implements Serializable {
             }
         }
 
-
         @Override
         public void run() {
             try {
@@ -444,10 +443,14 @@ public class PiServer extends Thread implements Serializable {
                     Object obj = ois.readObject();
                     if (obj instanceof Message) {
                         Message msg = (Message) obj;
-                        if (msg.getInfo().equals("shutdown")) {
-                            shutdownSensor(msg);
-                        }
-                        if (msg.getSecurityComponent() instanceof DoorLock) {
+                        if (msg.getInfo().equals("ny location")) {
+                            map.get(msg.getSecurityComponent()).sensor.setLocation(msg.getSecurityComponent().getLocation()); //TODO Byta hela sensorn?
+                            if (allOnlineSensors.contains(msg.getSecurityComponent()))
+                                allOnlineSensors.set(allOnlineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
+                            if (allOfflineSensors.contains(msg.getSecurityComponent()))
+                                allOfflineSensors.set(allOfflineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
+                            controller.updateSensors();
+                        } else if (msg.getSecurityComponent() instanceof DoorLock) {
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     if (msg.getSecurityComponent().isOpen()) {
@@ -463,7 +466,7 @@ public class PiServer extends Thread implements Serializable {
                     }
                     if (obj instanceof String) {
                         System.out.println("String object vi fått från Global: " + obj);
-                        if (obj.equals("user authenticated")) controller.setOnline(false);
+                        if (obj.equals("user authenticated")) controller.setOnlineButton(false);
                         if (obj.equals("Take photo")) controller.takePicture();
                     }
                 } catch (IOException | ClassNotFoundException e) {
@@ -476,7 +479,7 @@ public class PiServer extends Thread implements Serializable {
                     break;
                 }
             }
-            controller.setOnline(true);
+            controller.setOnlineButton(true);
         }
     }
 }

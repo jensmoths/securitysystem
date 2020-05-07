@@ -36,7 +36,7 @@ public class RequestHandler {
                ArrayList<SecurityComponent> offline = message.getOfflineSensors();
                boolean alarm = message.isAlarmOn();
                 home.sendToAllClients(message);
-
+            //Spara message, skicka till klient när den ansluter
                 for (SecurityComponent s: online
                      ) {
                     System.out.println("ONLINE SENSOR: "+s.getId());

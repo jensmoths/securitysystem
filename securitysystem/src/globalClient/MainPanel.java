@@ -7,9 +7,7 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,6 +48,7 @@ public class MainPanel extends JPanel {
     private JTextField tfStartTime;
     private JTextField tfEndTime;
     private ButtonListener buttonListener = new ButtonListener();
+    JPopupMenu popup = new JPopupMenu();
 
     public MainPanel(GlobalClientController globalClientController) {
         this.globalClientController = globalClientController;
@@ -87,6 +86,10 @@ public class MainPanel extends JPanel {
         rightPanel.add(BorderLayout.CENTER, pnlDateTime);
     }
 
+    void showPopup(MouseEvent me) {
+        if(me.isPopupTrigger())
+            popup.show(me.getComponent(), me.getX(), me.getY());
+    }
     public void draw() {
 
         this.setPreferredSize(new Dimension(1435, 630));
@@ -110,6 +113,19 @@ public class MainPanel extends JPanel {
         dlmOnline = new DefaultListModel();
         taOffline = new JList(dlmOffline);
         taOnline = new JList(dlmOnline);
+
+        JPopupMenu popup = new JPopupMenu();
+        popup.add(new JMenuItem("Cut"));
+        popup.add(new JMenuItem("Copy"));
+        popup.add(new JMenuItem("Paste"));
+        popup.addSeparator();
+        popup.add(new JMenuItem("SelectAll"));
+        taOnline.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent me) {
+                showPopup(me); // showPopup() is our own user-defined method
+            }
+        }) ;
+
 
 
         taOnline.setForeground(Color.white);

@@ -7,6 +7,9 @@ public class Message implements Serializable {
     boolean alarmOn;
     ArrayList<SecurityComponent> onlineSensors;
     ArrayList<SecurityComponent> offlineSensors;
+
+
+
     String info;
     SecurityComponent securityComponent;
 
@@ -46,6 +49,18 @@ public class Message implements Serializable {
 
     public SecurityComponent getSecurityComponent() {
         return securityComponent;
+    }
+
+    public boolean isAlarmOn() {
+        return alarmOn;
+    }
+
+    public ArrayList<SecurityComponent> getOnlineSensors() {
+        return onlineSensors;
+    }
+
+    public ArrayList<SecurityComponent> getOfflineSensors() {
+        return offlineSensors;
     }
 
     @Override

@@ -16,12 +16,11 @@ public class EmailSender {
 
     private Properties properties;
 
-    public EmailSender(){
+    public EmailSender() {
 
         properties = new Properties();
 
     }
-
 
     public void sendMail(String recipient, String subject, String text) throws MessagingException {
 
@@ -37,17 +36,17 @@ public class EmailSender {
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(myAccountEmail,password);
+                return new PasswordAuthentication(myAccountEmail, password);
             }
         });
 
-        Message message = messageCreator(session,myAccountEmail,recipient, subject, text);
+        Message message = messageCreator(session, myAccountEmail, recipient, subject, text);
         Transport.send(message);
         System.out.println("skickat");
     }
 
 
-    public void sendPictureMail(String recipient,String text ,String subject, String picturePath) throws MessagingException, IOException {
+    public void sendPictureMail(String recipient, String text, String subject, String picturePath) throws MessagingException {
 
         System.out.println("börjar skicka");
 
@@ -62,11 +61,11 @@ public class EmailSender {
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(myAccountEmail,password);
+                return new PasswordAuthentication(myAccountEmail, password);
             }
         });
 
-        Message message = messagePictureCreator(session, myAccountEmail, recipient, text, subject,picturePath);
+        Message message = messagePictureCreator(session, myAccountEmail, recipient, text, subject, picturePath);
         Transport.send(message);
 
     }
@@ -83,7 +82,7 @@ public class EmailSender {
     }
 
 
-    public Message messagePictureCreator(Session session, String myAccountEmail, String recipient, String text ,String subject, String filepath) throws MessagingException {
+    public Message messagePictureCreator(Session session, String myAccountEmail, String recipient, String text, String subject, String filepath) throws MessagingException {
 
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(myAccountEmail));

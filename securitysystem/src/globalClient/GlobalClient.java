@@ -1,12 +1,15 @@
 package globalClient;
 
 import globalServer.Logger;
+import model.Message;
+import model.SecurityComponent;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class GlobalClient {
 
@@ -83,10 +86,21 @@ public class GlobalClient {
                         } else if (objectRead.equals("user unauthenticated")) {
                             JOptionPane.showMessageDialog(null, "username or password are incorrect");
                         }
+                        else if (objectRead.equals("local server offline")){
+                            globalClientController.clearList();
+                        }
                     } else if (objectRead instanceof Logger) {
                         globalClientController.setLogger((Logger) objectRead);
                     } else if (objectRead instanceof ImageIcon) {
                         globalClientController.showImage((ImageIcon) objectRead);
+                    }
+                    if(objectRead instanceof Message){
+                        Message msg = (Message) objectRead;
+                        ArrayList<SecurityComponent> onlineSensor = msg.getOnlineSensors();
+                        ArrayList<SecurityComponent> offlineSensor = msg.getOfflineSensors();
+                        globalClientController.setOnlinesensor(onlineSensor);
+                        globalClientController.setOfflinesensor(offlineSensor);
+
                     }
 
                 } catch (IOException | ClassNotFoundException e) {

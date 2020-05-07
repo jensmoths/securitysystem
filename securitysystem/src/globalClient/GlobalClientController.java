@@ -1,9 +1,11 @@
 package globalClient;
 
 import globalServer.Logger;
+import model.SecurityComponent;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GlobalClientController {
     private GlobalClient globalClient;
@@ -11,7 +13,7 @@ public class GlobalClientController {
     private Logger logger;
 
     public GlobalClientController() {
-        globalClient = new GlobalClient("localhost", 8081, this);
+        globalClient = new GlobalClient("localhost", 43210, this);
         mainFrame = new MainFrame(this);
     }
 
@@ -65,6 +67,16 @@ public class GlobalClientController {
 
     public void showImage(ImageIcon imageIcon) {
         mainFrame.showImage(imageIcon);
+    }
+
+    public void setOnlinesensor(ArrayList<SecurityComponent> rey){
+        mainFrame.getMainPanel().setOnlineSensor(rey);
+    }
+    public void setOfflinesensor(ArrayList<SecurityComponent> rey){
+        mainFrame.getMainPanel().setOfflineSensor(rey);
+    }
+    public void clearList(){
+        mainFrame.getMainPanel().clearList();
     }
 
     public static void main(String[] args) {

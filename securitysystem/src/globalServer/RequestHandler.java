@@ -4,6 +4,7 @@ import model.*;
 
 import javax.mail.MessagingException;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class RequestHandler {
 
@@ -29,6 +30,26 @@ public class RequestHandler {
         } else if (requestObject instanceof Message) {
             Message message = (Message) requestObject;
             SecurityComponent securityComponent = message.getSecurityComponent();
+
+            if(securityComponent == null){
+               ArrayList<SecurityComponent> online = message.getOnlineSensors();
+               ArrayList<SecurityComponent> offline = message.getOfflineSensors();
+               boolean alarm = message.isAlarmOn();
+                home.sendToAllClients(message);
+
+                for (SecurityComponent s: online
+                     ) {
+                    System.out.println("ONLINE SENSOR: "+s.getId());
+
+                }
+                for (SecurityComponent s: offline
+                ) {
+                    System.out.println("OFFLINE SENSOR: "+s.getId());
+
+                }
+
+                System.out.println("Alarm status: "+alarm);
+            }
 
             if (securityComponent instanceof MagneticSensor) {
                 if (securityComponent.isOpen()) {

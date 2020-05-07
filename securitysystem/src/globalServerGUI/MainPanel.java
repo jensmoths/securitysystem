@@ -266,6 +266,8 @@ public class MainPanel extends JPanel {
         registerPanel.disposePanel();
     }
 
+
+
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {

@@ -28,12 +28,16 @@ public class GlobalServerController implements Observer {
         this.userRegister.addObserver(this);
         homes = new HashMap<>();
         mainFrame = new MainFrame(this);
+
+        //globalServer = new GlobalServer(43210, homes);
+
         globalServer = new GlobalServer(8081, homes);
         readUserFromFile();
     }
 
     public HashMap<String, Home> getHomes() {
         return homes;
+
     }
 
     public Home getHome(String name) {

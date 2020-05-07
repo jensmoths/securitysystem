@@ -1,10 +1,9 @@
 package localClient;
 
 
-import javafx.application.Application;
-import javafx.scene.layout.Border;
 import localserver.*;
 import localserver.PiServer;
+import model.Message;
 import model.SecurityComponent;
 
 import javax.swing.*;
@@ -28,19 +27,16 @@ public class Controller {
     void setDoorOpen(boolean b) {
         try {
             server.setDoor(b);
-            updateOnlineMK(server.allOnlineSensors);
+            updateSensors();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void updateOnlineMK(ArrayList<SecurityComponent> MKarray) {
-        mainFrame.meny.updateOnlineMK(MKarray);
-
-    }
-
-    public void updateOfflineMK(ArrayList<SecurityComponent> MKarray) {
-        mainFrame.meny.updateOfflineMK(MKarray);
+    public void updateSensors() {
+        mainFrame.meny.updateOnlineMK(server.allOnlineSensors);
+        mainFrame.meny.updateOfflineMK(server.allOfflineSensors);
+        server.globalServer.updateGlobal();
     }
 
     public void sendToMK(char c, int id) throws IOException {
@@ -71,16 +67,19 @@ public class Controller {
         }
     }
 
-    public void alarmOnDelay(String file) {
+    public void alarmOnDelay(String soundFile, Message message) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (alarmOn) soundAlarm(file);
+                if (alarmOn) {
+                    server.globalServer.globalsendMessage(message);
+                    soundAlarm(soundFile);
+                }
             }
         }).start();
     }
@@ -109,7 +108,11 @@ public class Controller {
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(10000);
+                        for (int i = 9; i >= 0; i--) {
+                            Thread.sleep(1000);
+                            jd.add(new JOptionPane("Larmar om " + i + " sekunder", JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}));
+                            jd.pack();
+                        }
                         jd.dispose();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -123,8 +126,6 @@ public class Controller {
             mainFrame.meny.setVisible(true);
             Controller.alarmOn = false;
         }
-
-
     }
 
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {

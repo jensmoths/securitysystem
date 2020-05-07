@@ -112,12 +112,13 @@ public class GlobalServer {
                                 try {
                                     ois = new ObjectInputStream(socket.getInputStream());
                                     requestObject = ois.readObject();
-                                    System.out.println(requestObject.toString());
+                                   // System.out.println(requestObject.toString());
                                     requestHandler.handleServerRequest(requestObject, home);
 
                                 } catch (IOException | ClassNotFoundException | MessagingException e) {
                                     System.out.println(socket.getInetAddress() + " has disconnected");
                                     try {
+                                        home.sendToAllClients("local server offline");
                                         home.setLocalServer(null);
                                         if (socket != null) {
                                             socket.close();
@@ -147,6 +148,7 @@ public class GlobalServer {
 
                                 } catch (IOException | ClassNotFoundException e) {
                                     System.out.println(socket.getInetAddress() + " has disconnected");
+
                                     try {
                                         home.logger.addToLog(socket.getInetAddress() + "has logged out");
                                         home.removeGlobalClient(this);

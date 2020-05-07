@@ -1,5 +1,7 @@
 package globalClient;
 
+import model.SecurityComponent;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -9,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainPanel extends JPanel {
@@ -28,8 +31,10 @@ public class MainPanel extends JPanel {
     private JButton btnUnlock;
 
     private JTextArea taLogger;
-    private JTextArea taOnline;
-    private JTextArea taOffline;
+    private JList taOnline;
+    private JList taOffline;
+    private DefaultListModel dlmOnline;
+    private DefaultListModel dlmOffline;
 
     private GlobalClientController globalClientController;
 
@@ -101,8 +106,11 @@ public class MainPanel extends JPanel {
         centerPanelSouth = new JPanel();
         drawPnlDateTime();
         taLogger = new JTextArea();
-        taOffline = new JTextArea();
-        taOnline = new JTextArea();
+        dlmOffline = new DefaultListModel();
+        dlmOnline = new DefaultListModel();
+        taOffline = new JList(dlmOffline);
+        taOnline = new JList(dlmOnline);
+
 
         taOnline.setForeground(Color.white);
         taOffline.setForeground(Color.white);
@@ -119,8 +127,8 @@ public class MainPanel extends JPanel {
         centerPanelNorth.setPreferredSize(new Dimension(420, 300));
 
         taLogger.setEditable(false);
-        taOffline.setEditable(false);
-        taOnline.setEditable(false);
+       // taOffline.setEditable(false);
+       // taOnline.setEditable(false);
 
         scrollPaneLogger = new JScrollPane(taLogger);
         scrollPaneOffline = new JScrollPane(taOffline);
@@ -227,19 +235,36 @@ public class MainPanel extends JPanel {
         });
     }
     // TODO: 30-Apr-20 add this code to GUI for microcontroller gui
-//    public void setTestJlist(ArrayList<SecurityComponent> rey) {
-//        testListModel.clear();
-//
-//        for (SecurityComponent s: rey
-//        ) {
-//            String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
-//            testListModel.addElement(hej);
-//        }
-//        testJlist.setModel(testListModel);
-//        testJlist.repaint();
-//
-//
-//    }
+   public void setOnlineSensor(ArrayList<SecurityComponent> rey) {
+       dlmOnline.clear();
+
+        for (SecurityComponent s: rey
+        ) {
+            String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            dlmOnline.addElement(hej);
+       }
+        taOnline.setModel(dlmOnline);
+        taOnline.repaint();
+    }
+    public void setOfflineSensor(ArrayList<SecurityComponent> rey) {
+        dlmOffline.clear();
+
+        for (SecurityComponent s: rey
+        ) {
+            String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            dlmOffline.addElement(hej);
+        }
+        taOffline.setModel(dlmOffline);
+        taOffline.repaint();
+    }
+    public void clearList(){
+        dlmOnline.clear();
+        dlmOffline.clear();
+        taOnline.setModel(dlmOnline);
+        taOffline.setModel(dlmOffline);
+        taOnline.repaint();
+        taOffline.repaint();
+    }
 
 
     public void setTaLogger(String text) {

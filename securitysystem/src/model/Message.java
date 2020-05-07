@@ -48,6 +48,18 @@ public class Message implements Serializable {
         return securityComponent;
     }
 
+    public boolean isAlarmOn() {
+        return alarmOn;
+    }
+
+    public ArrayList<SecurityComponent> getOnlineSensors() {
+        return onlineSensors;
+    }
+
+    public ArrayList<SecurityComponent> getOfflineSensors() {
+        return offlineSensors;
+    }
+
     @Override
     public String toString() {
         return String.format("The ID is %s, in the %s", securityComponent.getId(), securityComponent.getLocation());

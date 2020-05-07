@@ -115,7 +115,7 @@ public class RegisterPanel extends JPanel {
                 if (!globalServerController.getHomes().containsKey(user.getUserName())) {
                     globalServerController.addUserToSystem(user);
 
-                } else if ((removeStringSpace(user.getStreet()).equals(street)) & removeStringSpace(user.getCity().equals(city))) {
+                } else if ((removeStringSpace(user.getStreet()).equals(street)) & removeStringSpace(user.getCity()).equals(city)) {
                     JOptionPane.showMessageDialog(null, "Prohibited entry! User already exits");
                     disposePanel();
                 } else {

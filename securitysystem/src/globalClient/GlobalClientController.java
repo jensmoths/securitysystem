@@ -1,6 +1,7 @@
 package globalClient;
 
 import globalServer.Logger;
+import model.Message;
 import model.SecurityComponent;
 
 import javax.swing.*;
@@ -24,6 +25,10 @@ public class GlobalClientController {
 
     public void send(String string) {
         globalClient.send(string);
+    }
+
+    public void send(Message msg) {
+        globalClient.send(msg);
     }
 
     public void closeSocket() {

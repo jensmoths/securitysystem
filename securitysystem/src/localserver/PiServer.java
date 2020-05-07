@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class PiServer extends Thread implements Serializable {
 
-    // private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
+
     private HashMap<String, SecurityComponent> globalMap = new HashMap<>();
     private MicroClients map = new MicroClients();
 
@@ -29,7 +29,7 @@ public class PiServer extends Thread implements Serializable {
     public transient StartServer startServer;
 
 
-    public PiServer(Controller controller) throws IOException, InterruptedException {
+    public PiServer(Controller controller) {
         this.controller = controller;
         startServer = new StartServer(controller);
 
@@ -265,7 +265,7 @@ public class PiServer extends Thread implements Serializable {
                             message.setInfo("Någon har stängt dörren");
                         }
                         if (!message.getInfo().equals("Någon har brutit sig in"))
-                        globalServer.globalsendMessage(message);
+                            globalServer.globalsendMessage(message);
                     }
 
                     if (message.getSecurityComponent() instanceof ProximitySensor) {
@@ -387,7 +387,7 @@ public class PiServer extends Thread implements Serializable {
         }
 
 
-        public void globalsendMessage(Message msg)  {
+        public void globalsendMessage(Message msg) {
             if (socket != null && !socket.isClosed()) {
                 try {
                     oos = new ObjectOutputStream(socket.getOutputStream());  //FUNGERADE INTE ATT LÄSA OBJEKTETS BOOLEAN OM VI INTE GJORDE NYA STREAMS VARJE GÅNG VI SKICKADE
@@ -401,7 +401,7 @@ public class PiServer extends Thread implements Serializable {
         }
 
         public void updateGlobal() { //TODO EJ TESTAD METOD
-           Message msg = new Message(Controller.alarmOn, allOnlineSensors, allOfflineSensors);
+            Message msg = new Message(Controller.alarmOn, allOnlineSensors, allOfflineSensors);
 
             if (socket != null && !socket.isClosed()) {
                 try {

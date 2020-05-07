@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainPanel extends JPanel {
 
@@ -18,6 +20,7 @@ public class MainPanel extends JPanel {
     private JPanel leftPanelSouth;
     private JPanel centerPanelNorth;
     private JPanel centerPanelSouth;
+    private JPanel pnlDateTime = new JPanel();
 
     private JButton btnON;
     private JButton btnOFF;
@@ -28,7 +31,7 @@ public class MainPanel extends JPanel {
     private JTextArea taOnline;
     private JTextArea taOffline;
 
-    private GlobalClient globalClient;
+    private GlobalClientController globalClientController;
 
     private JFrame frame;
 
@@ -36,15 +39,52 @@ public class MainPanel extends JPanel {
     private JScrollPane scrollPaneOnline;
     private JScrollPane scrollPaneOffline;
 
-    public MainPanel(GlobalClient globalClient) {
-        this.globalClient = globalClient;
+    private JButton btnGetLog;
+    private JTextField tfStartDate;
+    private JTextField tfEndDate;
+    private JTextField tfStartTime;
+    private JTextField tfEndTime;
+    private ButtonListener buttonListener = new ButtonListener();
+
+    public MainPanel(GlobalClientController globalClientController) {
+        this.globalClientController = globalClientController;
         frame = new JFrame();
         draw();
     }
 
+    public void drawPnlDateTime() {
+        Dimension tfDimension = new Dimension(125, 35);
+        btnGetLog = new JButton("Filter");
+        btnGetLog.addActionListener(buttonListener);
+        pnlDateTime.setPreferredSize(new Dimension(600, 45));
+        tfStartDate = new JTextField(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+        tfStartTime = new JTextField(new SimpleDateFormat("HH-mm").format(Calendar.getInstance().getTime()));
+        tfEndDate = new JTextField(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+        tfEndTime = new JTextField(new SimpleDateFormat("HH-mm").format(Calendar.getInstance().getTime()));
+
+        tfStartDate.setPreferredSize(tfDimension);
+        tfStartTime.setPreferredSize(tfDimension);
+        tfEndDate.setPreferredSize(tfDimension);
+        tfEndTime.setPreferredSize(tfDimension);
+        btnGetLog.setPreferredSize(new Dimension(70, 35));
+
+        tfStartDate.setBorder(BorderFactory.createTitledBorder("From: yyyy-mm-dd"));
+        tfStartTime.setBorder(BorderFactory.createTitledBorder("From: HH-mm"));
+        tfEndDate.setBorder(BorderFactory.createTitledBorder("To: yyyy-mm-dd"));
+        tfEndTime.setBorder(BorderFactory.createTitledBorder("To: HH-mm"));
+
+        pnlDateTime.add(tfStartDate);
+        pnlDateTime.add(tfStartTime);
+        pnlDateTime.add(tfEndDate);
+        pnlDateTime.add(tfEndTime);
+        pnlDateTime.add(btnGetLog);
+
+        rightPanel.add(BorderLayout.CENTER, pnlDateTime);
+    }
+
     public void draw() {
-        ButtonListener buttonListener = new ButtonListener();
-        this.setPreferredSize(new Dimension(1200, 630));
+
+        this.setPreferredSize(new Dimension(1435, 630));
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(60, 63, 65));
         LineBorder border = new LineBorder(new Color(184, 207, 229));
@@ -59,7 +99,7 @@ public class MainPanel extends JPanel {
         leftPanelSouth = new JPanel();
         centerPanelNorth = new JPanel();
         centerPanelSouth = new JPanel();
-
+        drawPnlDateTime();
         taLogger = new JTextArea();
         taOffline = new JTextArea();
         taOnline = new JTextArea();
@@ -69,8 +109,8 @@ public class MainPanel extends JPanel {
         taLogger.setForeground(Color.white);
 
         leftPanel.setPreferredSize(new Dimension(280, 600));
-        centerPanel.setPreferredSize(new Dimension(430,600));
-        rightPanel.setPreferredSize(new Dimension(400, 600));
+        centerPanel.setPreferredSize(new Dimension(430, 600));
+        rightPanel.setPreferredSize(new Dimension(630, 600));
 
         leftPanelSouth.setPreferredSize(new Dimension(260, 285));
         leftPanelNorth.setPreferredSize(new Dimension(260, 285));
@@ -86,9 +126,9 @@ public class MainPanel extends JPanel {
         scrollPaneOffline = new JScrollPane(taOffline);
         scrollPaneOnline = new JScrollPane(taOnline);
 
-        scrollPaneLogger.setPreferredSize(new Dimension(380, 580));
-        scrollPaneOnline.setPreferredSize(new Dimension(380,260));
-        scrollPaneOffline.setPreferredSize(new Dimension(380,260));
+        scrollPaneLogger.setPreferredSize(new Dimension(600, 530));
+        scrollPaneOnline.setPreferredSize(new Dimension(380, 260));
+        scrollPaneOffline.setPreferredSize(new Dimension(380, 260));
 
         btnLock = new JButton("Lock door");
         btnUnlock = new JButton("Unlock door");
@@ -173,15 +213,15 @@ public class MainPanel extends JPanel {
         btnLock.addActionListener(buttonListener);
         btnUnlock.addActionListener(buttonListener);
 
-        frame.setSize(new Dimension(1250, 650));
+        frame.setSize(new Dimension(1500, 650));
         frame.setContentPane(MainPanel.this);
-        frame.setBackground(new Color(83,86,91));
+        frame.setBackground(new Color(83, 86, 91));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                globalClient.closeSocket();
+                globalClientController.closeSocket();
                 //System.exit(0);
             }
         });
@@ -205,21 +245,72 @@ public class MainPanel extends JPanel {
     public void setTaLogger(String text) {
         taLogger.setText(text);
     }
+    public String[] getStartDate() {
+        String temp = tfStartDate.getText();
+        if (temp.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            String[] startDate = tfStartDate.getText().split("-");
+            return startDate;
+        } else {
+            JOptionPane.showMessageDialog(null, "Use the correct format!");
+            return null;
+        }
+    }
 
+    public String[] getStartTime() {
+        String temp = tfStartTime.getText();
+        if (temp.matches("\\d{2}-\\d{2}")) {
+            String[] startTime = tfStartTime.getText().split("-");
+            return startTime;
+        } else {
+            JOptionPane.showMessageDialog(null, "Use the correct format!");
+            return null;
+        }
+//        String[] startTime = tfStartTime.getText().split("-");
+//        return startTime;
+    }
+
+    public String[] getEndDate() {
+        String temp = tfEndDate.getText();
+        if (temp.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            String[] endDate = tfEndDate.getText().split("-");
+            return endDate;
+        } else {
+            JOptionPane.showMessageDialog(null, "Use the correct format!");
+            return null;
+        }
+    }
+
+    public String[] getEndTime() {
+        String temp = tfEndTime.getText();
+        if (temp.matches("\\d{2}-\\d{2}")) {
+            String[] endTime = tfEndTime.getText().split("-");
+            return endTime;
+        } else {
+            JOptionPane.showMessageDialog(null, "Use the correct format!");
+            return null;
+        }
+    }
+    public void showImage(ImageIcon imageIcon) {
+        JOptionPane.showMessageDialog(null, imageIcon);
+
+    }
 
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 
             if (e.getSource() == btnON) {
-                globalClient.send("on");
+                globalClientController.send("on");
             } else if (e.getSource() == btnOFF) {
-                globalClient.send("off");
+                globalClientController.send("off");
             } else if (e.getSource() == btnLock) {
-                globalClient.send("lock");
+                globalClientController.send("lock");
             } else if (e.getSource() == btnUnlock) {
-                globalClient.send("unlock");
+                globalClientController.send("unlock");
 
+            }else if (e.getSource() == btnGetLog) {
+
+                setTaLogger(globalClientController.getClientLoggerText());
             }
         }
     }

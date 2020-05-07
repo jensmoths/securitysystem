@@ -1,9 +1,10 @@
 package globalServer;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Random;
 
-public class User {
+public class User implements Serializable {
 
     private String firstName, surName, street, zipCode, city, userName, password, email;
 
@@ -53,7 +54,6 @@ public class User {
 
     public void generateLogInDetails() {
         Random rand = new Random();
-
         String characters = "123456789abcdefghijklmnopqrstuvwxyz";
         for (int i = 0; i < 8; i++) {
             password += characters.charAt(rand.nextInt(characters.length()));
@@ -62,9 +62,7 @@ public class User {
         String firstName = getFirstName().toLowerCase().replaceAll("\\s", "");
         String surName = getSurName().toLowerCase().replaceAll("\\s", "");
         String street = getStreet().toLowerCase().replaceAll("\\s", "");
-
         userName = street.substring(0, 3) + surName.substring(0, 2) + firstName.substring(0, 2);
-
         System.out.println(getUserName() + ", "+ getPassword());
     }
 
@@ -141,5 +139,12 @@ public class User {
         return userInfo;
 
     }
+    public void generateRandomUserName(){
 
+        Random rand = new Random();
+        int random = rand.nextInt(4)+1;
+        int randomNumber =rand.nextInt(9999);
+
+        userName = street.substring(0, random) + surName.substring(0,random) + firstName.substring(0,random) + randomNumber;
+    }
 }

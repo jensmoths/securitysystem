@@ -3,6 +3,7 @@ package globalServer;
 import model.*;
 
 import javax.mail.MessagingException;
+import javax.swing.*;
 
 public class RequestHandler {
 
@@ -19,12 +20,17 @@ public class RequestHandler {
             home.logger.addToLog((String) requestObject);
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
+
+        } else if(requestObject instanceof ImageIcon) {
+            home.logger.addToLog("received an image");
+            home.sendToAllClients(home.logger);
+            home.sendToAllClients(requestObject);
+
         } else if (requestObject instanceof Message) {
             Message message = (Message) requestObject;
             SecurityComponent securityComponent = message.getSecurityComponent();
 
             if (securityComponent instanceof MagneticSensor) {
-
                 if (securityComponent.isOpen()) {
                     home.sendToAllClients("Magnetsensorn larmar");
                     home.logger.addToLog("Magnetsensorn larmar");
@@ -46,7 +52,6 @@ public class RequestHandler {
                     emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Brandlarmet har utlösts");
 
                 }catch (Exception e){
-
                     e.printStackTrace();
                 }
                 home.sendToAllClients(home.logger);

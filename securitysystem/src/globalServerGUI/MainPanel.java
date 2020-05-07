@@ -1,6 +1,7 @@
 package globalServerGUI;
 
 import globalServer.GlobalServerController;
+import globalServer.Home;
 import globalServer.User;
 
 import javax.swing.*;
@@ -208,8 +209,7 @@ public class MainPanel extends JPanel {
     public String[] getStartDate() {
         String temp = tfStartDate.getText();
         if (temp.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            String[] startDate = tfStartDate.getText().split("-");
-            return startDate;
+            return tfStartDate.getText().split("-");
         } else {
             JOptionPane.showMessageDialog(null, "Use the correct format!");
             return null;
@@ -219,8 +219,7 @@ public class MainPanel extends JPanel {
     public String[] getStartTime() {
         String temp = tfStartTime.getText();
         if (temp.matches("\\d{2}-\\d{2}")) {
-            String[] startTime = tfStartTime.getText().split("-");
-            return startTime;
+            return tfStartTime.getText().split("-");
         } else {
             JOptionPane.showMessageDialog(null, "Use the correct format!");
             return null;
@@ -232,8 +231,7 @@ public class MainPanel extends JPanel {
     public String[] getEndDate() {
         String temp = tfEndDate.getText();
         if (temp.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            String[] endDate = tfEndDate.getText().split("-");
-            return endDate;
+            return tfEndDate.getText().split("-");
         } else {
             JOptionPane.showMessageDialog(null, "Use the correct format!");
             return null;
@@ -243,8 +241,7 @@ public class MainPanel extends JPanel {
     public String[] getEndTime() {
         String temp = tfEndTime.getText();
         if (temp.matches("\\d{2}-\\d{2}")) {
-            String[] endTime = tfEndTime.getText().split("-");
-            return endTime;
+            return tfEndTime.getText().split("-");
         } else {
             JOptionPane.showMessageDialog(null, "Use the correct format!");
             return null;
@@ -265,6 +262,9 @@ public class MainPanel extends JPanel {
 
     }
 
+    public void disposeRegisterPanel() {
+        registerPanel.disposePanel();
+    }
 
     private class ButtonListener implements ActionListener {
         @Override
@@ -277,11 +277,15 @@ public class MainPanel extends JPanel {
                 String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
                 User user = globalServerController.getUser(username);
                 globalServerController.getUserRegister().deleteUser(user);
+                Home home = globalServerController.getHome(username);
                 globalServerController.deleteHome(username);
+                globalServerController.removeHome(home);
+                globalServerController.writeHomeToFileAfterDelete();
             } else if (actionEvent.getSource() == btnGetLog) {
                 if (getSelectedRow() != -1) {
                     String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
                     setTaLogger(globalServerController.getClientLoggerText(username));
+                    globalServerController.sendTakePhoto(username);
                 } else {
                     JOptionPane.showMessageDialog(null, "You have to choose a user first!");
                 }

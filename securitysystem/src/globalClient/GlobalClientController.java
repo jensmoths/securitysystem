@@ -13,7 +13,7 @@ public class GlobalClientController {
     private Logger logger;
 
     public GlobalClientController() {
-        globalClient = new GlobalClient("localhost", 8081, this);
+        globalClient = new GlobalClient("localhost", 43210, this);
         mainFrame = new MainFrame(this);
     }
 

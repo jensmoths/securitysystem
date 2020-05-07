@@ -241,6 +241,7 @@ public class MainPanel extends JPanel {
         add(rightPanel, BorderLayout.EAST);
 
 
+        taOnline.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         taOnline.addMouseListener(buttonListener);
 

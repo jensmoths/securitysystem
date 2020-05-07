@@ -382,9 +382,8 @@ public class PiServer extends Thread implements Serializable {
             oos.writeObject(clientType);
             oos.writeObject(userName);
             oos.writeObject(password);
-
-
             oos.flush();
+            updateGlobal();
         }
 
 

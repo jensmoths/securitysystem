@@ -241,6 +241,7 @@ public class MainPanel extends JPanel {
         add(rightPanel, BorderLayout.EAST);
 
 
+
         taOnline.addMouseListener(buttonListener);
 
         btnOFF.addActionListener(buttonListener);
@@ -357,8 +358,9 @@ public class MainPanel extends JPanel {
     private class ButtonListener extends MouseAdapter implements ActionListener {
 
         public void mouseClicked(MouseEvent e) {
-            //if (e.getModifiers() == MouseEvent.BUTTON3_MASK)
-           
+
+
+          //  taOnline.setSelectedIndex(taOnline.locationToIndex(e.getPoint()));
 
             if (SwingUtilities.isRightMouseButton(e) && !taOnline.isSelectionEmpty() && taOnline.locationToIndex(e.getPoint()) == taOnline.getSelectedIndex()) {
 
@@ -370,8 +372,8 @@ public class MainPanel extends JPanel {
                 popup.add(popupPanel);
                 popupPanel.add(label1);
 
+               // popup.getRootPane().setDefaultButton(btnOk); Fungerar ej, att trycka enter istället för ok
 
-                popupPanel.getRootPane().setDefaultButton(btnOk);
 
                 btnOk = new JButton("OK");
                 btnOk.addActionListener(this::actionPerformed);

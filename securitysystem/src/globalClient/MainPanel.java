@@ -3,13 +3,10 @@ package globalClient;
 import model.SecurityComponent;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +27,14 @@ public class MainPanel extends JPanel {
     private JButton btnOFF;
     private JButton btnLock;
     private JButton btnUnlock;
+
+    //TODO POPUPGREJER
+    private JButton btnOk;
+    private JTextField textFieldPopup;
+    private String location;
+    private SecurityComponent valdSensor;
+    private JPopupMenu popup;
+    private JPanel popupPanel;
 
     private JTextArea taLogger;
     private JList taOnline;
@@ -132,8 +137,8 @@ public class MainPanel extends JPanel {
         centerPanelNorth.setPreferredSize(new Dimension(420, 300));
 
         taLogger.setEditable(false);
-       // taOffline.setEditable(false);
-       // taOnline.setEditable(false);
+        // taOffline.setEditable(false);
+        // taOnline.setEditable(false);
 
         scrollPaneLogger = new JScrollPane(taLogger);
         scrollPaneOffline = new JScrollPane(taOffline);
@@ -168,11 +173,11 @@ public class MainPanel extends JPanel {
         leftPanelNorth.add(btnON, BorderLayout.CENTER);
         leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         leftPanelCenter.add(btnPhoto);
-       //leftPanelNorth.add(btnLocation);
+        //leftPanelNorth.add(btnLocation);
 
         leftPanel.add(leftPanelNorth, BorderLayout.NORTH);
         leftPanel.add(leftPanelSouth, BorderLayout.SOUTH);
-        leftPanel.add(leftPanelCenter,BorderLayout.CENTER);
+        leftPanel.add(leftPanelCenter, BorderLayout.CENTER);
 
         centerPanel.add(centerPanelNorth, BorderLayout.NORTH);
         centerPanel.add(centerPanelSouth, BorderLayout.SOUTH);
@@ -189,7 +194,7 @@ public class MainPanel extends JPanel {
         offlineBorder.setTitleColor(new Color(62, 134, 160));
         onOffBorder.setTitleColor(new Color(62, 134, 160));
         doorBorder.setTitleColor(new Color(62, 134, 160));
-        camera.setTitleColor(new Color(62,134,160));
+        camera.setTitleColor(new Color(62, 134, 160));
 
         centerPanelNorth.setBorder(onlineBorder);
         centerPanelSouth.setBorder(offlineBorder);
@@ -235,6 +240,9 @@ public class MainPanel extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);
 
+
+        taOnline.addMouseListener(buttonListener);
+
         btnOFF.addActionListener(buttonListener);
         btnON.addActionListener(buttonListener);
         btnLock.addActionListener(buttonListener);
@@ -254,30 +262,33 @@ public class MainPanel extends JPanel {
             }
         });
     }
-    // TODO: 30-Apr-20 add this code to GUI for microcontroller gui
-   public void setOnlineSensor(ArrayList<SecurityComponent> rey) {
-       dlmOnline.clear();
 
-        for (SecurityComponent s: rey
+    // TODO: 30-Apr-20 add this code to GUI for microcontroller gui
+    public void setOnlineSensor(ArrayList<SecurityComponent> rey) {
+        dlmOnline.clear();
+
+        for (SecurityComponent s : rey
         ) {
-            String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
-            dlmOnline.addElement(hej);
-       }
+            //  String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            dlmOnline.addElement(s);
+        }
         taOnline.setModel(dlmOnline);
         taOnline.repaint();
     }
+
     public void setOfflineSensor(ArrayList<SecurityComponent> rey) {
         dlmOffline.clear();
 
-        for (SecurityComponent s: rey
+        for (SecurityComponent s : rey
         ) {
-            String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
-            dlmOffline.addElement(hej);
+            //  String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+            dlmOffline.addElement(s);
         }
         taOffline.setModel(dlmOffline);
         taOffline.repaint();
     }
-    public void clearList(){
+
+    public void clearList() {
         dlmOnline.clear();
         dlmOffline.clear();
         taOnline.setModel(dlmOnline);
@@ -290,6 +301,7 @@ public class MainPanel extends JPanel {
     public void setTaLogger(String text) {
         taLogger.setText(text);
     }
+
     public String[] getStartDate() {
         String temp = tfStartDate.getText();
         if (temp.matches("\\d{4}-\\d{2}-\\d{2}")) {
@@ -335,13 +347,60 @@ public class MainPanel extends JPanel {
             return null;
         }
     }
+
     public void showImage(ImageIcon imageIcon) {
         JOptionPane.showMessageDialog(null, imageIcon);
 
     }
 
-    private class ButtonListener implements ActionListener {
+
+    private class ButtonListener extends MouseAdapter implements ActionListener {
+
+        public void mouseClicked(MouseEvent e) {
+            //if (e.getModifiers() == MouseEvent.BUTTON3_MASK)
+            taOnline.setSelectedIndex(taOnline.locationToIndex(e.getPoint()));
+
+            if (SwingUtilities.isRightMouseButton(e) && !taOnline.isSelectionEmpty() && taOnline.locationToIndex(e.getPoint()) == taOnline.getSelectedIndex()) {
+
+
+                valdSensor = (SecurityComponent) dlmOnline.getElementAt(taOnline.getSelectedIndex());
+                popup = new JPopupMenu();
+                JLabel label1 = new JLabel("Välj location för: " + valdSensor.getClass().getSimpleName() + "\n" + " id: " + valdSensor.getId());
+                popupPanel = new JPanel();
+                popup.add(popupPanel);
+                popupPanel.add(label1);
+
+
+                popupPanel.getRootPane().setDefaultButton(btnOk);
+
+                btnOk = new JButton("OK");
+                btnOk.addActionListener(this::actionPerformed);
+                textFieldPopup = new JTextField();
+
+                textFieldPopup.setToolTipText("Skriv location här:");
+
+
+                popupPanel.setPreferredSize(new Dimension(300, 90));
+                textFieldPopup.setPreferredSize(new Dimension(200, 20));
+                btnOk.setPreferredSize(new Dimension(150, 20));
+                popupPanel.add(textFieldPopup);
+                popupPanel.add(btnOk, CENTER_ALIGNMENT);
+
+                popup.show(taOnline, e.getX(), e.getY());
+
+                System.out.println("Du högerklickade på :" + valdSensor.getId());
+
+                //Skicka till global -> lokalserver location
+
+
+            }
+
+        }
+
+
+
         @Override
+
         public void actionPerformed(ActionEvent e) {
 
             if (e.getSource() == btnON) {
@@ -353,18 +412,28 @@ public class MainPanel extends JPanel {
             } else if (e.getSource() == btnUnlock) {
                 globalClientController.send("unlock");
 
-            }else if (e.getSource() == btnGetLog) {
+            } else if (e.getSource() == btnGetLog) {
 
                 setTaLogger(globalClientController.getClientLoggerText());
-            }
-            else if (e.getSource() == btnPhoto) {
-               //TA FOTO SOM FAN
+            } else if (e.getSource() == btnPhoto) {
+                //TA FOTO SOM FAN
 
-            }
-            else if (e.getSource() == btnLocation) {
-               // taOnline.getMouseListeners()
+            } else if (e.getSource() == btnOk) {
 
-                //set location
+                location = textFieldPopup.getText();
+                System.out.println("DETTA FYLLDES I: " + location);
+
+                valdSensor.setLocation(location);
+                popup.setVisible(false);
+
+
+                // dlmOnline.add(taOnline.getSelectedIndex(), valdSensor);
+
+
+                //globalClientController.send(valdSensor);
+                //TODO SKICKA TILLBAKA Sensorn i som Message objekt?
+                // Eller skicka hela listan?
+
 
             }
         }

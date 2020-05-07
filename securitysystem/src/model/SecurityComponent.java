@@ -43,7 +43,7 @@ public class SecurityComponent implements Serializable {
     }
 
     public String toString() {
-        return id;
+        return getClass().getSimpleName()+ "   Id: "+ id +"   Location: " +location;
     }
 
     public boolean isOpen() {

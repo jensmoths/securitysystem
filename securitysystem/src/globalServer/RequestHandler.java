@@ -27,6 +27,7 @@ public class RequestHandler {
             home.logger.addToLog("received an image");
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
+            emailSender.sendPictureMail(home.getUser().getEmail(), "", "Nytt foto från ditt hem", ((ImageIcon) requestObject).getDescription());
 
         } else if (requestObject instanceof Message) {
             Message message = (Message) requestObject;

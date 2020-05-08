@@ -28,7 +28,7 @@ public class CommandLine implements Runnable {
                 e.printStackTrace();
             }
         }
-        String[] commandTakePic = {"raspistill", "-o", "/home/pi/pic/cam" + number + ".jpg"};
+        String[] commandTakePic = {"raspistill", "-o", "/home/pi/data/photo/cam" + number + ".jpg"};
         controller.cameraReady = false;
         ProcessBuilder processBuilder = new ProcessBuilder(commandTakePic);
         processBuilder.directory(new File(System.getProperty("user.home")));

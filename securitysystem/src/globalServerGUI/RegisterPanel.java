@@ -1,6 +1,8 @@
 package globalServerGUI;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -88,41 +90,62 @@ public class RegisterPanel extends JPanel {
         frame.dispose();
     }
 
+    public static boolean isValidEmailAddress(String email) {
+        boolean isEmailValid = true;
+        try {
+            InternetAddress emailAddress = new InternetAddress(email);
+            emailAddress.validate();
+        } catch (AddressException ex) {
+            isEmailValid = false;
+        }
+        return isEmailValid;
+    }
+
     public String removeStringSpace(String string) {
         return string.replaceAll("\\s+","");
+    }
+
+    public void createUser(String email) {
+        User user = new User(tfFirstName.getText().toLowerCase(), tfSurName.getText().toLowerCase(),
+                tfStreet.getText().toLowerCase(), tfZipCode.getText().toLowerCase(), tfCity.getText().toLowerCase()
+                , email);
+
+        // String city = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getCity());
+        //  String street = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getStreet());
+
+        //User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
+        user.generateLogInDetails();
+        if (!globalServerController.getHomes().containsKey(user.getUserName())) {
+            globalServerController.addUserToSystem(user);
+
+        } else if ((removeStringSpace(user.getStreet()).equals(removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getStreet()))) &
+                removeStringSpace(user.getCity()).equals(removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getCity()))) {
+            JOptionPane.showMessageDialog(null, "Prohibited entry! User already exits");
+            disposePanel();
+        } else {
+            user.generateRandomUserName();
+            globalServerController.addUserToSystem(user);
+        }
     }
 
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO: 29-Apr-20 Avkommentera alla kommentaren nedan för slutversion
-
+            String email = "";
             if ((tfFirstName.getText().isEmpty() | tfFirstName.getText().length() < 2)
                     | (tfSurName.getText().isEmpty() | tfSurName.getText().length() < 2)
                     | (tfStreet.getText().isEmpty() | tfStreet.getText().length() < 3) | (tfEmail.getText().length() < 5)) {
                 JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
+
             } else {
-                User user = new User(tfFirstName.getText().toLowerCase(), tfSurName.getText().toLowerCase(),
-                        tfStreet.getText().toLowerCase(), tfZipCode.getText().toLowerCase(), tfCity.getText().toLowerCase()
-                        , tfEmail.getText().toLowerCase());
+                email = tfEmail.getText().toLowerCase();
 
-               // String city = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getCity());
-              //  String street = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getStreet());
-
-                //User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
-                user.generateLogInDetails();
-
-                if (!globalServerController.getHomes().containsKey(user.getUserName())) {
-                    globalServerController.addUserToSystem(user);
-
-                } else if ((removeStringSpace(user.getStreet()).equals(removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getStreet()))) &
-                        removeStringSpace(user.getCity()).equals(removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getCity()))) {
-                    JOptionPane.showMessageDialog(null, "Prohibited entry! User already exits");
-                    disposePanel();
-                } else {
-                    user.generateRandomUserName();
-                    globalServerController.addUserToSystem(user);
+                while (!isValidEmailAddress(email)) {
+                    email = JOptionPane.showInputDialog(null, "Type a valid email!");
                 }
+
+                createUser(email);
             }
         }
     }

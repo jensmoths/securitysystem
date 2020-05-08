@@ -16,7 +16,7 @@ public class GlobalClientController {
     private LinkedList<ImageIcon> images = new LinkedList<>();
 
     public GlobalClientController() {
-        globalClient = new GlobalClient("localhost", 43210, this);
+        globalClient = new GlobalClient("localhost", 8081, this);
         mainFrame = new MainFrame(this);
     }
 
@@ -86,13 +86,15 @@ public class GlobalClientController {
         mainFrame.updateImageList();
     }
 
-    public void setOnlinesensor(ArrayList<SecurityComponent> rey){
+    public void setOnlinesensor(ArrayList<SecurityComponent> rey) {
         mainFrame.getMainPanel().setOnlineSensor(rey);
     }
-    public void setOfflinesensor(ArrayList<SecurityComponent> rey){
+
+    public void setOfflinesensor(ArrayList<SecurityComponent> rey) {
         mainFrame.getMainPanel().setOfflineSensor(rey);
     }
-    public void clearList(){
+
+    public void clearList() {
         mainFrame.getMainPanel().clearList();
     }
 

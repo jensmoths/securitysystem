@@ -138,7 +138,7 @@ public class Meny extends JFrame {
                 onlineMK = s.getClass().getSimpleName() + " ID: " + s.getId() + " Location: " + s.getLocation() + status;
 
 
-            OnlineListModel.addElement(onlineMK);
+            OnlineListModel.addElement(s);
         }
         tfonlineMK.setModel(OnlineListModel);
         tfonlineMK.repaint();
@@ -151,7 +151,7 @@ public class Meny extends JFrame {
 
         for (SecurityComponent s: sensor){
             String offlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
-            OfflineListModel.addElement(offlineMK);
+            OfflineListModel.addElement(s);
         }
         tfofflineMK.setModel(OfflineListModel);
         tfofflineMK.repaint();

@@ -52,14 +52,6 @@ public class RequestHandler {
                 }
 
                 System.out.println("Alarm status: "+alarm);
-            } else if (message.getInfo().equals("ny location")) {
-                try {
-                    home.getLocalServer().getOos().writeObject(message); //TODO Ny kontrollermetod?
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                home.logger.addToLog("Ny location");
-                home.sendToAllClients(home.logger);
             }
 
             if (securityComponent instanceof MagneticSensor) {
@@ -99,10 +91,28 @@ public class RequestHandler {
         }
     }
 
-    public Message handleClientRequest(String clientRequest) {
+    public Message handleClientRequest(Object clientRequest) {
         Message messageResponse = new Message();
 
-        switch (clientRequest) {
+        if (clientRequest instanceof Message) {
+
+            if (((Message) clientRequest).getInfo().equals("ny location")) {
+               /* try {
+                    home.getLocalServer().getOos().writeObject(clientRequest); //TODO Ny kontrollermetod?
+                    System.out.println("Det har skickats till lokalserver förmodligen");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            */
+                home.logger.addToLog("Ny location");
+                home.sendToAllClients(home.logger);
+                return (Message) clientRequest;
+        }
+        }
+
+        switch ((String) clientRequest) {
             case "on":
                 //localServerOos.writeObject(new MagneticSensor());
                 break;
@@ -121,7 +131,18 @@ public class RequestHandler {
                 break;
         }
 
-        return messageResponse;
+
+
+
+
+
+
+
+
+
+
+            return messageResponse;
+        }
     }
-}
+
 

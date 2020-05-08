@@ -11,6 +11,7 @@ import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 
 public class MainPanel extends JPanel {
 
@@ -41,6 +42,8 @@ public class MainPanel extends JPanel {
     private JTextArea taLogger;
     private JList taOnline;
     private JList taOffline;
+    private JList listImages;
+    private DefaultListModel defaultListModelImages;
     private DefaultListModel dlmOnline;
     private DefaultListModel dlmOffline;
 
@@ -60,7 +63,7 @@ public class MainPanel extends JPanel {
     private JTextField tfStartTime;
     private JTextField tfEndTime;
     private ButtonListener buttonListener = new ButtonListener();
-    JPopupMenu popup = new JPopupMenu();
+    //JPopupMenu popup = new JPopupMenu();
 
     public MainPanel(GlobalClientController globalClientController) {
         this.globalClientController = globalClientController;
@@ -99,9 +102,10 @@ public class MainPanel extends JPanel {
     }
 
     void showPopup(MouseEvent me) {
-        if(me.isPopupTrigger())
+        if (me.isPopupTrigger())
             popup.show(me.getComponent(), me.getX(), me.getY());
     }
+
     public void draw() {
 
         this.setPreferredSize(new Dimension(1435, 630));
@@ -124,8 +128,13 @@ public class MainPanel extends JPanel {
         taLogger = new JTextArea();
         dlmOffline = new DefaultListModel();
         dlmOnline = new DefaultListModel();
+        defaultListModelImages = new DefaultListModel();
         taOffline = new JList(dlmOffline);
         taOnline = new JList(dlmOnline);
+        listImages = new JList(defaultListModelImages);
+        listImages.setBackground(Color.white);
+        defaultListModelImages.add(0, "String");
+        listImages.setModel(defaultListModelImages);
 
         JPopupMenu popup = new JPopupMenu();
         popup.add(new JMenuItem("Cut"));
@@ -137,28 +146,25 @@ public class MainPanel extends JPanel {
             public void mouseReleased(MouseEvent me) {
                 showPopup(me); // showPopup() is our own user-defined method
             }
-        }) ;
-
+        });
 
 
         taOnline.setForeground(Color.white);
         taOffline.setForeground(Color.white);
         taLogger.setForeground(Color.white);
 
-        leftPanel.setPreferredSize(new Dimension(280, 600));
+        leftPanel.setPreferredSize(new Dimension(280, 300));
         centerPanel.setPreferredSize(new Dimension(430, 600));
         rightPanel.setPreferredSize(new Dimension(630, 600));
 
-        leftPanelSouth.setPreferredSize(new Dimension(260, 285));
-        leftPanelNorth.setPreferredSize(new Dimension(260, 285));
-        leftPanelCenter.setPreferredSize(new Dimension(260, 285));
+        leftPanelSouth.setPreferredSize(new Dimension(260, 80));
+        leftPanelNorth.setPreferredSize(new Dimension(260, 80));
+        leftPanelCenter.setPreferredSize(new Dimension(260, 300));
 
         centerPanelSouth.setPreferredSize(new Dimension(420, 300));
         centerPanelNorth.setPreferredSize(new Dimension(420, 300));
 
         taLogger.setEditable(false);
-
-
         scrollPaneLogger = new JScrollPane(taLogger);
         scrollPaneOffline = new JScrollPane(taOffline);
         scrollPaneOnline = new JScrollPane(taOnline);
@@ -192,6 +198,7 @@ public class MainPanel extends JPanel {
         leftPanelNorth.add(btnON, BorderLayout.CENTER);
         leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         leftPanelCenter.add(btnPhoto);
+        leftPanelCenter.add(listImages);
 
 
         leftPanel.add(leftPanelNorth, BorderLayout.NORTH);
@@ -263,6 +270,8 @@ public class MainPanel extends JPanel {
         taOnline.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         taOnline.addMouseListener(buttonListener);
+        listImages.addMouseListener(buttonListener);
+        listImages.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         btnOFF.addActionListener(buttonListener);
         btnON.addActionListener(buttonListener);
@@ -284,7 +293,6 @@ public class MainPanel extends JPanel {
         });
     }
 
-    // TODO: 30-Apr-20 add this code to GUI for microcontroller gui
     public void setOnlineSensor(ArrayList<SecurityComponent> rey) {
         dlmOnline.clear();
 
@@ -367,9 +375,13 @@ public class MainPanel extends JPanel {
         }
     }
 
-    public void showImage(ImageIcon imageIcon) {
-        JOptionPane.showMessageDialog(null, imageIcon);
-
+    public void updateImageList(LinkedList<ImageIcon> list) {
+        defaultListModelImages.clear();
+        for (ImageIcon imageIcon : list) {
+            defaultListModelImages.addElement(imageIcon.toString());
+        }
+        listImages.setModel(dlmOnline);
+        listImages.repaint();
     }
 
 
@@ -409,8 +421,12 @@ public class MainPanel extends JPanel {
                 popup.show(taOnline, e.getX(), e.getY());
 
                 System.out.println("Du högerklickade på :" + valdSensor.getId());
-            }
 
+            } else if (e.getClickCount() == 2) {
+                int index = listImages.locationToIndex(e.getPoint());
+                ImageIcon imageIcon = globalClientController.getImages().get(index);
+                JOptionPane.showMessageDialog(null, cropImage(imageIcon, 80, 80));
+            }
         }
 
         @Override
@@ -449,5 +465,22 @@ public class MainPanel extends JPanel {
 
             }
         }
+    }
+    public ImageIcon cropImage(ImageIcon icon, int width, int height)
+    {
+        int newWidth = icon.getIconWidth();
+        int newHeight = icon.getIconHeight();
+
+        if(icon.getIconWidth() > width) {
+            newWidth = width;
+            newHeight = (newWidth * icon.getIconHeight()) / icon.getIconWidth();
+        }
+
+        if(newHeight > height) {
+            newHeight = height;
+            newWidth = (icon.getIconWidth() * newHeight) / icon.getIconHeight();
+        }
+
+        return new ImageIcon(icon.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT));
     }
 }

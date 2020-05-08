@@ -444,12 +444,13 @@ public class PiServer extends Thread implements Serializable {
                     if (obj instanceof Message) {
                         Message msg = (Message) obj;
                         if (msg.getInfo().equals("ny location")) {
-                            map.get(msg.getSecurityComponent()).sensor.setLocation(msg.getSecurityComponent().getLocation()); //TODO Byta hela sensorn?
+                            map.get(msg.getSecurityComponent()).sensor.setLocation(msg.getSecurityComponent().getLocation());//TODO Byta hela sensorn?
                             if (allOnlineSensors.contains(msg.getSecurityComponent()))
                                 allOnlineSensors.set(allOnlineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
                             if (allOfflineSensors.contains(msg.getSecurityComponent()))
                                 allOfflineSensors.set(allOfflineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
                             controller.updateSensors();
+                            saveKeySet();
                         } else if (msg.getSecurityComponent() instanceof DoorLock) {
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {

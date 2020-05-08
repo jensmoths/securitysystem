@@ -4,6 +4,7 @@ import model.*;
 
 import javax.mail.MessagingException;
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class RequestHandler {
@@ -31,6 +32,7 @@ public class RequestHandler {
             Message message = (Message) requestObject;
             SecurityComponent securityComponent = message.getSecurityComponent();
 
+
             if(securityComponent == null){
                ArrayList<SecurityComponent> online = message.getOnlineSensors();
                ArrayList<SecurityComponent> offline = message.getOfflineSensors();
@@ -49,6 +51,14 @@ public class RequestHandler {
                 }
 
                 System.out.println("Alarm status: "+alarm);
+            } else if (message.getInfo().equals("ny location")) {
+                try {
+                    home.getLocalServer().getOos().writeObject(message); //TODO Ny kontrollermetod?
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                home.logger.addToLog("Ny location");
+                home.sendToAllClients(home.logger);
             }
 
             if (securityComponent instanceof MagneticSensor) {

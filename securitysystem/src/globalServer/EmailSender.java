@@ -22,7 +22,7 @@ public class EmailSender {
 
     }
 
-    public void sendMail(String recipient, String subject, String text) throws MessagingException {
+    public void sendMail(String recipient, String subject, String text) {
 
         System.out.println("börjar skicka");
         properties.put("mail.smtp.auth", "true");
@@ -40,8 +40,15 @@ public class EmailSender {
             }
         });
 
-        Message message = messageCreator(session, myAccountEmail, recipient, subject, text);
-        Transport.send(message);
+        try {
+
+            Message message = messageCreator(session, myAccountEmail, recipient, subject, text);
+            Transport.send(message);
+        }catch (MessagingException e){
+
+            JOptionPane.showMessageDialog(null, "Enter a valid email");
+
+        }
         System.out.println("skickat");
     }
 
@@ -110,7 +117,7 @@ public class EmailSender {
 
 
     public static void main(String[] args) throws MessagingException, IOException {
-        //new EmailSender().sendMail("darwesh.ammar@hotmail.com" , "Larm har gått", "Hej kära kund!\n\n" + " Brandlarmet har upptäckt rök i hallen");
+        new EmailSender().sendMail("darwesfodsa" , "Larm har gått", "Hej kära kund!\n\n" + " Brandlarmet har upptäckt rök i hallen");
         // new EmailSender().sendPictureMail("darwesh.ammar@hotmail.com", "Bild","Bild" ,"images/google-svart-792.jpg");
     }
 

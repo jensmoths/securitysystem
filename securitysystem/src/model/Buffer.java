@@ -4,25 +4,24 @@ import javax.management.ObjectName;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class Buffer {
+public class Buffer<T> {
 
-    private LinkedList list = new LinkedList<>();
+    private LinkedList<T> list = new LinkedList<T>();
 
-    public void add(Object object){
+    public void add(T put) {
 
-        list.addLast(object);
+        list.addLast(put);
 
     }
 
-    public boolean objectListIsEmpty(){
+    public boolean objectListIsEmpty() {
 
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
-    public Object getList(){
+   /* public T get(){
 
         for (int i = 0; i<list.size(); i++){
 
@@ -31,6 +30,31 @@ public class Buffer {
         }
         list.clear();
         return null;
+    }
+
+    */
+
+    public LinkedList<T> getList() {
+        return list;
+    }
+
+    public T getObjects(int i) {
+
+        return list.get(i);
+
+    }
+
+    public void clearObjectBuffer(){
+
+        list.clear();
+
+    }
+
+
+    public int getBufferSize() {
+
+        return list.size();
+
     }
 
 }

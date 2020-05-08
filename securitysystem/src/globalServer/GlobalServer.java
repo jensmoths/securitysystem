@@ -1,5 +1,7 @@
 package globalServer;
 
+import model.Buffer;
+
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -95,6 +97,7 @@ public class GlobalServer {
                     Home home = homes.get(username);
                     home.setClientHandler(this);
                     RequestHandler requestHandler = new RequestHandler(home);
+
                     try {
                         oos.writeObject("user authenticated");
                     } catch (IOException e) {
@@ -113,7 +116,7 @@ public class GlobalServer {
                                     ois = new ObjectInputStream(socket.getInputStream());
                                     requestObject = ois.readObject();
                                    // System.out.println(requestObject.toString());
-                                    requestHandler.handleServerRequest(requestObject, home);
+                                    requestHandler.handleServerRequest(requestObject, home, ClientHandler.this);
 
                                 } catch (IOException | ClassNotFoundException | MessagingException e) {
                                     System.out.println(socket.getInetAddress() + " has disconnected");
@@ -133,6 +136,28 @@ public class GlobalServer {
 
                         case "globalClient":
                             ObjectOutputStream localServerOos;
+
+                            if (!home.getObjectBuffer().objectListIsEmpty()) {
+
+                                    try {
+
+                                        Buffer<Object> buffer = home.getObjectBuffer();
+
+                                        for (int i=0; i<buffer.getBufferSize(); i++){
+
+                                            Object object = buffer.getObjects(i);
+                                            requestHandler.handleServerRequest(object, home, this);
+
+                                        }
+
+                                        buffer.clearObjectBuffer();
+
+                                    } catch (MessagingException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                            }
 
                             while (true) {
                                 try {

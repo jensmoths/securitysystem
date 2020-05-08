@@ -425,16 +425,16 @@ public class MainPanel extends JPanel {
                 System.out.println("Du högerklickade på :" + valdSensor.getId());
 
                 //TODO LÖSA DET HÄR SÅ MAN KAN DUBBELKLICKA
-         /*   } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2 )
+            } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2 )
          {
                 int index = listImages.locationToIndex(e.getPoint());
                 ImageIcon imageIcon = globalClientController.getImages().get(index);
                 JOptionPane.showMessageDialog(null, cropImage(imageIcon, 80, 80));
             }
-            */
+
 
             }
-        }
+
 
         @Override
 

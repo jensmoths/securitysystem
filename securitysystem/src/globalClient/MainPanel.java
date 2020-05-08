@@ -445,7 +445,7 @@ public class MainPanel extends JPanel {
 
                 setTaLogger(globalClientController.getClientLoggerText());
             } else if (e.getSource() == btnPhoto) {
-                //TA FOTO SOM FAN
+                globalClientController.send("Take photo");
 
             } else if (e.getSource() == btnOk) {
 

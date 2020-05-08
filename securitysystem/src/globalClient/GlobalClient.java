@@ -81,26 +81,27 @@ public class GlobalClient {
 
                     if (objectRead instanceof String) {
                         System.out.println("You have received: " + objectRead);
+
                         if (objectRead.equals("user authenticated")) {
                             globalClientController.authenticateUser();
                         } else if (objectRead.equals("user unauthenticated")) {
                             JOptionPane.showMessageDialog(null, "username or password are incorrect");
-                        }
-                        else if (objectRead.equals("local server offline")){
+                        } else if (objectRead.equals("local server offline")){
                             globalClientController.clearList();
                         }
+
                     } else if (objectRead instanceof Logger) {
                         globalClientController.setLogger((Logger) objectRead);
+
                     } else if (objectRead instanceof ImageIcon) {
-                        globalClientController.showImage((ImageIcon) objectRead);
-                    }
-                    if(objectRead instanceof Message){
+                        globalClientController.addImage((ImageIcon) objectRead);
+
+                    } else if(objectRead instanceof Message){
                         Message msg = (Message) objectRead;
                         ArrayList<SecurityComponent> onlineSensor = msg.getOnlineSensors();
                         ArrayList<SecurityComponent> offlineSensor = msg.getOfflineSensors();
                         globalClientController.setOnlinesensor(onlineSensor);
                         globalClientController.setOfflinesensor(offlineSensor);
-
                     }
 
                 } catch (IOException | ClassNotFoundException e) {

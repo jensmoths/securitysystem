@@ -31,7 +31,7 @@ public class MainFrame extends JFrame {
         return mainPanel;
     }
 
-    public void showImage(ImageIcon imageIcon) {
-        mainPanel.showImage(imageIcon);
+    public void updateImageList() {
+        mainPanel.updateImageList(clientController.getImages());
     }
 }

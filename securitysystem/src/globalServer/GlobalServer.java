@@ -141,7 +141,7 @@ public class GlobalServer {
 
                                     if (home.localServer != null) {
                                         localServerOos = home.getLocalServer().getOos();
-                                        localServerOos.writeObject(requestHandler.handleClientRequest(requestString));
+                                        localServerOos.writeObject(requestHandler.handleClientRequest(requestObject));
                                     } else {
                                         home.getGlobalClient(this).oos.writeObject("local server offline"); //sending a string when a local server is offline
                                     }

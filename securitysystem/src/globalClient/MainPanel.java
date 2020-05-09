@@ -100,11 +100,12 @@ public class MainPanel extends JPanel {
         rightPanel.add(BorderLayout.CENTER, pnlDateTime);
     }
 
-    void showPopup(MouseEvent me) {
+    //TODO SKA VI TA BORT?
+  /*  void showPopup(MouseEvent me) {
         if (me.isPopupTrigger())
             popup.show(me.getComponent(), me.getX(), me.getY());
     }
-
+*/
     public void draw() {
 
         this.setPreferredSize(new Dimension(1435, 630));
@@ -135,6 +136,8 @@ public class MainPanel extends JPanel {
         defaultListModelImages.add(0, "String");
         listImages.setModel(defaultListModelImages);
 
+        //TODO TA BORT DETTA?
+        /*
         JPopupMenu popup = new JPopupMenu();
         popup.add(new JMenuItem("Cut"));
         popup.add(new JMenuItem("Copy"));
@@ -146,7 +149,7 @@ public class MainPanel extends JPanel {
                 showPopup(me); // showPopup() is our own user-defined method
             }
         });
-
+*/
 
         taOnline.setForeground(Color.white);
         taOffline.setForeground(Color.white);
@@ -379,7 +382,7 @@ public class MainPanel extends JPanel {
         for (ImageIcon imageIcon : list) {
             defaultListModelImages.addElement(imageIcon.toString());
         }
-        listImages.setModel(dlmOnline);
+        //listImages.setModel(dlmOnline);
         listImages.repaint();
     }
 
@@ -421,12 +424,17 @@ public class MainPanel extends JPanel {
 
                 System.out.println("Du högerklickade på :" + valdSensor.getId());
 
-            } else if (e.getClickCount() == 2 ) {
+                //TODO LÖSA DET HÄR SÅ MAN KAN DUBBELKLICKA
+            } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2 )
+         {
                 int index = listImages.locationToIndex(e.getPoint());
                 ImageIcon imageIcon = globalClientController.getImages().get(index);
                 JOptionPane.showMessageDialog(null, cropImage(imageIcon, 80, 80));
             }
-        }
+
+
+            }
+
 
         @Override
 

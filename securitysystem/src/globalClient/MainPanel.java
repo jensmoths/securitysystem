@@ -22,7 +22,8 @@ public class MainPanel extends JPanel {
     private JPanel leftPanelSouth;
     private JPanel leftPanelCenter;
     private JPanel centerPanelNorth;
-    private JPanel centerPanelSouth;
+    private JPanel centerPanelCenter;
+    private JPanel centerPanelSouth = new JPanel();
     private JPanel pnlDateTime = new JPanel();
 
     private JButton btnON;
@@ -55,7 +56,7 @@ public class MainPanel extends JPanel {
     private JScrollPane scrollPaneOnline;
     private JScrollPane scrollPaneOffline;
 
-    private JButton btnGetLog;
+    private JButton btnFilter;
     private JButton btnPhoto;
     private JButton btnLocation;
     private JTextField tfStartDate;
@@ -72,8 +73,8 @@ public class MainPanel extends JPanel {
 
     public void drawPnlDateTime() {
         Dimension tfDimension = new Dimension(125, 35);
-        btnGetLog = new JButton("Filter");
-        btnGetLog.addActionListener(buttonListener);
+        btnFilter = new JButton("Filter");
+        btnFilter.addActionListener(buttonListener);
         pnlDateTime.setPreferredSize(new Dimension(600, 45));
         tfStartDate = new JTextField(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
         tfStartTime = new JTextField(new SimpleDateFormat("HH-mm").format(Calendar.getInstance().getTime()));
@@ -84,7 +85,7 @@ public class MainPanel extends JPanel {
         tfStartTime.setPreferredSize(tfDimension);
         tfEndDate.setPreferredSize(tfDimension);
         tfEndTime.setPreferredSize(tfDimension);
-        btnGetLog.setPreferredSize(new Dimension(70, 35));
+        btnFilter.setPreferredSize(new Dimension(70, 35));
 
         tfStartDate.setBorder(BorderFactory.createTitledBorder("From: yyyy-mm-dd"));
         tfStartTime.setBorder(BorderFactory.createTitledBorder("From: HH-mm"));
@@ -95,7 +96,7 @@ public class MainPanel extends JPanel {
         pnlDateTime.add(tfStartTime);
         pnlDateTime.add(tfEndDate);
         pnlDateTime.add(tfEndTime);
-        pnlDateTime.add(btnGetLog);
+        pnlDateTime.add(btnFilter);
 
         rightPanel.add(BorderLayout.CENTER, pnlDateTime);
     }
@@ -123,7 +124,7 @@ public class MainPanel extends JPanel {
         leftPanelSouth = new JPanel();
         leftPanelCenter = new JPanel();
         centerPanelNorth = new JPanel();
-        centerPanelSouth = new JPanel();
+        centerPanelCenter = new JPanel();
         drawPnlDateTime();
         taLogger = new JTextArea();
         dlmOffline = new DefaultListModel();
@@ -133,8 +134,6 @@ public class MainPanel extends JPanel {
         taOnline = new JList(dlmOnline);
         listImages = new JList(defaultListModelImages);
         listImages.setBackground(Color.white);
-        defaultListModelImages.add(0, "String");
-        listImages.setModel(defaultListModelImages);
 
         //TODO TA BORT DETTA?
         /*
@@ -163,8 +162,10 @@ public class MainPanel extends JPanel {
         leftPanelNorth.setPreferredSize(new Dimension(260, 80));
         leftPanelCenter.setPreferredSize(new Dimension(260, 300));
 
-        centerPanelSouth.setPreferredSize(new Dimension(420, 300));
+        centerPanelCenter.setPreferredSize(new Dimension(420, 300));
         centerPanelNorth.setPreferredSize(new Dimension(420, 300));
+        centerPanelSouth.setPreferredSize(new Dimension(420, 300));
+
 
         taLogger.setEditable(false);
         scrollPaneLogger = new JScrollPane(taLogger);
@@ -192,7 +193,7 @@ public class MainPanel extends JPanel {
         btnLocation.setPreferredSize(new Dimension(btnDimension));
 
         centerPanelNorth.add(scrollPaneOnline);
-        centerPanelSouth.add(scrollPaneOffline);
+        centerPanelCenter.add(scrollPaneOffline);
 
         leftPanelSouth.add(btnLock, BorderLayout.SOUTH);
         leftPanelSouth.add(btnUnlock, BorderLayout.SOUTH);
@@ -204,10 +205,11 @@ public class MainPanel extends JPanel {
 
 
         leftPanel.add(leftPanelNorth, BorderLayout.NORTH);
-        leftPanel.add(leftPanelSouth, BorderLayout.SOUTH);
         leftPanel.add(leftPanelCenter, BorderLayout.CENTER);
+        leftPanel.add(leftPanelSouth, BorderLayout.SOUTH);
 
         centerPanel.add(centerPanelNorth, BorderLayout.NORTH);
+        centerPanel.add(centerPanelCenter, BorderLayout.CENTER);
         centerPanel.add(centerPanelSouth, BorderLayout.SOUTH);
 
         TitledBorder loggerBorder = new TitledBorder("Logger");
@@ -215,7 +217,9 @@ public class MainPanel extends JPanel {
         TitledBorder onlineBorder = new TitledBorder("Online Components");
         TitledBorder onOffBorder = new TitledBorder("Turn On/Off");
         TitledBorder doorBorder = new TitledBorder("Door");
-        TitledBorder camera = new TitledBorder("Kamera");
+        TitledBorder camera = new TitledBorder("Camera");
+        TitledBorder borderImages = new TitledBorder("Images");
+
 
         loggerBorder.setTitleColor(new Color(62, 134, 160));
         onlineBorder.setTitleColor(new Color(62, 134, 160));
@@ -223,13 +227,15 @@ public class MainPanel extends JPanel {
         onOffBorder.setTitleColor(new Color(62, 134, 160));
         doorBorder.setTitleColor(new Color(62, 134, 160));
         camera.setTitleColor(new Color(62, 134, 160));
+        borderImages.setTitleColor(new Color(62, 134, 160));
 
         centerPanelNorth.setBorder(onlineBorder);
-        centerPanelSouth.setBorder(offlineBorder);
+        centerPanelCenter.setBorder(offlineBorder);
 
         leftPanelNorth.setBorder(onOffBorder);
         leftPanelSouth.setBorder(doorBorder);
         leftPanelCenter.setBorder(camera);
+        centerPanelSouth.setBorder(borderImages);
 
         rightPanel.setBorder(loggerBorder);
 
@@ -239,8 +245,9 @@ public class MainPanel extends JPanel {
         leftPanelSouth.setBackground(new Color(60, 63, 65));
         leftPanelNorth.setBackground(new Color(60, 63, 65));
         leftPanelCenter.setBackground(new Color(60, 63, 65));
-
         centerPanelSouth.setBackground(new Color(60, 63, 65));
+
+        centerPanelCenter.setBackground(new Color(60, 63, 65));
         centerPanelNorth.setBackground(new Color(60, 63, 65));
         centerPanel.setBackground(new Color(60, 63, 65));
 
@@ -382,7 +389,7 @@ public class MainPanel extends JPanel {
         for (ImageIcon imageIcon : list) {
             defaultListModelImages.addElement(imageIcon.toString());
         }
-        //listImages.setModel(dlmOnline);
+        listImages.setModel(defaultListModelImages);
         listImages.repaint();
     }
 
@@ -425,15 +432,13 @@ public class MainPanel extends JPanel {
                 System.out.println("Du högerklickade på :" + valdSensor.getId());
 
                 //TODO LÖSA DET HÄR SÅ MAN KAN DUBBELKLICKA
-            } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2 )
-         {
+            } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
                 int index = listImages.locationToIndex(e.getPoint());
                 ImageIcon imageIcon = globalClientController.getImages().get(index);
-                JOptionPane.showMessageDialog(null, cropImage(imageIcon, 80, 80));
+                // TODO: 11-May-20 fill in code
+                centerPanelSouth.add(cropImage(imageIcon, 410, 280));
             }
-
-
-            }
+        }
 
 
         @Override
@@ -449,7 +454,7 @@ public class MainPanel extends JPanel {
             } else if (e.getSource() == btnUnlock) {
                 globalClientController.send("unlock");
 
-            } else if (e.getSource() == btnGetLog) {
+            } else if (e.getSource() == btnFilter) {
 
                 setTaLogger(globalClientController.getClientLoggerText());
             } else if (e.getSource() == btnPhoto) {
@@ -473,21 +478,21 @@ public class MainPanel extends JPanel {
             }
         }
     }
-    public ImageIcon cropImage(ImageIcon icon, int width, int height)
-    {
+
+    public JLabel cropImage(ImageIcon icon, int width, int height) {
         int newWidth = icon.getIconWidth();
         int newHeight = icon.getIconHeight();
 
-        if(icon.getIconWidth() > width) {
+        if (icon.getIconWidth() > width) {
             newWidth = width;
             newHeight = (newWidth * icon.getIconHeight()) / icon.getIconWidth();
         }
 
-        if(newHeight > height) {
+        if (newHeight > height) {
             newHeight = height;
             newWidth = (icon.getIconWidth() * newHeight) / icon.getIconHeight();
         }
 
-        return new ImageIcon(icon.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT));
+        return new JLabel(new ImageIcon(icon.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT)));
     }
 }

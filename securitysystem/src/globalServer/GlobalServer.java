@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 
 public class GlobalServer {
@@ -85,9 +86,10 @@ public class GlobalServer {
                         username = (String) ois.readObject();
                         password = (String) ois.readObject();
                     }
-                } catch (IOException | ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e ) {
                     e.printStackTrace();
                 }
+
             } while (!homes.containsKey(username));
 
             if (homes.containsKey(username)) {
@@ -137,7 +139,7 @@ public class GlobalServer {
                             while (true) {
                                 try {
                                     requestObject = ois.readObject();
-                                    String requestString = requestObject.toString();
+//                                    String requestString = requestObject.toString();
 
                                     if (home.localServer != null) {
                                         localServerOos = home.getLocalServer().getOos();

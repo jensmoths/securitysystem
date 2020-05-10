@@ -23,7 +23,7 @@ public class RequestHandler {
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
 
-        } else if(requestObject instanceof ImageIcon) {
+        } else if (requestObject instanceof ImageIcon) {
             home.logger.addToLog("received an image");
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
@@ -34,24 +34,24 @@ public class RequestHandler {
             SecurityComponent securityComponent = message.getSecurityComponent();
 
 
-            if(securityComponent == null){
-               ArrayList<SecurityComponent> online = message.getOnlineSensors();
-               ArrayList<SecurityComponent> offline = message.getOfflineSensors();
-               boolean alarm = message.isAlarmOn();
+            if (securityComponent == null) {
+                ArrayList<SecurityComponent> online = message.getOnlineSensors();
+                ArrayList<SecurityComponent> offline = message.getOfflineSensors();
+                boolean alarm = message.isAlarmOn();
                 home.sendToAllClients(message);
-            //Spara message, skicka till klient när den ansluter
-                for (SecurityComponent s: online
-                     ) {
-                    System.out.println("ONLINE SENSOR: "+s.getId());
-
-                }
-                for (SecurityComponent s: offline
+                //Spara message, skicka till klient när den ansluter
+                for (SecurityComponent s : online
                 ) {
-                    System.out.println("OFFLINE SENSOR: "+s.getId());
+                    System.out.println("ONLINE SENSOR: " + s.getId());
+
+                }
+                for (SecurityComponent s : offline
+                ) {
+                    System.out.println("OFFLINE SENSOR: " + s.getId());
 
                 }
 
-                System.out.println("Alarm status: "+alarm);
+                System.out.println("Alarm status: " + alarm);
             }
 
             if (securityComponent instanceof MagneticSensor) {
@@ -75,7 +75,7 @@ public class RequestHandler {
                 try {
                     emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Brandlarmet har utlösts");
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 home.sendToAllClients(home.logger);
@@ -91,8 +91,8 @@ public class RequestHandler {
         }
     }
 
-    public Message handleClientRequest(Object clientRequest) {
-        Message messageResponse = new Message();
+    public Object handleClientRequest(Object clientRequest) {
+        Object respone = null;
 
         if (clientRequest instanceof Message) {
 
@@ -108,41 +108,31 @@ public class RequestHandler {
             */
                 home.logger.addToLog("Ny location");
                 home.sendToAllClients(home.logger);
-                return (Message) clientRequest;
-        }
+                return clientRequest;
+            }
         }
 
-        switch ((String) clientRequest) {
-            case "on":
+        if (clientRequest instanceof String) {
+            if ("on".equals(clientRequest)) {
                 //localServerOos.writeObject(new MagneticSensor());
-                break;
-            case "off":
-                //localServerOos.writeObject(new );
-                break;
-            case "lock":
-                messageResponse = new Message("", new DoorLock(false));
+            } else if ("off".equals(clientRequest)) {
+                //localServerOos.writeObject(new);
+            } else if ("lock".equals(clientRequest)) {
+                respone = new Message("", new DoorLock(false));
                 home.logger.addToLog("Door locked");
                 home.sendToAllClients(home.logger);
-                break;
-            case "unlock":
-                messageResponse = new Message("", new DoorLock(true));
+            } else if ("unlock".equals(clientRequest)) {
+                respone = new Message("", new DoorLock(true));
                 home.logger.addToLog("Door unlocked");
                 home.sendToAllClients(home.logger);
-                break;
+            } else if ("Take photo".equals(clientRequest)) {
+                respone = "Take photo";
+                home.logger.addToLog("Client wants a photo");
+                home.sendToAllClients(home.logger);
+            }
         }
-
-
-
-
-
-
-
-
-
-
-
-            return messageResponse;
-        }
+        return respone;
     }
+}
 
 

@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class PiServer extends Thread implements Serializable {
 
-    // private HashMap<SecurityComponent, ClientHandler> map = new HashMap<>();
+
     private HashMap<String, SecurityComponent> globalMap = new HashMap<>();
     private MicroClients map = new MicroClients();
 
@@ -29,7 +29,7 @@ public class PiServer extends Thread implements Serializable {
     public transient StartServer startServer;
 
 
-    public PiServer(Controller controller) throws IOException, InterruptedException {
+    public PiServer(Controller controller) {
         this.controller = controller;
         startServer = new StartServer(controller);
 
@@ -265,7 +265,7 @@ public class PiServer extends Thread implements Serializable {
                             message.setInfo("Någon har stängt dörren");
                         }
                         if (!message.getInfo().equals("Någon har brutit sig in"))
-                        globalServer.globalsendMessage(message);
+                            globalServer.globalsendMessage(message);
                     }
 
                     if (message.getSecurityComponent() instanceof ProximitySensor) {
@@ -387,7 +387,7 @@ public class PiServer extends Thread implements Serializable {
         }
 
 
-        public void globalsendMessage(Message msg)  {
+        public void globalsendMessage(Message msg) {
             if (socket != null && !socket.isClosed()) {
                 try {
                     oos = new ObjectOutputStream(socket.getOutputStream());  //FUNGERADE INTE ATT LÄSA OBJEKTETS BOOLEAN OM VI INTE GJORDE NYA STREAMS VARJE GÅNG VI SKICKADE
@@ -401,7 +401,7 @@ public class PiServer extends Thread implements Serializable {
         }
 
         public void updateGlobal() { //TODO EJ TESTAD METOD
-           Message msg = new Message(Controller.alarmOn, allOnlineSensors, allOfflineSensors);
+            Message msg = new Message(Controller.alarmOn, allOnlineSensors, allOfflineSensors);
 
             if (socket != null && !socket.isClosed()) {
                 try {
@@ -429,7 +429,6 @@ public class PiServer extends Thread implements Serializable {
             }
         }
 
-
         @Override
         public void run() {
             try {
@@ -444,10 +443,15 @@ public class PiServer extends Thread implements Serializable {
                     Object obj = ois.readObject();
                     if (obj instanceof Message) {
                         Message msg = (Message) obj;
-                        if (msg.getInfo().equals("shutdown")) {
-                            shutdownSensor(msg);
-                        }
-                        if (msg.getSecurityComponent() instanceof DoorLock) {
+                        if (msg.getInfo().equals("ny location")) {
+                            map.get(msg.getSecurityComponent()).sensor.setLocation(msg.getSecurityComponent().getLocation());//TODO Byta hela sensorn?
+                            if (allOnlineSensors.contains(msg.getSecurityComponent()))
+                                allOnlineSensors.set(allOnlineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
+                            if (allOfflineSensors.contains(msg.getSecurityComponent()))
+                                allOfflineSensors.set(allOfflineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
+                            controller.updateSensors();
+                            saveKeySet();
+                        } else if (msg.getSecurityComponent() instanceof DoorLock) {
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     if (msg.getSecurityComponent().isOpen()) {
@@ -463,7 +467,7 @@ public class PiServer extends Thread implements Serializable {
                     }
                     if (obj instanceof String) {
                         System.out.println("String object vi fått från Global: " + obj);
-                        if (obj.equals("user authenticated")) controller.setOnline(false);
+                        if (obj.equals("user authenticated")) controller.setOnlineButton(false);
                         if (obj.equals("Take photo")) controller.takePicture();
                     }
                 } catch (IOException | ClassNotFoundException e) {
@@ -476,7 +480,7 @@ public class PiServer extends Thread implements Serializable {
                     break;
                 }
             }
-            controller.setOnline(true);
+            controller.setOnlineButton(true);
         }
     }
 }

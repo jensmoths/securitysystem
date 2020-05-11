@@ -132,7 +132,7 @@ public class Controller {
         new Controller();
     }
 
-    public void setOnline(boolean b) {
+    public void setOnlineButton(boolean b) {
         mainFrame.meny.btnGoOnline.setEnabled(b);
     }
 }

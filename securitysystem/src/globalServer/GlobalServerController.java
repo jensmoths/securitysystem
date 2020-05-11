@@ -18,20 +18,17 @@ public class GlobalServerController implements Observer {
     private MainFrame mainFrame;
     private UserRegister userRegister;
     private EmailSender emailSender;
-    private int counter;
+
     LinkedList<Home> homesList = new LinkedList<>();
 
     public GlobalServerController() {
-        counter = 0;
         emailSender = new EmailSender();
         userRegister = new UserRegister();
         this.userRegister.addObserver(this);
         homes = new HashMap<>();
         mainFrame = new MainFrame(this);
 
-        //globalServer = new GlobalServer(43210, homes);
-
-        globalServer = new GlobalServer(8081, homes);
+        globalServer = new GlobalServer(43210, homes);
         readUserFromFile();
     }
 
@@ -55,10 +52,6 @@ public class GlobalServerController implements Observer {
     public void deleteHome(String userName) {
         homes.get(userName).logger.deleteLog();
         homes.remove(userName);
-    }
-
-    public int getCounter() {
-        return counter;
     }
 
     public String getClientLoggerText(String username) {
@@ -128,21 +121,21 @@ public class GlobalServerController implements Observer {
         String filename = "data/HomeObject.dat";
 
 //        new Thread(() -> {
-            try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
+        try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
 
-                Home home = (Home) ois.readObject();
+            Home home = (Home) ois.readObject();
 
-                while (home != null) {
+            while (home != null) {
 
-                    homes.put(home.getUser().getUserName(), home);
-                    homesList.add(home);
-                    userRegister.addUser(home.getUser());
-                    home = (Home) ois.readObject();
+                homes.put(home.getUser().getUserName(), home);
+                homesList.add(home);
+                userRegister.addUser(home.getUser());
+                home = (Home) ois.readObject();
 
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 //        });
         System.out.println("thread started again");
     }
@@ -151,7 +144,7 @@ public class GlobalServerController implements Observer {
         homesList.remove(home);
     }
 
-    public void sendEmail(String recipient, String subject, String information) throws MessagingException {
+    public void sendEmail(String recipient, String subject, String information) {
 
         emailSender.sendMail(recipient, subject, information);
 
@@ -173,6 +166,7 @@ public class GlobalServerController implements Observer {
             e.printStackTrace();
         }
     }
+
     public void addUserToSystem(User user) {
         getUserRegister().addUser(user);
         addHome(user.getUserName(), new Home(user));
@@ -182,11 +176,9 @@ public class GlobalServerController implements Observer {
         Thread thread = new Thread(() -> {
             String loginInfo = "Hej! \nHär nedan kommer dina inloggningsuppgifter\nAnvändarnamn: " + user.getUserName()
                     + "\nLösenord: " + user.getPassword();
-            try {
-                sendEmail(user.getEmail(), "SecureHomesMAU", loginInfo);
-            } catch (MessagingException ex) {
-                ex.printStackTrace();
-            }
+
+            sendEmail(user.getEmail(), "SecureHomesMAU", loginInfo);
+
             writeHomeToFile(getHomes().get(user.getUserName()));
         });
 

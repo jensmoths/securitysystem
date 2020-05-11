@@ -1,16 +1,19 @@
 package globalClient;
 
 import globalServer.Logger;
+import model.Message;
 import model.SecurityComponent;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class GlobalClientController {
     private GlobalClient globalClient;
     private MainFrame mainFrame;
     private Logger logger;
+    private LinkedList<ImageIcon> images = new LinkedList<>();
 
     public GlobalClientController() {
         globalClient = new GlobalClient("localhost", 43210, this);
@@ -26,14 +29,12 @@ public class GlobalClientController {
         globalClient.send(string);
     }
 
-    public void closeSocket() {
-        globalClient.closeSocket();
+    public void send(Message msg) {
+        globalClient.send(msg);
     }
 
-    // TODO: 05-May-20 Add code to make it possible for client to typ in own time
-    public void updateLog(Logger logger) {
-        mainFrame.setTextArea(logger.getLog(2020, 5, 5, 1, 6,
-                2021, 5, 5, 1, 44));
+    public void closeSocket() {
+        globalClient.closeSocket();
     }
 
     public void setLogger(Logger logger) {
@@ -65,17 +66,29 @@ public class GlobalClientController {
         return "";
     }
 
-    public void showImage(ImageIcon imageIcon) {
-        mainFrame.showImage(imageIcon);
+    public LinkedList<ImageIcon> getImages() {
+        return images;
     }
 
-    public void setOnlinesensor(ArrayList<SecurityComponent> rey){
+    public void addImage(ImageIcon imageIcon) {
+        images.add(imageIcon);
+        mainFrame.updateImageList();
+    }
+
+    public void removeImage(ImageIcon imageIcon) {
+        images.remove(imageIcon);
+        mainFrame.updateImageList();
+    }
+
+    public void setOnlinesensor(ArrayList<SecurityComponent> rey) {
         mainFrame.getMainPanel().setOnlineSensor(rey);
     }
-    public void setOfflinesensor(ArrayList<SecurityComponent> rey){
+
+    public void setOfflinesensor(ArrayList<SecurityComponent> rey) {
         mainFrame.getMainPanel().setOfflineSensor(rey);
     }
-    public void clearList(){
+
+    public void clearList() {
         mainFrame.getMainPanel().clearList();
     }
 

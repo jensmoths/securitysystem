@@ -24,36 +24,35 @@ public class EmailSender {
 
     public void sendMail(String recipient, String subject, String text) {
 
-        System.out.println("börjar skicka");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
-
-        String myAccountEmail = "securehomesmau@gmail.com";
-        String password = "emailutskick456";
-
-        Session session = Session.getInstance(properties, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(myAccountEmail, password);
-            }
-        });
-
+        System.out.println("Skickar användaruppgifter...");
         try {
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.starttls.enable", "true");
+            properties.put("mail.smtp.host", "smtp.gmail.com");
+            properties.put("mail.smtp.port", "587");
+
+            String myAccountEmail = "securehomesmau@gmail.com";
+            String password = "emailutskick456";
+
+            Session session = Session.getInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(myAccountEmail, password);
+                }
+            });
 
             Message message = messageCreator(session, myAccountEmail, recipient, subject, text);
             Transport.send(message);
-        }catch (MessagingException e){
+            System.out.println("skickat!");
 
-            JOptionPane.showMessageDialog(null, "Enter a valid email");
-
+        } catch (MessagingException m) {
+            System.out.println("Didn't find the specified email!");
+            m.printStackTrace();
         }
-        System.out.println("skickat");
     }
 
 
-    public void sendPictureMail(String recipient, String text, String subject, String picturePath) throws MessagingException {
+    public void sendPictureMail(String recipient, String text, String subject, String picturePath) {
 
         System.out.println("börjar skicka");
 
@@ -71,9 +70,13 @@ public class EmailSender {
                 return new PasswordAuthentication(myAccountEmail, password);
             }
         });
-
-        Message message = messagePictureCreator(session, myAccountEmail, recipient, text, subject, picturePath);
-        Transport.send(message);
+        try {
+            Message message = messagePictureCreator(session, myAccountEmail, recipient, text, subject, picturePath);
+            Transport.send(message);
+        } catch (MessagingException m) {
+            System.out.println("Didn't find the specified email!");
+            m.printStackTrace();
+        }
 
     }
 

@@ -6,11 +6,9 @@ import javax.swing.*;
 public class MainFrame extends JFrame {
     private MainPanel mainPanel;
     private LogInPanel logInPanel;
-    private GlobalClient globalClient;
     private GlobalClientController clientController;
 
     public MainFrame(GlobalClientController clientController) {
-//        this.globalClient = globalClient;
         this.clientController = clientController;
         logInPanel = new LogInPanel(clientController);
     }
@@ -31,7 +29,7 @@ public class MainFrame extends JFrame {
         return mainPanel;
     }
 
-    public void showImage(ImageIcon imageIcon) {
-        mainPanel.showImage(imageIcon);
+    public void updateImageList() {
+        mainPanel.updateImageList(clientController.getImages());
     }
 }

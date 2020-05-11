@@ -1,18 +1,17 @@
 package globalClient;
 
+import model.Message;
 import model.SecurityComponent;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 
 public class MainPanel extends JPanel {
 
@@ -21,8 +20,10 @@ public class MainPanel extends JPanel {
     private JPanel rightPanel;
     private JPanel leftPanelNorth;
     private JPanel leftPanelSouth;
+    private JPanel leftPanelCenter;
     private JPanel centerPanelNorth;
-    private JPanel centerPanelSouth;
+    private JPanel centerPanelCenter;
+    private JPanel centerPanelSouth = new JPanel();
     private JPanel pnlDateTime = new JPanel();
 
     private JButton btnON;
@@ -30,9 +31,20 @@ public class MainPanel extends JPanel {
     private JButton btnLock;
     private JButton btnUnlock;
 
+    //TODO POPUPGREJER
+    private JButton btnOk;
+    private JTextField textFieldPopup;
+    private String location;
+    private SecurityComponent valdSensor;
+    private JPopupMenu popup;
+    private JPanel popupPanel;
+    //
+
     private JTextArea taLogger;
     private JList taOnline;
     private JList taOffline;
+    private JList listImages;
+    private DefaultListModel defaultListModelImages;
     private DefaultListModel dlmOnline;
     private DefaultListModel dlmOffline;
 
@@ -44,7 +56,9 @@ public class MainPanel extends JPanel {
     private JScrollPane scrollPaneOnline;
     private JScrollPane scrollPaneOffline;
 
-    private JButton btnGetLog;
+    private JButton btnFilter;
+    private JButton btnPhoto;
+    private JButton btnLocation;
     private JTextField tfStartDate;
     private JTextField tfEndDate;
     private JTextField tfStartTime;
@@ -59,8 +73,8 @@ public class MainPanel extends JPanel {
 
     public void drawPnlDateTime() {
         Dimension tfDimension = new Dimension(125, 35);
-        btnGetLog = new JButton("Filter");
-        btnGetLog.addActionListener(buttonListener);
+        btnFilter = new JButton("Filter");
+        btnFilter.addActionListener(buttonListener);
         pnlDateTime.setPreferredSize(new Dimension(600, 45));
         tfStartDate = new JTextField(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
         tfStartTime = new JTextField(new SimpleDateFormat("HH-mm").format(Calendar.getInstance().getTime()));
@@ -71,7 +85,7 @@ public class MainPanel extends JPanel {
         tfStartTime.setPreferredSize(tfDimension);
         tfEndDate.setPreferredSize(tfDimension);
         tfEndTime.setPreferredSize(tfDimension);
-        btnGetLog.setPreferredSize(new Dimension(70, 35));
+        btnFilter.setPreferredSize(new Dimension(70, 35));
 
         tfStartDate.setBorder(BorderFactory.createTitledBorder("From: yyyy-mm-dd"));
         tfStartTime.setBorder(BorderFactory.createTitledBorder("From: HH-mm"));
@@ -82,11 +96,17 @@ public class MainPanel extends JPanel {
         pnlDateTime.add(tfStartTime);
         pnlDateTime.add(tfEndDate);
         pnlDateTime.add(tfEndTime);
-        pnlDateTime.add(btnGetLog);
+        pnlDateTime.add(btnFilter);
 
         rightPanel.add(BorderLayout.CENTER, pnlDateTime);
     }
 
+    //TODO SKA VI TA BORT?
+  /*  void showPopup(MouseEvent me) {
+        if (me.isPopupTrigger())
+            popup.show(me.getComponent(), me.getX(), me.getY());
+    }
+*/
     public void draw() {
 
         this.setPreferredSize(new Dimension(1435, 630));
@@ -102,34 +122,52 @@ public class MainPanel extends JPanel {
         rightPanel = new JPanel();
         leftPanelNorth = new JPanel();
         leftPanelSouth = new JPanel();
+        leftPanelCenter = new JPanel();
         centerPanelNorth = new JPanel();
-        centerPanelSouth = new JPanel();
+        centerPanelCenter = new JPanel();
         drawPnlDateTime();
         taLogger = new JTextArea();
         dlmOffline = new DefaultListModel();
         dlmOnline = new DefaultListModel();
+        defaultListModelImages = new DefaultListModel();
         taOffline = new JList(dlmOffline);
         taOnline = new JList(dlmOnline);
+        listImages = new JList(defaultListModelImages);
+        listImages.setBackground(Color.white);
 
+        //TODO TA BORT DETTA?
+        /*
+        JPopupMenu popup = new JPopupMenu();
+        popup.add(new JMenuItem("Cut"));
+        popup.add(new JMenuItem("Copy"));
+        popup.add(new JMenuItem("Paste"));
+        popup.addSeparator();
+        popup.add(new JMenuItem("SelectAll"));
+        taOnline.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent me) {
+                showPopup(me); // showPopup() is our own user-defined method
+            }
+        });
+*/
 
         taOnline.setForeground(Color.white);
         taOffline.setForeground(Color.white);
         taLogger.setForeground(Color.white);
 
-        leftPanel.setPreferredSize(new Dimension(280, 600));
+        leftPanel.setPreferredSize(new Dimension(280, 300));
         centerPanel.setPreferredSize(new Dimension(430, 600));
         rightPanel.setPreferredSize(new Dimension(630, 600));
 
-        leftPanelSouth.setPreferredSize(new Dimension(260, 285));
-        leftPanelNorth.setPreferredSize(new Dimension(260, 285));
+        leftPanelSouth.setPreferredSize(new Dimension(260, 80));
+        leftPanelNorth.setPreferredSize(new Dimension(260, 80));
+        leftPanelCenter.setPreferredSize(new Dimension(260, 300));
 
-        centerPanelSouth.setPreferredSize(new Dimension(420, 300));
+        centerPanelCenter.setPreferredSize(new Dimension(420, 300));
         centerPanelNorth.setPreferredSize(new Dimension(420, 300));
+        centerPanelSouth.setPreferredSize(new Dimension(420, 300));
+
 
         taLogger.setEditable(false);
-       // taOffline.setEditable(false);
-       // taOnline.setEditable(false);
-
         scrollPaneLogger = new JScrollPane(taLogger);
         scrollPaneOffline = new JScrollPane(taOffline);
         scrollPaneOnline = new JScrollPane(taOnline);
@@ -143,26 +181,35 @@ public class MainPanel extends JPanel {
 
         btnOFF = new JButton("Off");
         btnON = new JButton("On");
+        btnLocation = new JButton("Välj location");
+        btnPhoto = new JButton("Ta foto bror");
 
         btnUnlock.setPreferredSize(new Dimension(btnDimension));
         btnLock.setPreferredSize(new Dimension(btnDimension));
 
         btnOFF.setPreferredSize(new Dimension(btnDimension));
         btnON.setPreferredSize(new Dimension(btnDimension));
+        btnPhoto.setPreferredSize(new Dimension(btnDimension));
+        btnLocation.setPreferredSize(new Dimension(btnDimension));
 
         centerPanelNorth.add(scrollPaneOnline);
-        centerPanelSouth.add(scrollPaneOffline);
+        centerPanelCenter.add(scrollPaneOffline);
 
         leftPanelSouth.add(btnLock, BorderLayout.SOUTH);
         leftPanelSouth.add(btnUnlock, BorderLayout.SOUTH);
 
-        leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         leftPanelNorth.add(btnON, BorderLayout.CENTER);
+        leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
+        leftPanelCenter.add(btnPhoto);
+        leftPanelCenter.add(listImages);
+
 
         leftPanel.add(leftPanelNorth, BorderLayout.NORTH);
+        leftPanel.add(leftPanelCenter, BorderLayout.CENTER);
         leftPanel.add(leftPanelSouth, BorderLayout.SOUTH);
 
         centerPanel.add(centerPanelNorth, BorderLayout.NORTH);
+        centerPanel.add(centerPanelCenter, BorderLayout.CENTER);
         centerPanel.add(centerPanelSouth, BorderLayout.SOUTH);
 
         TitledBorder loggerBorder = new TitledBorder("Logger");
@@ -170,18 +217,25 @@ public class MainPanel extends JPanel {
         TitledBorder onlineBorder = new TitledBorder("Online Components");
         TitledBorder onOffBorder = new TitledBorder("Turn On/Off");
         TitledBorder doorBorder = new TitledBorder("Door");
+        TitledBorder camera = new TitledBorder("Camera");
+        TitledBorder borderImages = new TitledBorder("Images");
+
 
         loggerBorder.setTitleColor(new Color(62, 134, 160));
         onlineBorder.setTitleColor(new Color(62, 134, 160));
         offlineBorder.setTitleColor(new Color(62, 134, 160));
         onOffBorder.setTitleColor(new Color(62, 134, 160));
         doorBorder.setTitleColor(new Color(62, 134, 160));
+        camera.setTitleColor(new Color(62, 134, 160));
+        borderImages.setTitleColor(new Color(62, 134, 160));
 
         centerPanelNorth.setBorder(onlineBorder);
-        centerPanelSouth.setBorder(offlineBorder);
+        centerPanelCenter.setBorder(offlineBorder);
 
         leftPanelNorth.setBorder(onOffBorder);
         leftPanelSouth.setBorder(doorBorder);
+        leftPanelCenter.setBorder(camera);
+        centerPanelSouth.setBorder(borderImages);
 
         rightPanel.setBorder(loggerBorder);
 
@@ -190,8 +244,10 @@ public class MainPanel extends JPanel {
         leftPanel.setBackground(new Color(60, 63, 65));
         leftPanelSouth.setBackground(new Color(60, 63, 65));
         leftPanelNorth.setBackground(new Color(60, 63, 65));
-
+        leftPanelCenter.setBackground(new Color(60, 63, 65));
         centerPanelSouth.setBackground(new Color(60, 63, 65));
+
+        centerPanelCenter.setBackground(new Color(60, 63, 65));
         centerPanelNorth.setBackground(new Color(60, 63, 65));
         centerPanel.setBackground(new Color(60, 63, 65));
 
@@ -206,7 +262,10 @@ public class MainPanel extends JPanel {
 
         btnLock.setBackground(new Color(43, 43, 43));
         btnUnlock.setBackground(new Color(43, 43, 43));
-
+        btnPhoto.setBackground(new Color(43, 43, 43));
+        btnPhoto.setForeground(Color.white);
+        btnLocation.setBackground(new Color(43, 43, 43));
+        btnLocation.setForeground(Color.white);
         btnON.setForeground(Color.white);
         btnOFF.setForeground(Color.white);
         btnUnlock.setForeground(Color.white);
@@ -216,11 +275,19 @@ public class MainPanel extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);
 
+
+        taOnline.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        taOnline.addMouseListener(buttonListener);
+        listImages.addMouseListener(buttonListener);
+        listImages.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
         btnOFF.addActionListener(buttonListener);
         btnON.addActionListener(buttonListener);
         btnLock.addActionListener(buttonListener);
         btnUnlock.addActionListener(buttonListener);
-
+        btnPhoto.addActionListener(buttonListener);
+        btnLocation.addActionListener(buttonListener);
         frame.setSize(new Dimension(1500, 650));
         frame.setContentPane(MainPanel.this);
         frame.setBackground(new Color(83, 86, 91));
@@ -234,30 +301,30 @@ public class MainPanel extends JPanel {
             }
         });
     }
-    // TODO: 30-Apr-20 add this code to GUI for microcontroller gui
-   public void setOnlineSensor(ArrayList<SecurityComponent> rey) {
-       dlmOnline.clear();
 
-        for (SecurityComponent s: rey
+    public void setOnlineSensor(ArrayList<SecurityComponent> rey) {
+        dlmOnline.clear();
+
+        for (SecurityComponent s : rey
         ) {
-            String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
-            dlmOnline.addElement(hej);
-       }
+            dlmOnline.addElement(s);
+        }
         taOnline.setModel(dlmOnline);
         taOnline.repaint();
     }
+
     public void setOfflineSensor(ArrayList<SecurityComponent> rey) {
         dlmOffline.clear();
 
-        for (SecurityComponent s: rey
+        for (SecurityComponent s : rey
         ) {
-            String hej = s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
-            dlmOffline.addElement(hej);
+            dlmOffline.addElement(s);
         }
         taOffline.setModel(dlmOffline);
         taOffline.repaint();
     }
-    public void clearList(){
+
+    public void clearList() {
         dlmOnline.clear();
         dlmOffline.clear();
         taOnline.setModel(dlmOnline);
@@ -270,6 +337,7 @@ public class MainPanel extends JPanel {
     public void setTaLogger(String text) {
         taLogger.setText(text);
     }
+
     public String[] getStartDate() {
         String temp = tfStartDate.getText();
         if (temp.matches("\\d{4}-\\d{2}-\\d{2}")) {
@@ -315,13 +383,66 @@ public class MainPanel extends JPanel {
             return null;
         }
     }
-    public void showImage(ImageIcon imageIcon) {
-        JOptionPane.showMessageDialog(null, imageIcon);
 
+    public void updateImageList(LinkedList<ImageIcon> list) {
+        defaultListModelImages.clear();
+        for (ImageIcon imageIcon : list) {
+            defaultListModelImages.addElement(imageIcon.toString());
+        }
+        listImages.setModel(defaultListModelImages);
+        listImages.repaint();
     }
 
-    private class ButtonListener implements ActionListener {
+
+    private class ButtonListener extends MouseAdapter implements ActionListener {
+
+        public void mouseClicked(MouseEvent e) {
+
+
+            //  taOnline.setSelectedIndex(taOnline.locationToIndex(e.getPoint()));
+
+            if (SwingUtilities.isRightMouseButton(e) && !taOnline.isSelectionEmpty() && taOnline.locationToIndex(e.getPoint()) == taOnline.getSelectedIndex()) {
+
+
+                valdSensor = (SecurityComponent) dlmOnline.getElementAt(taOnline.getSelectedIndex());
+                popup = new JPopupMenu();
+                JLabel label1 = new JLabel("Välj location för: " + valdSensor.getClass().getSimpleName() + "\n" + " id: " + valdSensor.getId());
+                popupPanel = new JPanel();
+                popup.add(popupPanel);
+                popupPanel.add(label1);
+
+                // popup.getRootPane().setDefaultButton(btnOk); Fungerar ej, att trycka enter istället för ok
+
+
+                btnOk = new JButton("OK");
+                btnOk.addActionListener(this::actionPerformed);
+                textFieldPopup = new JTextField();
+
+                textFieldPopup.setToolTipText("Skriv location här:");
+
+
+                popupPanel.setPreferredSize(new Dimension(300, 90));
+                textFieldPopup.setPreferredSize(new Dimension(200, 20));
+                btnOk.setPreferredSize(new Dimension(150, 20));
+                popupPanel.add(textFieldPopup);
+                popupPanel.add(btnOk, CENTER_ALIGNMENT);
+
+                popup.show(taOnline, e.getX(), e.getY());
+
+                System.out.println("Du högerklickade på :" + valdSensor.getId());
+
+                //TODO LÖSA DET HÄR SÅ MAN KAN DUBBELKLICKA
+            } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+                int index = listImages.locationToIndex(e.getPoint());
+                ImageIcon imageIcon = globalClientController.getImages().get(index);
+                // TODO: 11-May-20 fill in code
+                centerPanelSouth.add(cropImage(imageIcon, 410, 280));
+            }
+        }
+
+
         @Override
+
         public void actionPerformed(ActionEvent e) {
 
             if (e.getSource() == btnON) {
@@ -333,10 +454,45 @@ public class MainPanel extends JPanel {
             } else if (e.getSource() == btnUnlock) {
                 globalClientController.send("unlock");
 
-            }else if (e.getSource() == btnGetLog) {
+            } else if (e.getSource() == btnFilter) {
 
                 setTaLogger(globalClientController.getClientLoggerText());
+            } else if (e.getSource() == btnPhoto) {
+                globalClientController.send("Take photo");
+
+            } else if (e.getSource() == btnOk) {
+
+                location = textFieldPopup.getText();
+                System.out.println("DETTA FYLLDES I: " + location);
+
+                valdSensor.setLocation(location);
+                popup.setVisible(false);
+
+
+                globalClientController.send(new Message("ny location", valdSensor));
+
+                //TODO GLOBALA SKA TA EMOT RADEN OVANFÖR. SEN SKICKA VIDARE SENSOROBJEKTET TILL
+                // LOKALSERVER SOM SEDAN ÄNDRAR LOCATION
+
+
             }
         }
+    }
+
+    public JLabel cropImage(ImageIcon icon, int width, int height) {
+        int newWidth = icon.getIconWidth();
+        int newHeight = icon.getIconHeight();
+
+        if (icon.getIconWidth() > width) {
+            newWidth = width;
+            newHeight = (newWidth * icon.getIconHeight()) / icon.getIconWidth();
+        }
+
+        if (newHeight > height) {
+            newHeight = height;
+            newWidth = (icon.getIconWidth() * newHeight) / icon.getIconHeight();
+        }
+
+        return new JLabel(new ImageIcon(icon.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_DEFAULT)));
     }
 }

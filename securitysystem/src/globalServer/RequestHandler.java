@@ -31,7 +31,7 @@ public class RequestHandler {
             home.logger.addToLog("received an image");
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
-            emailSender.sendPictureMail(home.getUser().getEmail(), "", "Nytt foto från ditt hem", ((ImageIcon) requestObject).getDescription());
+            emailSender.sendPictureMail(home.getUser().getEmail(), "", "Nytt foto från ditt hem", (ImageIcon) requestObject);
             }
              else if (requestObject instanceof Message) {
                 Message message = (Message) requestObject;
@@ -102,15 +102,6 @@ public class RequestHandler {
         if (clientRequest instanceof Message) {
 
             if (((Message) clientRequest).getInfo().equals("ny location")) {
-               /* try {
-                    home.getLocalServer().getOos().writeObject(clientRequest); //TODO Ny kontrollermetod?
-                    System.out.println("Det har skickats till lokalserver förmodligen");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            */
                 home.logger.addToLog("Ny location");
                 home.sendToAllClients(home.logger);
                 return clientRequest;

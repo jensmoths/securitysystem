@@ -9,7 +9,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="com.miglayout:miglayout:3.7.4" level="project" />
     <orderEntry type="library" name="javax.mail:mail:1.4.6" level="project" />
-    <orderEntry type="library" name="mail-1.4.6" level="project" />
     <orderEntry type="library" name="activation-1.1" level="project" />
+    <orderEntry type="library" name="mail-1.4.61" level="project" />
   </component>
 </module>

@@ -99,12 +99,14 @@ public class Logger implements Serializable {
 
         for (int i = 0; i < events.size(); i++) {
             temp = new Timestamp(timeStamps.get(i));
+
             if (temp.after(startingTime) & temp.before(endingTime)) {
                 res += (temp.toLocalDateTime() + ": " + events.get(i) + "\n");
-            } else {
-                JOptionPane.showMessageDialog(null, "Invalid time filter!");
-                return "";
             }
+//                else {
+//                JOptionPane.showMessageDialog(null, "Invalid time filter!");
+//                return res;
+//                }
         }
         return res;
     }

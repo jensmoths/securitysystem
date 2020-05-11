@@ -18,6 +18,7 @@ public class GlobalClient {
     private int port;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
+    private Receiver receiver;
 
     private GlobalClientController globalClientController;
 
@@ -30,18 +31,19 @@ public class GlobalClient {
 
 
     public void connect() {
-
         try {
             socket = new Socket(ip, port);
             System.out.println("You're connected");
-
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
-            new Receiver().start();
-
+            receiver = new Receiver();
+            receiver.start();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Connection faulty in client");
+            //receiver.interrupt();
+            receiver = null;
+            connect();
         }
     }
 

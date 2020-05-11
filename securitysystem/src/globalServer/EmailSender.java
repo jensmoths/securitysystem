@@ -120,7 +120,7 @@ public class EmailSender {
 
 
     public static void main(String[] args) throws MessagingException, IOException {
-        //new EmailSender().sendMail("darwesh.ammar@hotmail.com" , "Larm har gått", "Hej kära kund!\n\n" + " Brandlarmet har upptäckt rök i hallen");
+        new EmailSender().sendMail("darwesfodsa" , "Larm har gått", "Hej kära kund!\n\n" + " Brandlarmet har upptäckt rök i hallen");
         // new EmailSender().sendPictureMail("darwesh.ammar@hotmail.com", "Bild","Bild" ,"images/google-svart-792.jpg");
     }
 

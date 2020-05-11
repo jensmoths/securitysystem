@@ -6,11 +6,9 @@ import javax.swing.*;
 public class MainFrame extends JFrame {
     private MainPanel mainPanel;
     private LogInPanel logInPanel;
-    private GlobalClient globalClient;
     private GlobalClientController clientController;
 
     public MainFrame(GlobalClientController clientController) {
-//        this.globalClient = globalClient;
         this.clientController = clientController;
         logInPanel = new LogInPanel(clientController);
     }

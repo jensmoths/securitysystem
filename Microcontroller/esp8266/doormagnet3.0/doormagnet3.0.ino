@@ -125,7 +125,7 @@ void connectToServerMagnet(String location) {
       magnet.println();
     }
     yield();
-    if (door.connected()) break;
+    if (magnet.connected()) break;
   }
   Serial.println("connected to server magnet");
 }

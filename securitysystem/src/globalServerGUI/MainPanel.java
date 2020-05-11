@@ -287,7 +287,7 @@ public class MainPanel extends JPanel {
                 if (getSelectedRow() != -1) {
                     String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
                     setTaLogger(globalServerController.getClientLoggerText(username));
-                    globalServerController.sendTakePhoto(username);
+                    //globalServerController.sendTakePhoto(username);
                 } else {
                     JOptionPane.showMessageDialog(null, "You have to choose a user first!");
                 }

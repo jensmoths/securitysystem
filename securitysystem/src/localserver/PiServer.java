@@ -117,7 +117,8 @@ public class PiServer extends Thread implements Serializable {
                     String[] split = who.split("\\|");
                     String id = split[0];
                     String type = split[1];
-                    if (split.length > 2) {
+                    if (split.length >= 3 && !split[2].isEmpty())
+                    {
                         location = split[2];
                     } else location = "default";
 
@@ -209,14 +210,14 @@ public class PiServer extends Thread implements Serializable {
         private transient Socket socket;
         private SecurityComponent sensor;
         private long lastRead;
-        private int HeartbeatIntervall = 5;
+        private int HeartbeatIntervall = 8;
 
 
         ClientHandler(Socket socket, SecurityComponent securityComponent) throws IOException {
             this.socket = socket;
             this.sensor = securityComponent;
             socket.setTcpNoDelay(true); //TODO HA DET HÄR ELLER?
-            socket.setSoTimeout(5000);
+            socket.setSoTimeout(8000);
 
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));

@@ -21,19 +21,21 @@ public class RequestHandler {
         if (home.getGlobalClient(handler) == null) {
             home.objectBuffer.add(requestObject);
         } else {
-                        if (requestObject instanceof String) {
-               
+            if (requestObject instanceof String) {
+
                 home.logger.addToLog((String) requestObject);
                 home.sendToAllClients(home.logger);
                 home.sendToAllClients(requestObject);
 
             } else if (requestObject instanceof ImageIcon) {
+
             home.logger.addToLog("received an image");
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
             emailSender.sendPictureMail(home.getUser().getEmail(), "", "Nytt foto från ditt hem", (ImageIcon) requestObject);
             }
              else if (requestObject instanceof Message) {
+
                 Message message = (Message) requestObject;
                 SecurityComponent securityComponent = message.getSecurityComponent();
 
@@ -55,9 +57,10 @@ public class RequestHandler {
 
                     }
 
+
                     System.out.println("Alarm status: " + alarm);
                 }
-                
+
                 if (securityComponent instanceof MagneticSensor) {
                     if (securityComponent.isOpen()) {
                         home.sendToAllClients("Magnetsensorn larmar");
@@ -102,33 +105,45 @@ public class RequestHandler {
         if (clientRequest instanceof Message) {
 
             if (((Message) clientRequest).getInfo().equals("ny location")) {
+
                 home.logger.addToLog("Ny location");
                 home.sendToAllClients(home.logger);
                 return clientRequest;
             }
         }
 
-        if (clientRequest instanceof String) {
-            if ("on".equals(clientRequest)) {
-                //localServerOos.writeObject(new MagneticSensor());
-            } else if ("off".equals(clientRequest)) {
-                //localServerOos.writeObject(new);
-            } else if ("lock".equals(clientRequest)) {
-                respone = new Message("", new DoorLock(false));
-                home.logger.addToLog("Door locked");
-                home.sendToAllClients(home.logger);
-            } else if ("unlock".equals(clientRequest)) {
-                respone = new Message("", new DoorLock(true));
-                home.logger.addToLog("Door unlocked");
-                home.sendToAllClients(home.logger);
-            } else if ("Take photo".equals(clientRequest)) {
-                respone = "Take photo";
-                home.logger.addToLog("Client wants a photo");
-                home.sendToAllClients(home.logger);
-            }
+        switch ((String) clientRequest) {
+            case "on":
+
+
+                if (clientRequest instanceof String) {
+                    if ("on".equals(clientRequest)) {
+
+                        //localServerOos.writeObject(new MagneticSensor());
+                    } else if ("off".equals(clientRequest)) {
+                        //localServerOos.writeObject(new);
+                    } else if ("lock".equals(clientRequest)) {
+                        respone = new Message("", new DoorLock(false));
+                        home.logger.addToLog("Door locked");
+                        home.sendToAllClients(home.logger);
+                    } else if ("unlock".equals(clientRequest)) {
+                        respone = new Message("", new DoorLock(true));
+                        home.logger.addToLog("Door unlocked");
+                        home.sendToAllClients(home.logger);
+                    } else if ("Take photo".equals(clientRequest)) {
+                        respone = "Take photo";
+                        home.logger.addToLog("Client wants a photo");
+                        home.sendToAllClients(home.logger);
+                    }
+                }
+
+
+
         }
+
         return respone;
     }
 }
+
 
 

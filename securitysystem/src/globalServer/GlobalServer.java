@@ -30,6 +30,7 @@ public class GlobalServer {
         public void run() {
 
             try (ServerSocket serverSocket = new ServerSocket(port)) {
+
                 while (true) {
                     Socket socket = serverSocket.accept();
                     System.out.println(socket.getInetAddress() + " has connected");
@@ -53,170 +54,139 @@ public class GlobalServer {
         private String serverOrClient;
         private String username;
         private String password;
+        private RequestHandler requestHandler;
+        private Home home;
+        private boolean authenticated = false;
 
         public ClientHandler(Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
             this.socket = socket;
             this.oos = oos;
             this.ois = ois;
+
+            try {
+                serverOrClient = (String) ois.readObject();
+            } catch (IOException | ClassNotFoundException i) {
+                i.printStackTrace();
+            }
         }
 
-        public String getServerOrClient() {
-            return serverOrClient;
+        public void authenticateUser() {
+
+            while (true) {
+                try {
+                    username = (String) ois.readObject();
+                    password = (String) ois.readObject();
+
+                    if (homes.containsKey(username)) {
+
+                        if (password.equals(homes.get(username).getUser().getPassword())) {
+                            authenticated = true;
+                            home = homes.get(username);
+                            home.setClientHandler(this);
+                            requestHandler = new RequestHandler(home);
+                            oos.writeObject("user authenticated");
+                            home.logger.addToLog(socket.getInetAddress() + "has logged in");
+                            home.sendToAllClients(home.logger);
+                            break;
+                        }
+                    }
+                    System.out.println("failed login");
+                    oos.writeObject("user unauthenticated");
+
+                } catch (IOException | ClassNotFoundException e) {
+                    System.out.println("unexpected disconnect");
+                    e.printStackTrace();
+                    break;
+                }
+            }
         }
 
         @Override
         public void run() {
-            try {
-                serverOrClient = (String) ois.readObject();
-                username = (String) ois.readObject();
-                password = (String) ois.readObject();
-                System.out.println(serverOrClient);
+            authenticateUser();
 
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            if (authenticated) {
+                Object requestObject;
+                switch (serverOrClient) {
 
-            do {
-                try {
-                    if (homes.containsKey(username)) {
-                        if (password.equals(homes.get(username).getUser().getPassword()) & socket != null) {
-                            break;
+                    case "server":
+                        while (true) {
+                            try {
+                                ois = new ObjectInputStream(socket.getInputStream());
+                                requestObject = ois.readObject();
+                                requestHandler.handleServerRequest(requestObject, home, ClientHandler.this);
+
+                            } catch (IOException | ClassNotFoundException | MessagingException e) {
+                                System.out.println(socket.getInetAddress() + " has disconnected (local server)");
+                                try {
+                                    home.sendToAllClients("local server offline");
+                                    home.setLocalServer(null);
+                                    if (socket != null) {
+                                        socket.close();
+                                    }
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    break;
+                                }
+                                break;
+                            }
                         }
-                    } else {
-                        System.out.println("failed login");
-                        oos.writeObject("user unauthenticated");
-                        username = (String) ois.readObject();
-                        password = (String) ois.readObject();
-                    }
-                } catch (IOException | ClassNotFoundException e ) {
-                    e.printStackTrace();
-                }
+                        break;
 
-            } while (!homes.containsKey(username));
+                    case "globalClient":
+                        ObjectOutputStream localServerOos;
 
-            if (homes.containsKey(username)) {
-                if (password.equals(homes.get(username).getUser().getPassword()) & socket != null) {
-                    Home home = homes.get(username);
-                    home.setClientHandler(this);
-                    RequestHandler requestHandler = new RequestHandler(home);
-
-                    try {
-                        oos.writeObject("user authenticated");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    home.logger.addToLog(socket.getInetAddress() + "has logged in");
-                    home.sendToAllClients(home.logger);
-
-                    Object requestObject;
-                    switch (serverOrClient) {
-
-                        case "server":
-
-                            while (true) {
-                                try {
-                                    ois = new ObjectInputStream(socket.getInputStream());
-                                    requestObject = ois.readObject();
-                                   // System.out.println(requestObject.toString());
-                                    requestHandler.handleServerRequest(requestObject, home, ClientHandler.this);
-
-                                } catch (IOException | ClassNotFoundException | MessagingException e) {
-                                    System.out.println(socket.getInetAddress() + " has disconnected");
-                                    try {
-                                        home.sendToAllClients("local server offline");
-                                        home.setLocalServer(null);
-                                        if (socket != null) {
-                                            socket.close();
-                                        }
-                                    } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                    }
-                                    break;
+                        if (!home.getObjectBuffer().objectListIsEmpty()) {
+                            try {
+                                Buffer<Object> buffer = home.getObjectBuffer();
+                                for (int i = 0; i < buffer.getBufferSize(); i++) {
+                                    Object object = buffer.getObjects(i);
+                                    requestHandler.handleServerRequest(object, home, this);
                                 }
+                                buffer.clearObjectBuffer();
+                            } catch (MessagingException e) {
+                                e.printStackTrace();
                             }
-                            break;
+                        }
 
-                        case "globalClient":
-                            ObjectOutputStream localServerOos;
+                        while (true) {
+                            try {
+                                requestObject = ois.readObject();
 
-                            if (!home.getObjectBuffer().objectListIsEmpty()) {
-
-                                    try {
-
-                                        Buffer<Object> buffer = home.getObjectBuffer();
-
-                                        for (int i=0; i<buffer.getBufferSize(); i++){
-
-                                            Object object = buffer.getObjects(i);
-                                            requestHandler.handleServerRequest(object, home, this);
-
-                                        }
-
-                                        buffer.clearObjectBuffer();
-
-                                    } catch (MessagingException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-                            }
-
-                            while (true) {
-                                try {
-                                    requestObject = ois.readObject();
-//                                    String requestString = requestObject.toString();
-
-                                    if (home.localServer != null) {
-                                        localServerOos = home.getLocalServer().getOos();
-                                        localServerOos.writeObject(requestHandler.handleClientRequest(requestObject));
-                                    } else {
-                                        home.getGlobalClient(this).oos.writeObject("local server offline"); //sending a string when a local server is offline
-                                    }
-
-                                } catch (IOException | ClassNotFoundException e) {
-                                    System.out.println(socket.getInetAddress() + " has disconnected");
-
-                                    try {
-                                        home.logger.addToLog(socket.getInetAddress() + "has logged out");
-                                        home.removeGlobalClient(this);
-                                        if (socket != null) {
-                                            socket.close();
-                                        }
-                                    } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                    }
-                                    break;
+                                if (home.localServer != null) {
+                                    localServerOos = home.getLocalServer().getOos();
+                                    localServerOos.writeObject(requestHandler.handleClientRequest(requestObject));
+                                } else {
+                                    home.getGlobalClient(this).oos.writeObject("local server offline");
                                 }
+
+                            } catch (IOException | ClassNotFoundException e) {
+                                System.out.println(socket.getInetAddress() + " has disconnected (global client)");
+
+                                try {
+                                    home.logger.addToLog(socket.getInetAddress() + "has logged out (global client)");
+                                    home.removeGlobalClient(this);
+                                    if (socket != null) {
+                                        socket.close();
+                                    }
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                }
+                                break;
                             }
-                            break;
-                    }
-                } else {
-                    System.out.println("disconnected");
-                    try {
-                        oos.writeObject("user unauthenticated");
-                        System.out.println("failed login");
-                        //socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                try {
-                    System.out.println("failed login");
-                    oos.writeObject("user unauthenticated");
-                    //socket.close();
-                    //System.out.println("Unexpected disconnection");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        }
+                        break;
                 }
             }
         }
-
 
         public ObjectOutputStream getOos() {
             return oos;
         }
 
+        public String getServerOrClient() {
+            return serverOrClient;
+        }
     }
 }
 

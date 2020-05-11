@@ -102,15 +102,6 @@ public class RequestHandler {
         if (clientRequest instanceof Message) {
 
             if (((Message) clientRequest).getInfo().equals("ny location")) {
-               /* try {
-                    home.getLocalServer().getOos().writeObject(clientRequest); //TODO Ny kontrollermetod?
-                    System.out.println("Det har skickats till lokalserver förmodligen");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            */
                 home.logger.addToLog("Ny location");
                 home.sendToAllClients(home.logger);
                 return clientRequest;

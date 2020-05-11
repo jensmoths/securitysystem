@@ -1,21 +1,19 @@
 package model;
 
 import javax.management.ObjectName;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class Buffer<T> {
+public class Buffer<T> implements Serializable {
 
     private LinkedList<T> list = new LinkedList<T>();
 
     public void add(T put) {
-
         list.addLast(put);
-
     }
 
     public boolean objectListIsEmpty() {
-
         if (list.isEmpty()) {
             return true;
         } else return false;

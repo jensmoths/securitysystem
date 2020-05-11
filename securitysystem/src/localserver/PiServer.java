@@ -292,7 +292,7 @@ public class PiServer extends Thread implements Serializable {
                         controller.soundAlarm("fire");
                         for (SecurityComponent s : map.keySet()) {
                             if (s instanceof DoorLock) {
-                                map.get(s).sendMessage('o');
+                                setDoor(true);
                             }
                         }
                     }
@@ -303,7 +303,7 @@ public class PiServer extends Thread implements Serializable {
                             message.setInfo("Fingerläsaren har öppnat dörren");
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
-                                    map.get(s).sendMessage('o');
+                                    setDoor(true);
                                 }
                             }
                         } else {

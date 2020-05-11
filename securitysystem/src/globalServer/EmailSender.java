@@ -2,6 +2,7 @@ package globalServer;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
+import javax.imageio.ImageIO;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -9,7 +10,13 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.sql.DataSource;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.util.Properties;
 
 public class EmailSender {
@@ -52,7 +59,7 @@ public class EmailSender {
     }
 
 
-    public void sendPictureMail(String recipient, String text, String subject, String picturePath) {
+    public void sendPictureMail(String recipient, String text, String subject, ImageIcon imageIcon) {
 
         System.out.println("börjar skicka");
 
@@ -71,8 +78,9 @@ public class EmailSender {
             }
         });
         try {
-            Message message = messagePictureCreator(session, myAccountEmail, recipient, text, subject, picturePath);
+            Message message = messagePictureCreator(session, myAccountEmail, recipient, text, subject, imageIcon);
             Transport.send(message);
+            System.out.println("skickat");
         } catch (MessagingException m) {
             System.out.println("Didn't find the specified email!");
             m.printStackTrace();
@@ -91,8 +99,18 @@ public class EmailSender {
 
     }
 
+    public static BufferedImage convertToBufferedImage(Image image)
+    {
+        BufferedImage newImage = new BufferedImage(
+                image.getWidth(null), image.getHeight(null),
+                BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = newImage.createGraphics();
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+        return newImage;
+    }
 
-    public Message messagePictureCreator(Session session, String myAccountEmail, String recipient, String text, String subject, String filepath) throws MessagingException {
+    public Message messagePictureCreator(Session session, String myAccountEmail, String recipient, String text, String subject, ImageIcon imageIcon) throws MessagingException {
 
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(myAccountEmail));
@@ -107,10 +125,21 @@ public class EmailSender {
 
         multipart.addBodyPart(messageMime);
 
+        BufferedImage bi = convertToBufferedImage(imageIcon.getImage());
+        File file = new File(imageIcon.getDescription());
+        try {
+            ImageIO.write(bi, "jpg", file);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
         messageMime = new MimeBodyPart();
-        FileDataSource source = new FileDataSource(filepath);
+        FileDataSource source = new FileDataSource(file);
         messageMime.setDataHandler(new DataHandler(source));
-        messageMime.setFileName(filepath);
+        messageMime.setFileName(file.getName());
         multipart.addBodyPart(messageMime);
 
         message.setContent(multipart);
@@ -120,8 +149,8 @@ public class EmailSender {
 
 
     public static void main(String[] args) throws MessagingException, IOException {
-        new EmailSender().sendMail("darwesfodsa" , "Larm har gått", "Hej kära kund!\n\n" + " Brandlarmet har upptäckt rök i hallen");
-        // new EmailSender().sendPictureMail("darwesh.ammar@hotmail.com", "Bild","Bild" ,"images/google-svart-792.jpg");
+        //new EmailSender().sendMail("darwesfodsa" , "Larm har gått", "Hej kära kund!\n\n" + " Brandlarmet har upptäckt rök i hallen");
+         new EmailSender().sendPictureMail("darwesh.ammar@hotmail.com", "Bild","Bild" ,new ImageIcon("data/bild.jpg"));
     }
 
 }

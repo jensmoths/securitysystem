@@ -293,6 +293,7 @@ public class MainPanel extends JPanel {
         frame.setBackground(new Color(83, 86, 91));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

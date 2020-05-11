@@ -275,7 +275,7 @@ public class PiServer extends Thread implements Serializable {
                                 if (s instanceof DoorLock) {
                                     if (Controller.alarmOn) {
                                         map.get(s).sendMessage('c');
-                                    } else map.get(s).sendMessage('o');
+                                    } else setDoor(true);
                                 }
                             }
                             if (Controller.alarmOn) {

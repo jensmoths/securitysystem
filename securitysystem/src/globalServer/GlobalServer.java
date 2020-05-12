@@ -1,17 +1,12 @@
 package globalServer;
 
-import model.Buffer;
-
 import javax.mail.MessagingException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.HashMap;
 
-public class GlobalServer {
+public class GlobalServer implements Serializable{
     private HashMap<String, Home> homes;
 
     public GlobalServer(int port, HashMap<String, Home> homes) {
@@ -41,16 +36,16 @@ public class GlobalServer {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                start();
+                new Connection(port).start();
             }
         }
     }
 
-    public class ClientHandler extends Thread {
+    public class ClientHandler extends Thread implements Serializable {
 
         private Socket socket;
-        private ObjectInputStream ois;
-        private ObjectOutputStream oos;
+        private transient ObjectInputStream ois;
+        private transient ObjectOutputStream oos;
         private String serverOrClient;
         private String username;
         private String password;
@@ -135,19 +130,19 @@ public class GlobalServer {
 
                     case "globalClient":
                         ObjectOutputStream localServerOos;
-
-                        if (!home.getObjectBuffer().objectListIsEmpty()) {
-                            try {
-                                Buffer<Object> buffer = home.getObjectBuffer();
-                                for (int i = 0; i < buffer.getBufferSize(); i++) {
-                                    Object object = buffer.getObjects(i);
-                                    requestHandler.handleServerRequest(object, home, this);
-                                }
-                                buffer.clearObjectBuffer();
-                            } catch (MessagingException e) {
-                                e.printStackTrace();
-                            }
-                        }
+//
+//                        if (!home.getObjectBuffer().objectListIsEmpty()) {
+//                            try {
+//                                Buffer<Object> buffer = home.getObjectBuffer();
+//                                for (int i = 0; i < buffer.getBufferSize(); i++) {
+//                                    Object object = buffer.getObjects(i);
+//                                    requestHandler.handleServerRequest(object, home, this);
+//                                }
+//                                buffer.clearObjectBuffer();
+//                            } catch (MessagingException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
 
                         while (true) {
                             try {

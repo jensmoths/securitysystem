@@ -16,7 +16,7 @@ public class GlobalClientController {
     private LinkedList<ImageIcon> images = new LinkedList<>();
 
     public GlobalClientController() {
-        globalClient = new GlobalClient("localhost", 43210, this);
+        globalClient = new GlobalClient("localhost", 8081, this);
         mainFrame = new MainFrame(this);
     }
 

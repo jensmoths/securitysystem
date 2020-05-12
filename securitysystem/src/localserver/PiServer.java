@@ -461,6 +461,9 @@ public class PiServer extends Thread implements Serializable {
 
                                     } else controller.setDoorOpen(false);
                                 }
+                            }  if (allOnlineSensors.contains(msg.getSecurityComponent())) {
+                                allOnlineSensors.set(allOnlineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
+                                controller.updateSensors();
                             }
 
                         }

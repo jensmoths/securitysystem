@@ -28,13 +28,12 @@ public class GlobalServerController implements Observer {
         homes = new HashMap<>();
         mainFrame = new MainFrame(this);
 
-        globalServer = new GlobalServer(43210, homes);
+        globalServer = new GlobalServer(8081, homes);
         readUserFromFile();
     }
 
     public HashMap<String, Home> getHomes() {
         return homes;
-
     }
 
     public Home getHome(String name) {
@@ -119,7 +118,6 @@ public class GlobalServerController implements Observer {
     public void readUserFromFile() {
 
         String filename = "data/HomeObject.dat";
-
 //        new Thread(() -> {
         try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
 

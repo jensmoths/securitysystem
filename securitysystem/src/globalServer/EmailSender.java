@@ -126,7 +126,7 @@ public class EmailSender {
         multipart.addBodyPart(messageMime);
 
         BufferedImage bi = convertToBufferedImage(imageIcon.getImage());
-        File file = new File(imageIcon.getDescription());
+        File file = new File("data/img.jpg");
         try {
             ImageIO.write(bi, "jpg", file);
 

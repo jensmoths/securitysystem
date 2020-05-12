@@ -1,7 +1,5 @@
 package globalServer;
 
-import model.Buffer;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -11,13 +9,11 @@ public class Home implements Serializable {
     GlobalServer.ClientHandler localServer;
     LinkedList<GlobalServer.ClientHandler> globalClients;
     Logger logger;
-    Buffer<Object> objectBuffer;
 
     public Home(User user) {
         globalClients = new LinkedList<>();
         logger = new Logger();
         logger.createLogger(user.getUserName());
-        objectBuffer = new Buffer<>();
         this.user = user;
     }
 
@@ -61,18 +57,15 @@ public class Home implements Serializable {
         }
     }
 
-    public Buffer<Object> getObjectBuffer() {
-        return objectBuffer;
-    }
-
     public User getUser() {
         return user;
     }
 
-
-
     public GlobalServer.ClientHandler getGlobalClient(GlobalServer.ClientHandler clientHandler) {
-        return globalClients.get(globalClients.indexOf(clientHandler));
+        if(globalClients.get(globalClients.indexOf(clientHandler)) == null) {
+            return null;
+        } else {
+            return globalClients.get(globalClients.indexOf(clientHandler));
+        }
     }
-
 }

@@ -40,6 +40,7 @@ public class MainPanel extends JPanel {
     private JTextField tfEndDate;
     private JTextField tfStartTime;
     private JTextField tfEndTime;
+    TableRowSorter<DefaultTableModel> rowSorter;
 
     public MainPanel(GlobalServerController globalServerController) {
         this.globalServerController = globalServerController;
@@ -103,8 +104,9 @@ public class MainPanel extends JPanel {
 //        pnlLeft.setBackground(new Color(83, 86, 91));
 //        pnlRight.setBackground(new Color(83, 86, 91));
 
-        taLogger.setBackground(new Color(43,43,43));
+        taLogger.setBackground(new Color(43, 43, 43));
         tblInfo.setBackground(new Color(83, 86, 91));
+
         this.setBackground(new Color(60, 63, 65));
         pnlLeft.setBackground(new Color(60, 63, 65));
         pnlRight.setBackground(new Color(60, 63, 65));
@@ -120,15 +122,15 @@ public class MainPanel extends JPanel {
 //        pnlLeft.setPreferredSize(new Dimension(800, 485));
         pnlRight.setPreferredSize(new Dimension(610, 485));
 //        tblScrollPane.setPreferredSize(new Dimension(750, 370));
-        tblScrollPane.getViewport().setBackground(new Color(43,43,43));
+        tblScrollPane.getViewport().setBackground(new Color(43, 43, 43));
         loggerScrollPane.setPreferredSize(new Dimension(605, 370));
-        this.setPreferredSize(new Dimension(1250,600));
-        pnlLeft.setPreferredSize(new Dimension(800,580));
+        this.setPreferredSize(new Dimension(1250, 600));
+        pnlLeft.setPreferredSize(new Dimension(800, 580));
 //        pnlRight.setPreferredSize(new Dimension(450,580));
-        tblScrollPane.setPreferredSize(new Dimension(750,370));
+        tblScrollPane.setPreferredSize(new Dimension(750, 370));
 //        loggerScrollPane.setPreferredSize(new Dimension(420,370));
-        lblEmpty.setPreferredSize(new Dimension(290,40));
-        tfSearch.setPreferredSize(new Dimension(200,20));
+        lblEmpty.setPreferredSize(new Dimension(290, 40));
+        tfSearch.setPreferredSize(new Dimension(200, 20));
 
         lblSearch.setText("Search:");
         btnDelete.setText("Delete");
@@ -152,14 +154,14 @@ public class MainPanel extends JPanel {
 
         tblInfo.setRowHeight(30);
         tblInfo.setModel(model);
-        tblInfo.setBackground(new Color(83, 86, 91));
+        tblInfo.setForeground(Color.white);
 
         btnRegister.setPreferredSize(new Dimension(100, 40));
         btnDelete.setPreferredSize(new Dimension(100, 40));
 
         taLogger.setForeground(Color.white);
-        btnRegister.setBackground(new Color(43,43,43));
-        btnDelete.setBackground(new Color(43,43,43));
+        btnRegister.setBackground(new Color(43, 43, 43));
+        btnDelete.setBackground(new Color(43, 43, 43));
 
         btnRegister.setForeground(Color.white);
         btnDelete.setForeground(Color.white);
@@ -252,11 +254,11 @@ public class MainPanel extends JPanel {
         return tblInfo.getSelectedRow();
     }
 
-    public void searchTable(){
+    public void searchTable() {
 
         DefaultTableModel tableModel = (DefaultTableModel) tblInfo.getModel();
         String search = tfSearch.getText().toLowerCase();
-        TableRowSorter<DefaultTableModel> rowSorter = new TableRowSorter<>(tableModel);
+        rowSorter = new TableRowSorter<>(tableModel);
         tblInfo.setRowSorter(rowSorter);
         rowSorter.setRowFilter(RowFilter.regexFilter(search));
 
@@ -265,7 +267,6 @@ public class MainPanel extends JPanel {
     public void disposeRegisterPanel() {
         registerPanel.disposePanel();
     }
-
 
 
     private class ButtonListener implements ActionListener {
@@ -284,10 +285,15 @@ public class MainPanel extends JPanel {
                 globalServerController.removeHome(home);
                 globalServerController.writeHomeToFileAfterDelete();
             } else if (actionEvent.getSource() == btnGetLog) {
-                if (getSelectedRow() != -1) {
+                if (getSelectedRow() != -1 && tfSearch.getText().isEmpty()) {
                     String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
+                    System.out.println(username);
                     setTaLogger(globalServerController.getClientLoggerText(username));
                     //globalServerController.sendTakePhoto(username);
+                } else if (getSelectedRow() != -1 && !tfSearch.getText().isEmpty()) {
+                    int i = tblInfo.getRowSorter().convertRowIndexToModel(getSelectedRow());
+                    String username = globalServerController.getUserRegister().getUser(i).getUserName();
+                    setTaLogger(globalServerController.getClientLoggerText(username));
                 } else {
                     JOptionPane.showMessageDialog(null, "You have to choose a user first!");
                 }

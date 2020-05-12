@@ -64,6 +64,8 @@ public class MainPanel extends JPanel {
     private JTextField tfStartTime;
     private JTextField tfEndTime;
     private ButtonListener buttonListener = new ButtonListener();
+    //experimental
+    JLabel lbl = new JLabel();
 
     public MainPanel(GlobalClientController globalClientController) {
         this.globalClientController = globalClientController;
@@ -436,19 +438,16 @@ public class MainPanel extends JPanel {
 
                 System.out.println("Du högerklickade på :" + valdSensor.getId());
 
-                //TODO LÖSA DET HÄR SÅ MAN KAN DUBBELKLICKA
-
             } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-
                 int index = listImages.locationToIndex(e.getPoint());
                 ImageIcon imageIcon = globalClientController.getImages().get(index);
-                // TODO: 11-May-20 fill in code
-                centerPanelSouth.add(cropImage(imageIcon, 410, 280));
+                centerPanelSouth.removeAll();
+                // TODO: 12-May-20 Gör att den täcker över bägge onlinelistan och offline
+                centerPanelSouth.add(cropImage(imageIcon, 410, 250));
+                centerPanelSouth.revalidate();
+                centerPanelSouth.repaint();
             }
-
-
-            }
-
+        }
 
 
         @Override

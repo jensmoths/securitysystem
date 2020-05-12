@@ -433,7 +433,7 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("83.254.129.68", 43210);
+                connect("109.228.172.110", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Kunde inte ansluta till servern \n" + e.getMessage());
@@ -456,8 +456,9 @@ public class PiServer extends Thread implements Serializable {
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     if (msg.getSecurityComponent().isOpen()) {
-                                        map.get(s).sendMessage('o');
-                                    } else map.get(s).sendMessage('c');
+                                       controller.setDoorOpen(true);
+
+                                    } else controller.setDoorOpen(false);
                                 }
                             }
                             if (allOnlineSensors.contains(msg.getSecurityComponent())) {

@@ -8,8 +8,8 @@
 //String locationString = "location";
 int buttonState = 0;         // current state of the button
 int lastButtonState = 0;     // previous state of the button
-//const String IP = "83.254.129.68"; //per
-const String IP = "192.168.1.42";
+const String IP = "83.254.129.68"; //per
+//const String IP = "192.168.1.42";
 const int PORT = 40000;
 const String TYPEMAGNET = "magnet";
 const String TYPEDOOR = "door";
@@ -77,7 +77,7 @@ void ledBlink() {
 
 void heartBeat() {
   beatMs = millis();
-  if ((beatMs - preBeat) >= 1000 ) {
+  if ((beatMs - preBeat) >= 3000 ) {
     preBeat = beatMs;
     door.println("heartbeat");
     magnet.println("heartbeat");
@@ -115,7 +115,7 @@ void connectToServerMagnet(String location) {
     connectMs = millis();
     if ((connectMs - preConnect) >= 5000 ) {
       preConnect = connectMs;
-      Serial.println("connecting to server");
+      Serial.println("connecting to server magnet");
       magnet.connect(IP, PORT);
       magnet.print(ESP.getChipId());
       magnet.print("|");
@@ -125,7 +125,7 @@ void connectToServerMagnet(String location) {
       magnet.println();
     }
     yield();
-    if (door.connected()) break;
+    if (magnet.connected()) break;
   }
   Serial.println("connected to server magnet");
 }
@@ -163,7 +163,7 @@ void reconnectToServerMagnet() {
       magnet.println(TYPEMAGNET);
     }
     yield();
-    if (door.connected()) break;
+    if (magnet.connected()) break;
     //delay(5000);
   }
   Serial.println("connected to server magnet");
@@ -177,15 +177,15 @@ void setup() {
   pinMode(magnetReader, INPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(led, OUTPUT);
-  myservo.attach(servo);  // attaches the servo on GIO2 to the servo object
+  myservo.attach(servo);  // attaches the servo on GIO4 to the servo object
   door.setTimeout(250);
   magnet.setTimeout(250);
   //start serial for debugging
   Serial.begin(115200);
-
+  setupWifiManager();
   //method for easy connection to a wifi
   String location = setupWifiManager();
-
+  
   connectToServerDoor(location);
   connectToServerMagnet(location);
 }

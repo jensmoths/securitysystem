@@ -91,7 +91,8 @@ public class Meny extends JFrame {
         btnChangeCode.setForeground(Color.white);
         btnFingerprint.setForeground(Color.white);
         btnGoOnline.setForeground(Color.white);
-
+        tfofflineMK.setForeground(Color.white);
+        tfonlineMK.setForeground(Color.white);
         add(tfonlineMK,"span");
         add(tfofflineMK,"wrap, span");
         add(btnOpenDoor);

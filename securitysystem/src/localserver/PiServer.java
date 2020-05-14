@@ -252,7 +252,7 @@ public class PiServer extends Thread implements Serializable {
                             if (Controller.alarmOn) {
                                 for (SecurityComponent s : map.keySet()) {
                                     if (s instanceof DoorLock) {
-                                        map.get(s).sendMessage('c');
+                                        controller.setDoorOpen(false);
                                     }
                                 }
                                 message.setInfo("Någon har brutit sig in");
@@ -274,8 +274,8 @@ public class PiServer extends Thread implements Serializable {
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     if (Controller.alarmOn) {
-                                        map.get(s).sendMessage('c');
-                                    } else setDoor(true);
+                                        controller.setDoorOpen(false);
+                                    } else controller.setDoorOpen(true);;
                                 }
                             }
                             if (Controller.alarmOn) {
@@ -292,7 +292,7 @@ public class PiServer extends Thread implements Serializable {
                         controller.soundAlarm("fire");
                         for (SecurityComponent s : map.keySet()) {
                             if (s instanceof DoorLock) {
-                                setDoor(true);
+                                controller.setDoorOpen(true);
                             }
                         }
                     }
@@ -303,7 +303,7 @@ public class PiServer extends Thread implements Serializable {
                             message.setInfo("Fingerläsaren har öppnat dörren");
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
-                                    setDoor(true);
+                                    controller.setDoorOpen(true);
                                 }
                             }
                         } else {
@@ -456,8 +456,8 @@ public class PiServer extends Thread implements Serializable {
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     if (msg.getSecurityComponent().isOpen()) {
-                                        map.get(s).sendMessage('o');
-                                    } else map.get(s).sendMessage('c');
+                                        controller.setDoorOpen(true);
+                                    } else controller.setDoorOpen(false);;
                                 }
                             }
                             if (allOnlineSensors.contains(msg.getSecurityComponent())) {

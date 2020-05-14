@@ -30,8 +30,7 @@ public class EmailSender {
     }
 
     public void sendMail(String recipient, String subject, String text) {
-
-        System.out.println("Skickar användaruppgifter...");
+        System.out.println("Börjar skicka...");
         try {
             properties.put("mail.smtp.auth", "true");
             properties.put("mail.smtp.starttls.enable", "true");
@@ -61,7 +60,7 @@ public class EmailSender {
 
     public void sendPictureMail(String recipient, String text, String subject, ImageIcon imageIcon) {
 
-        System.out.println("börjar skicka");
+        System.out.println("Börjar skicka bild...");
 
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
@@ -80,7 +79,7 @@ public class EmailSender {
         try {
             Message message = messagePictureCreator(session, myAccountEmail, recipient, text, subject, imageIcon);
             Transport.send(message);
-            System.out.println("skickat");
+            System.out.println("Bild skickat!");
         } catch (MessagingException m) {
             System.out.println("Didn't find the specified email!");
             m.printStackTrace();

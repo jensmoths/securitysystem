@@ -16,7 +16,7 @@ public class RequestHandler {
         this.home = home;
     }
 
-    public void handleServerRequest(Object requestObject, Home home, GlobalServer.ClientHandler handler) throws MessagingException {
+    public void handleServerRequest(Object requestObject, Home home, GlobalServer.ClientHandler handler) {
         if (requestObject instanceof String) {
 
             home.logger.addToLog((String) requestObject);

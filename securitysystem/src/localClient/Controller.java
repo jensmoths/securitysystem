@@ -24,7 +24,7 @@ public class Controller {
 
     }
 
-    void setDoorOpen(boolean b) {
+   public void setDoorOpen(boolean b) {
         try {
             server.setDoor(b);
             updateSensors();
@@ -55,7 +55,7 @@ public class Controller {
     }
 
     public void pictureTaken(int number) {
-        ImageIcon icon = new ImageIcon("/home/pi/pic/cam" + number + ".jpg");
+        ImageIcon icon = new ImageIcon("/home/pi/data/photo/cam" + number + ".jpg");
         System.out.println(icon.getImageLoadStatus());
 
         if (icon.getImageLoadStatus() == MediaTracker.COMPLETE) {

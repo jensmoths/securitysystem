@@ -239,7 +239,7 @@ public class MainPanel extends JPanel {
         leftPanelCenter.setBorder(camera);
         centerPanelSouth.setBorder(borderImages);
 
-        rightPanel.setBorder(loggerBorder);
+        scrollPaneLogger.setBorder(loggerBorder);
 
         rightPanel.add(scrollPaneLogger);
 

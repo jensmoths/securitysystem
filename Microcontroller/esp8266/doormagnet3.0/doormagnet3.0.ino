@@ -163,7 +163,7 @@ void reconnectToServerMagnet() {
       magnet.println(TYPEMAGNET);
     }
     yield();
-    if (door.connected()) break;
+    if (magnet.connected()) break;
     //delay(5000);
   }
   Serial.println("connected to server magnet");
@@ -215,7 +215,7 @@ void loop() {
       if (message == 'c') {
         myservo.write(90);
       } else if (message == 'o') {
-        myservo.write(1);
+        myservo.write(180);
       }
     }
   } else reconnectToServerDoor();

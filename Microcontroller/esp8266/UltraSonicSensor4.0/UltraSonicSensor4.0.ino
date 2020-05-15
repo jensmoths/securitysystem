@@ -4,20 +4,20 @@
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
+#include <Ultrasonic.h>
 
 //String locationString = "location";
-int lastDistance = 0;         // current state of the distance
+float lastDistance = 0;         // current state of the distance
 
 //const String IP = "83.254.129.68";
 const String IP = "192.168.1.42";//Olof mobil
 const int PORT = 40000;
 const String TYPE = "proximity";
 // defines pins numbers
-const int trigPin = 4;
-const int echoPin = 5;
+const int trigpin = 4;
+const int echopin = 5;
 // defines variables
 long duration;
-int distance; // previous state of the distance
 const int led = 13;
 int ledState = LOW;
 int wifiReset = 16;
@@ -33,9 +33,10 @@ unsigned long reconnectMs;
 unsigned long preReconnect = 0;
 
 
+
 WiFiClient client;
 WiFiManager wifiManager;
-
+Ultrasonic ultrasonic(trigpin, echopin);
 String setupWifiManager() {
 
 
@@ -80,7 +81,7 @@ void heartBeat() {
   if ((beatMs - preBeat) >= 1000 ) {
     preBeat = beatMs;
     client.println("heartbeat");
-    Serial.println("heartbeat");
+    Serial.println("heartbeat Proxi");
   }
 }
 
@@ -131,8 +132,6 @@ void reconnectToServer() {
 
 
 void setup() {
-  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
-  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
 
   //start serial for debugging
   Serial.begin(9600);
@@ -153,36 +152,27 @@ void loop() {
     resetWifi();
     heartBeat();
     digitalWrite(led, HIGH);
-    // Clears the trigPin
-    digitalWrite(trigPin, LOW);
-    delayMicroseconds(2);
+    float cmdistance, indistance;
+    long microsec = ultrasonic.timing();
+    cmdistance = ultrasonic.CalcDistance(microsec, Ultrasonic::CM); //this result unit is centimeter
 
-    // Sets the trigPin on HIGH state for 10 micro seconds
-    digitalWrite(trigPin, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trigPin, LOW);
-
-    // Reads the echoPin, returns the sound wave travel time in microseconds
-    duration = pulseIn(echoPin, HIGH);
-
-    // Calculating the distance
-    distance = duration * 0.034 / 2;
-
-    // Prints the distance on the Serial Monitor
     delay(10);
 
-    if (((lastDistance - distance) > 10) || ((lastDistance - distance) <  -10  )) {
-      if (distance < 50) {
+    if (((lastDistance - cmdistance) > 10) || ((lastDistance - cmdistance) <  -10  )) {
+      if (cmdistance < 20.00) {
 
         ms = millis();
-        if ((ms - preMillis) >= 500 ) {
+        if ((ms - preMillis) >= 5000 ) {
           preMillis = ms;
           client.println("on");
           Serial.print("Distance: ");
-          Serial.println(distance);
+          Serial.println(cmdistance);
+
         }
+
+
       }
-      lastDistance = distance;
+      lastDistance = cmdistance;
     }
   } else reconnectToServer();
 }

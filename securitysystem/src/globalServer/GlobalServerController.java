@@ -132,7 +132,7 @@ public class GlobalServerController implements Observer {
 
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 //        });
         System.out.println("thread started again");

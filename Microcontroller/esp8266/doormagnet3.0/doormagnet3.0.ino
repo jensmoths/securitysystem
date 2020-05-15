@@ -177,6 +177,9 @@ void setup() {
   pinMode(magnetReader, INPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(led, OUTPUT);
+  pinMode(wifiReset, INPUT);
+  pinMode(resetState, INPUT);
+  digitalWrite(resetState, LOW);
   myservo.attach(servo);  // attaches the servo on GIO2 to the servo object
   door.setTimeout(250);
   magnet.setTimeout(250);

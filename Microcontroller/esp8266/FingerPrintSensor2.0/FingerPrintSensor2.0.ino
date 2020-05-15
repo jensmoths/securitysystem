@@ -190,7 +190,9 @@ void reconnectToServer() {
 
 void setup() {
   //setupDisplay();
-
+  pinMode(wifiReset, INPUT);
+  pinMode(resetState, INPUT);
+  digitalWrite(resetState, LOW);
   Serial.begin(9600);
   client.setTimeout(250);
 
@@ -203,7 +205,7 @@ void setup() {
 }
 
 void loop() {
-    resetWifi();
+  resetWifi();
   if (client.connected()) {
     heartBeat();
     int fingerid = getFingerprintIDez();

@@ -162,7 +162,7 @@ void loop() {
       if (cmdistance < 20.00) {
 
         ms = millis();
-        if ((ms - preMillis) >= 500 ) {
+        if ((ms - preMillis) >= 5000 ) {
           preMillis = ms;
           client.println("on");
           Serial.print("Distance: ");

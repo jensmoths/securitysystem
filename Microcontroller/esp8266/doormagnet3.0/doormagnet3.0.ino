@@ -163,7 +163,7 @@ void reconnectToServerMagnet() {
       magnet.println(TYPEMAGNET);
     }
     yield();
-    if (door.connected()) break;
+    if (magnet.connected()) break;
     //delay(5000);
   }
   Serial.println("connected to server magnet");
@@ -177,6 +177,9 @@ void setup() {
   pinMode(magnetReader, INPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(led, OUTPUT);
+  pinMode(wifiReset, INPUT);
+  pinMode(resetState, INPUT);
+  digitalWrite(resetState, LOW);
   myservo.attach(servo);  // attaches the servo on GIO2 to the servo object
   door.setTimeout(250);
   magnet.setTimeout(250);
@@ -215,7 +218,7 @@ void loop() {
       if (message == 'c') {
         myservo.write(90);
       } else if (message == 'o') {
-        myservo.write(1);
+        myservo.write(180);
       }
     }
   } else reconnectToServerDoor();

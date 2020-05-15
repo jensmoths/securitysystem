@@ -63,6 +63,14 @@ public class Message implements Serializable {
         return offlineSensors;
     }
 
+    public void setOfflineSensors(ArrayList<SecurityComponent> offlineSensors) {
+        this.offlineSensors = offlineSensors;
+    }
+
+    public void setOnlineSensors(ArrayList<SecurityComponent> onlineSensors) {
+        this.onlineSensors = onlineSensors;
+    }
+
     @Override
     public String toString() {
         return String.format("The ID is %s, in the %s", securityComponent.getId(), securityComponent.getLocation());

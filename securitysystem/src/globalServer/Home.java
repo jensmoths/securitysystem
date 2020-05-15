@@ -1,7 +1,11 @@
 package globalServer;
 
+import model.Message;
+import model.SecurityComponent;
+
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Home implements Serializable {
@@ -9,11 +13,15 @@ public class Home implements Serializable {
     GlobalServer.ClientHandler localServer;
     LinkedList<GlobalServer.ClientHandler> globalClients;
     Logger logger;
+    ArrayList<SecurityComponent> online;
+    ArrayList<SecurityComponent> offline;
 
     public Home(User user) {
         globalClients = new LinkedList<>();
         logger = new Logger();
         logger.createLogger(user.getUserName());
+        online = new ArrayList<>();
+        offline = new ArrayList<>();
         this.user = user;
     }
 
@@ -62,10 +70,35 @@ public class Home implements Serializable {
     }
 
     public GlobalServer.ClientHandler getGlobalClient(GlobalServer.ClientHandler clientHandler) {
-        if(globalClients.get(globalClients.indexOf(clientHandler)) == null) {
+        if (globalClients.get(globalClients.indexOf(clientHandler)) == null) {
             return null;
         } else {
             return globalClients.get(globalClients.indexOf(clientHandler));
         }
+    }
+
+    public void sendOnlineOfflineLists() {
+        if (!online.isEmpty() && !offline.isEmpty()) {
+            Message message = new Message();
+            message.setOnlineSensors(online);
+            message.setOfflineSensors(offline);
+            sendToAllClients(message);
+        }
+    }
+
+    public void setOffline(ArrayList<SecurityComponent> offline) {
+        this.offline = offline;
+    }
+
+    public void setOnline(ArrayList<SecurityComponent> online) {
+        this.online = online;
+    }
+
+    public ArrayList<SecurityComponent> getOffline() {
+        return offline;
+    }
+
+    public ArrayList<SecurityComponent> getOnline() {
+        return online;
     }
 }

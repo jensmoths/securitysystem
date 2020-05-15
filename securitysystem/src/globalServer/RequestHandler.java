@@ -36,16 +36,16 @@ public class RequestHandler {
             SecurityComponent securityComponent = message.getSecurityComponent();
 
             if (securityComponent == null) {
-                ArrayList<SecurityComponent> online = message.getOnlineSensors();
-                ArrayList<SecurityComponent> offline = message.getOfflineSensors();
+                home.setOffline(message.getOfflineSensors());
+                home.setOnline(message.getOnlineSensors());
                 boolean alarm = message.isAlarmOn();
                 home.sendToAllClients(message);
 
 
-                for (SecurityComponent s : online) {
+                for (SecurityComponent s : home.getOnline()) {
                     System.out.println("ONLINE SENSOR: " + s.getId());
                 }
-                for (SecurityComponent s : offline) {
+                for (SecurityComponent s : home.getOffline()) {
                     System.out.println("OFFLINE SENSOR: " + s.getId());
                 }
                 System.out.println("Alarm status: " + alarm);

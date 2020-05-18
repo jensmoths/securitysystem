@@ -6,14 +6,18 @@
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
 //String locationString = "location";
-const String IP = "83.254.129.68"; //per
-//const String IP = "82.209.130.123"; //jens
-const int PORT = 40000;
+//const String IP = "83.254.129.68"; //per
+//const String IP = "82.209.130.123";//jens
+const String IP = "192.168.1.42";//Olof mobil
+const int PORT = 40000; //per
 const String TYPE = "firealarm";
 const int larm = 15;
 int larmSignal;
 const int led = 13;
 int ledState = LOW;
+int wifiReset = 16;
+int wifiButton;
+int resetState = 12;
 unsigned long preMillis = 0;
 unsigned long ms;
 unsigned long beatMs;
@@ -23,12 +27,14 @@ unsigned long preConnect = 0;
 unsigned long reconnectMs;
 unsigned long preReconnect = 0;
 
-WiFiClient client;
 
+
+WiFiClient client;
+WiFiManager wifiManager;
 
 String setupWifiManager() {
-  WiFiManager wifiManager;
 
+   
   //uncomment to reset saved settings
   //wifiManager.resetSettings();
 
@@ -39,12 +45,20 @@ String setupWifiManager() {
   //fetches ssid and pass from eeprom and tries to connect
   //if it does not connect it starts an access point with the specified name
   //and goes into a BLOCKING loop awaiting configuration
-  wifiManager.autoConnect("ConnectToSetupSecuritySystem");
+  wifiManager.autoConnect("Brandlarm");
 
   //if you get here you have connected to the WiFi
   Serial.println("connected to wifi");
   Serial.println(location.getValue());
   return location.getValue();
+}
+void resetWifi() {
+  wifiButton = digitalRead(wifiReset);
+  if (wifiButton == HIGH) {
+    wifiManager.resetSettings();
+    delay(2000);
+    pinMode(resetState, OUTPUT);
+  }
 }
 void ledBlink() {
   ms = millis();
@@ -71,9 +85,11 @@ void heartBeat() {
 //unsigned long reconnectMs;
 //unsigned long preReconnect = 0;
 
+
 void connectToServer(String location) {
   while (true) {
     ledBlink();
+    resetWifi();
     connectMs = millis();
     if ((connectMs - preConnect) >= 5000 ) {
       preConnect = connectMs;
@@ -95,6 +111,7 @@ void connectToServer(String location) {
 void reconnectToServer() {
   while (true) {
     ledBlink();
+    resetWifi();
     reconnectMs = millis();
     if ((reconnectMs - preReconnect) >= 5000) {
       preReconnect = reconnectMs;
@@ -119,6 +136,9 @@ void setup() {
   client.setTimeout(250);
   pinMode(larm, INPUT);
   pinMode(led, OUTPUT);
+  pinMode(wifiReset, INPUT);
+  pinMode(resetState, INPUT);
+  digitalWrite(resetState, LOW);
 
   //method for easy connection to a wifi
   String location = setupWifiManager();
@@ -129,11 +149,12 @@ void setup() {
 
 void loop() {
   if (client.connected()) {
+    resetWifi();
     heartBeat();
     digitalWrite(led, HIGH);
     larmSignal = digitalRead(larm);
     if (larmSignal == HIGH) {
-      client.println("on");
+      client.println("Fire");
       Serial.println("Fire");
       delay(3000);
     }

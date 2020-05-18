@@ -2,59 +2,129 @@ package globalServer;
 
 import model.*;
 
+import javax.mail.MessagingException;
+import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class RequestHandler {
 
-    public void handleServerRequest(Object requestObject, Home home) {
+    private EmailSender emailSender = new EmailSender();
+    private Home home;
 
+    public RequestHandler(Home home) {
+        this.home = home;
+    }
+
+    public void handleServerRequest(Object requestObject, Home home, GlobalServer.ClientHandler handler) throws MessagingException {
         if (requestObject instanceof String) {
+
+            home.logger.addToLog((String) requestObject);
+            home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
+
+        } else if (requestObject instanceof ImageIcon) {
+
+            home.logger.addToLog("received an image");
+            home.sendToAllClients(home.logger);
+            home.sendToAllClients(requestObject);
+            emailSender.sendPictureMail(home.getUser().getEmail(), "", "Nytt foto från ditt hem", (ImageIcon) requestObject);
+
         } else if (requestObject instanceof Message) {
+
             Message message = (Message) requestObject;
             SecurityComponent securityComponent = message.getSecurityComponent();
 
-            if (securityComponent instanceof MagneticSensor) {
-                System.out.println("You are in magnet sensor");
-                System.out.println(securityComponent.isOpen());
+            if (securityComponent == null) {
+                ArrayList<SecurityComponent> online = message.getOnlineSensors();
+                ArrayList<SecurityComponent> offline = message.getOfflineSensors();
+                boolean alarm = message.isAlarmOn();
+                home.sendToAllClients(message);
 
+
+                for (SecurityComponent s : online) {
+                    System.out.println("ONLINE SENSOR: " + s.getId());
+                }
+                for (SecurityComponent s : offline) {
+                    System.out.println("OFFLINE SENSOR: " + s.getId());
+                }
+                System.out.println("Alarm status: " + alarm);
+            }
+
+            if (securityComponent instanceof MagneticSensor) {
                 if (securityComponent.isOpen()) {
                     home.sendToAllClients("Magnetsensorn larmar");
+                    home.logger.addToLog("Magnetsensorn larmar");
+                    home.sendToAllClients(home.logger);
+                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n\n Magnetsensorn har larmat");
+
 
                 } else if (!securityComponent.isOpen()) {
                     home.sendToAllClients("Magnetsensorn är aktiv");
+                    home.logger.addToLog("Magnetsensorn är aktiv");
+                    home.sendToAllClients(home.logger);
+
                 }
             }
             if (securityComponent instanceof FireAlarm) {
-                System.out.println("You are in Firealarm");
                 home.sendToAllClients("Brandlarmet har upptäckt rök i byggnaden");
+                home.logger.addToLog("Brandlarmet har upptäckt rök i byggnaden");
+                try {
+                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Brandlarmet har utlösts");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                home.sendToAllClients(home.logger);
             }
+
             if (securityComponent instanceof ProximitySensor) {
-                System.out.println("You are in Proximity Sensor");
                 home.sendToAllClients("Rörelsedetektorn har upptäckt rörelse i byggnaden");
+                home.logger.addToLog("Rörelsedetektorn har upptäckt rörelse i byggnaden");
+                home.sendToAllClients(home.logger);
+                emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Rörelsedetektorn har upptäckt rörelse i byggnaden");
+
             }
         }
     }
 
-    public Message handleClientRequest(String clientRequest) {
-        Message messageResponse = new Message();
+    public Object handleClientRequest(Object clientRequest) {
+        Object respone = null;
 
-        switch (clientRequest) {
-            case "on":
-                //localServerOos.writeObject(new MagneticSensor());
-                break;
-            case "off":
-                //localServerOos.writeObject(new );
-                break;
-            case "lock":
-                messageResponse = new Message("", new DoorLock(false));
-                break;
-            case "unlock":
-                messageResponse = new Message("", new DoorLock(true));
-                break;
+        if (clientRequest instanceof Message) {
+
+            if (((Message) clientRequest).getInfo().equals("ny location")) {
+                home.logger.addToLog("Ny location");
+                home.sendToAllClients(home.logger);
+                return clientRequest;
+            }
         }
 
-        return messageResponse;
+
+        if (clientRequest instanceof String) {
+//                    if (clientRequest.equals("on")) {
+//                        //localServerOos.writeObject(new MagneticSensor());
+//                    } else if ("off".equals(clientRequest)) {
+//                        //localServerOos.writeObject(new);
+//                    } else
+            if ("lock".equals(clientRequest)) {
+                respone = new Message("", new DoorLock(false));
+                home.logger.addToLog("Door locked");
+                home.sendToAllClients(home.logger);
+            } else if ("unlock".equals(clientRequest)) {
+                respone = new Message("", new DoorLock(true));
+                home.logger.addToLog("Door unlocked");
+                home.sendToAllClients(home.logger);
+            } else if ("Take photo".equals(clientRequest)) {
+                respone = "Take photo";
+                home.logger.addToLog("Client wants a photo");
+                home.sendToAllClients(home.logger);
+            }
+        }
+        return respone;
     }
 }
+
+
+
 

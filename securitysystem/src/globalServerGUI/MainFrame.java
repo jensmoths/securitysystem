@@ -11,15 +11,15 @@ public class MainFrame {
     private MainPanel mainPanel;
 
 
-    public MainFrame (GlobalServerController globalServerController) {
+    public MainFrame(GlobalServerController globalServerController) {
         this.globalServerController = globalServerController;
         mainPanel = new MainPanel(globalServerController);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                frame.setLocation(dim.width/3-frame.getSize().width/3, dim.height/3-frame.getSize().height/3);
-                frame.setSize(new Dimension(1300,580));
+                frame.setLocation(dim.width / 3 - frame.getSize().width / 3, dim.height / 3 - frame.getSize().height / 3);
+                frame.setSize(new Dimension(1440, 487));
                 frame.setContentPane(mainPanel);
                 frame.setVisible(true);
                 frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -31,9 +31,15 @@ public class MainFrame {
     public RegisterPanel getRegisterPanel() {
         return mainPanel.getRegisterPanel();
     }
-    public MainPanel getMainPanel (){
+
+    public MainPanel getMainPanel() {
 
         return mainPanel;
 
     }
+
+    public void disposeRegisterPanel() {
+        mainPanel.disposeRegisterPanel();
+    }
+
 }

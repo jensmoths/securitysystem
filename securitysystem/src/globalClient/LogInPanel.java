@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 public class LogInPanel extends JPanel {
 
@@ -14,15 +15,16 @@ public class LogInPanel extends JPanel {
     private JLabel lblUsername, lblPassword;
     private JButton btnLogIn;
     private JFrame frame;
-    private GlobalClient globalClient;
+    private GlobalClientController globalClientController;
 
-    public LogInPanel(GlobalClient globalClient) {
-        this.globalClient = globalClient;
+    public LogInPanel(GlobalClientController globalClientController) {
+        this.globalClientController = globalClientController;
         frame = new JFrame();
         this.setLayout(new MigLayout());
-        setBackground(new Color(83, 86, 91));
+        setBackground(new Color(60, 63, 65));
 
         btnLogIn = new JButton("Log In");
+        btnLogIn.setForeground(Color.white);
         lblUsername = new JLabel("Username:");
         lblPassword = new JLabel("Password:");
         tfPassword = new JTextField();
@@ -44,24 +46,34 @@ public class LogInPanel extends JPanel {
         tfUsername.setPreferredSize(new Dimension(120, 20));
         lblUsername.setForeground(Color.white);
         lblPassword.setForeground(Color.white);
+        btnLogIn.setBackground(new Color(43, 43, 43));
         add(lblUsername);
         add(tfUsername, "span");
         add(lblPassword);
         add(tfPassword, "span, grow");
         add(btnLogIn, "span 2, grow,  wrap");
+
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                globalClientController.closeSocket();
+                //System.exit(0);
+            }
+        });
     }
 
     public void disposeLogInPanel() {
         frame.dispose();
     }
 
+
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == btnLogIn) {
                 if (!tfUsername.getText().equals("") | !tfPassword.getText().equals("")) {
-                    globalClient.send(tfUsername.getText());
-                    globalClient.send(tfPassword.getText());
+                    globalClientController.send(tfUsername.getText());
+                    globalClientController.send(tfPassword.getText());
                 } else {
                     JOptionPane.showMessageDialog(null, "Fill in all the fields correctly!");
                 }

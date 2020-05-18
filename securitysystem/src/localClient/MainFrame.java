@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.text.ParseException;
+import java.util.Objects;
 
 public class MainFrame extends JPanel implements ActionListener {
     private JButton btnNum0, btnNum1, btnNum2, btnNum3, btnNum4, btnNum5, btnNum6, btnNum7,
@@ -12,37 +15,48 @@ public class MainFrame extends JPanel implements ActionListener {
     JPanel numPadPanel;
     private JTextField tfNumber;
     private String pinCode = "";
-    private Font font = new Font("Courier", Font.BOLD, 30);
-    private String systemPinCode = "1234";
+    private Font font = new Font("Courier", Font.BOLD, 45);
+    private String systemPinCode;
     private Color numberPadColor = new Color(74, 77, 82);
-    private ChangeCode cc;
+    ChangeCode cc;
     Meny meny;
     Controller controller;
-    JFrame frame;
+
+    FingerprintGui fingerprintGui;
+    GoOnline goOnline;
+
+    JFrame numpad;
+
 
 
     /*
     Instantiates the global GUI (the virtual numberpad) and hardcodes a value as the correct pincode.
     Also sets up all the necessary graphical components, using the draw() method.
      */
-    public MainFrame(Controller controller) {
+    public MainFrame(Controller controller) throws ParseException {
         this.controller = controller;
-        frame = new JFrame();
+        numpad = new JFrame();
         //frame.setSize(new Dimension(320, 420));
-        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
-        frame.setContentPane(this);
-        frame.setTitle("Numpad");
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        numpad.setExtendedState(Frame.MAXIMIZED_BOTH);
+        numpad.setUndecorated(true);
+        numpad.setContentPane(this);
+        numpad.setTitle("Numpad");
+        numpad.setVisible(true);
+        numpad.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-
-        cc = new ChangeCode(this);
-        meny = new Meny(this, cc);
-        cc.setVisible(false);
+        fingerprintGui = new FingerprintGui(this);
+        goOnline = new GoOnline(this);
+        meny = new Meny(this, cc, fingerprintGui, goOnline);
         meny.setVisible(false);
         meny.setBackground(new Color(83,86,91));
 
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/userdata.txt"))) {
+            reader.readLine();
+            reader.readLine();
+            systemPinCode = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         draw();
     }
 
@@ -181,10 +195,10 @@ public class MainFrame extends JPanel implements ActionListener {
 
     public void drawTextFieldPanel() {
         tfPanel.add(tfNumber, BorderLayout.CENTER);
-        tfPanel.setPreferredSize(new Dimension(300, 50));
+        tfPanel.setPreferredSize(new Dimension(300, 100));
         tfNumber.setHorizontalAlignment(JTextField.CENTER);
         tfNumber.setEditable(false);
-        tfNumber.setFont(new Font("Courier", Font.BOLD, 35));
+        tfNumber.setFont(new Font("Courier", Font.BOLD, 65));
         tfNumber.setForeground(Color.DARK_GRAY);
     }
 
@@ -203,8 +217,11 @@ public class MainFrame extends JPanel implements ActionListener {
         } else if (buttonNumber.equals("OK") && pinCode.length() == 4) {
             System.out.println(systemPinCode);
             if (pinCode.equals(systemPinCode)) {
-                meny.setVisible(true);
-                frame.setVisible(false);
+               // meny.setVisible(true);
+               // frame.setVisible(false);
+                controller.setAlarmOn(false); //TODO TESTA DETTA
+
+
             } else {
                 JOptionPane.showMessageDialog(null, "Please type again!");
             }
@@ -226,13 +243,32 @@ public class MainFrame extends JPanel implements ActionListener {
         this.pinCode = pinCode;
     }
 
-    public void setSystemPinCode(String systemPinCode) {
-        this.systemPinCode = systemPinCode;
+    public void setSystemPinCode(String newSystemPinCode) {
+
+        String userdata = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/userdata.txt"))) {
+            userdata = reader.readLine();
+            userdata += "\n";
+            userdata += reader.readLine();
+            userdata += "\n";
+            userdata += reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/userdata.txt"))) {
+            userdata = Objects.requireNonNull(userdata).replace(systemPinCode, newSystemPinCode);
+            writer.write(userdata);
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.systemPinCode = newSystemPinCode;
     }
 
     public String getSystemPinCode() {
         return systemPinCode;
     }
+
 
 
 }

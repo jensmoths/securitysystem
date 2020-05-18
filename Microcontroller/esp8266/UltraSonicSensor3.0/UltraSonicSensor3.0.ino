@@ -6,14 +6,23 @@
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
 //String locationString = "location";
-const String IP = "83.254.129.68"; //per
-//const String IP = "82.209.130.123"; //jens
+int lastDistance = 0;         // current state of the distance
+
+//const String IP = "83.254.129.68";
+const String IP = "192.168.1.42";//Olof mobil
 const int PORT = 40000;
-const String TYPE = "firealarm";
-const int larm = 15;
-int larmSignal;
+const String TYPE = "proximity";
+// defines pins numbers
+const int trigPin = 4;
+const int echoPin = 5;
+// defines variables
+long duration;
+int distance; // previous state of the distance
 const int led = 13;
 int ledState = LOW;
+int wifiReset = 16;
+int wifiButton;
+int resetState = 12;
 unsigned long preMillis = 0;
 unsigned long ms;
 unsigned long beatMs;
@@ -23,11 +32,12 @@ unsigned long preConnect = 0;
 unsigned long reconnectMs;
 unsigned long preReconnect = 0;
 
-WiFiClient client;
 
+WiFiClient client;
+WiFiManager wifiManager;
 
 String setupWifiManager() {
-  WiFiManager wifiManager;
+
 
   //uncomment to reset saved settings
   //wifiManager.resetSettings();
@@ -39,12 +49,20 @@ String setupWifiManager() {
   //fetches ssid and pass from eeprom and tries to connect
   //if it does not connect it starts an access point with the specified name
   //and goes into a BLOCKING loop awaiting configuration
-  wifiManager.autoConnect("ConnectToSetupSecuritySystem");
+  wifiManager.autoConnect("Proximity");
 
   //if you get here you have connected to the WiFi
   Serial.println("connected to wifi");
   Serial.println(location.getValue());
   return location.getValue();
+}
+void resetWifi() {
+  wifiButton = digitalRead(wifiReset);
+  if (wifiButton == HIGH) {
+    wifiManager.resetSettings();
+    delay(2000);
+    pinMode(resetState, OUTPUT);
+  }
 }
 void ledBlink() {
   ms = millis();
@@ -66,14 +84,11 @@ void heartBeat() {
   }
 }
 
-//unsigned long connectMs;
-//unsigned long preConnect = 0;
-//unsigned long reconnectMs;
-//unsigned long preReconnect = 0;
 
 void connectToServer(String location) {
   while (true) {
     ledBlink();
+    resetWifi();
     connectMs = millis();
     if ((connectMs - preConnect) >= 5000 ) {
       preConnect = connectMs;
@@ -95,6 +110,7 @@ void connectToServer(String location) {
 void reconnectToServer() {
   while (true) {
     ledBlink();
+    resetWifi();
     reconnectMs = millis();
     if ((reconnectMs - preReconnect) >= 5000) {
       preReconnect = reconnectMs;
@@ -112,34 +128,61 @@ void reconnectToServer() {
 }
 
 
+
+
 void setup() {
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
 
   //start serial for debugging
-  Serial.begin(115200);
+  Serial.begin(9600);
   client.setTimeout(250);
-  pinMode(larm, INPUT);
   pinMode(led, OUTPUT);
+  pinMode(wifiReset, INPUT);
+  pinMode(resetState, INPUT);
+  digitalWrite(resetState, LOW);
 
   //method for easy connection to a wifi
   String location = setupWifiManager();
 
   connectToServer(location);
-
 }
 
 void loop() {
   if (client.connected()) {
+    resetWifi();
     heartBeat();
     digitalWrite(led, HIGH);
-    larmSignal = digitalRead(larm);
-    if (larmSignal == HIGH) {
-      client.println("on");
-      Serial.println("Fire");
-      delay(3000);
-    }
-    if (client.available() > 0) {
-      char message = client.read();
-      Serial.println(message);
+    // Clears the trigPin
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+
+    // Sets the trigPin on HIGH state for 10 micro seconds
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+
+    // Reads the echoPin, returns the sound wave travel time in microseconds
+    duration = pulseIn(echoPin, HIGH);
+
+    // Calculating the distance
+    distance = duration * 0.034 / 2;
+
+    // Prints the distance on the Serial Monitor
+    delay(10);
+
+    if (((lastDistance - distance) > 10) || ((lastDistance - distance) <  -10  )) {
+      if (distance < 50) {
+
+        ms = millis();
+        if ((ms - preMillis) >= 500 ) {
+          preMillis = ms;
+          client.println("on");
+          Serial.print("Distance: ");
+          Serial.println(distance);
+        }
+      }
+      lastDistance = distance;
     }
   } else reconnectToServer();
 }

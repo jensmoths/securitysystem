@@ -1,9 +1,15 @@
 package globalClient;
+
+import globalServer.Logger;
+import model.Message;
+import model.SecurityComponent;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class GlobalClient {
 
@@ -12,6 +18,7 @@ public class GlobalClient {
     private int port;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
+    private Receiver receiver;
 
     private GlobalClientController globalClientController;
 
@@ -23,20 +30,20 @@ public class GlobalClient {
     }
 
 
-
     public void connect() {
-
         try {
             socket = new Socket(ip, port);
             System.out.println("You're connected");
-
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
-            new Receiver().start();
-
+            receiver = new Receiver();
+            receiver.start();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Connection faulty in client");
+            //receiver.interrupt();
+            receiver = null;
+            connect();
         }
     }
 
@@ -50,18 +57,17 @@ public class GlobalClient {
         }
     }
 
-    public void send(String string) {
+    public void send(Object obj) {
         try {
-            oos.writeObject(string);
+            oos.writeObject(obj);
             oos.flush();
-            System.out.println("You have sent: " + string);
+            System.out.println("You have sent: " + obj);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private class Receiver extends Thread {
-        String logger = "";
 
         @Override
         public void run() {
@@ -73,14 +79,31 @@ public class GlobalClient {
 
             while (true) {
                 try {
-                    String objectRead = (String) ois.readObject();
-                    //logger += objectRead + "\n";
-                    System.out.println("You have received: " + objectRead);
-                    //mainFrame.setTextArea(logger);
-                    if (objectRead.equals("user authenticated")) {
-                        globalClientController.authenticateUser();
-                    } else if (objectRead.equals("user unauthenticated")) {
-                        JOptionPane.showMessageDialog(null, "username or password are incorrect");
+                    Object objectRead = ois.readObject();
+
+                    if (objectRead instanceof String) {
+                        System.out.println("You have received: " + objectRead);
+
+                        if (objectRead.equals("user authenticated")) {
+                            globalClientController.authenticateUser();
+                        } else if (objectRead.equals("user unauthenticated")) {
+                            JOptionPane.showMessageDialog(null, "username or password are incorrect");
+                        } else if (objectRead.equals("local server offline")){
+                            globalClientController.clearList();
+                        }
+
+                    } else if (objectRead instanceof Logger) {
+                        globalClientController.setLogger((Logger) objectRead);
+
+                    } else if (objectRead instanceof ImageIcon) {
+                        globalClientController.addImage((ImageIcon) objectRead);
+
+                    } else if(objectRead instanceof Message){
+                        Message msg = (Message) objectRead;
+                        ArrayList<SecurityComponent> onlineSensor = msg.getOnlineSensors();
+                        ArrayList<SecurityComponent> offlineSensor = msg.getOfflineSensors();
+                        globalClientController.setOnlinesensor(onlineSensor);
+                        globalClientController.setOfflinesensor(offlineSensor);
                     }
 
                 } catch (IOException | ClassNotFoundException e) {

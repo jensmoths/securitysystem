@@ -1,15 +1,19 @@
 package globalServer;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Home {
+public class Home implements Serializable {
     User user;
     GlobalServer.ClientHandler localServer;
     LinkedList<GlobalServer.ClientHandler> globalClients;
+    Logger logger;
 
     public Home(User user) {
         globalClients = new LinkedList<>();
+        logger = new Logger();
+        logger.createLogger(user.getUserName());
         this.user = user;
     }
 
@@ -29,8 +33,8 @@ public class Home {
         GlobalServer.ClientHandler client;
         if (globalClients.size() > 0) {
             try {
-                for (int i = 0; i < globalClients.size(); i++) {
-                    client = globalClients.get(i);
+                for (GlobalServer.ClientHandler globalClient : globalClients) {
+                    client = globalClient;
                     client.getOos().writeObject(object);
                 }
             } catch (IOException e) {
@@ -58,7 +62,10 @@ public class Home {
     }
 
     public GlobalServer.ClientHandler getGlobalClient(GlobalServer.ClientHandler clientHandler) {
-        return globalClients.get(globalClients.indexOf(clientHandler));
+        if(globalClients.get(globalClients.indexOf(clientHandler)) == null) {
+            return null;
+        } else {
+            return globalClients.get(globalClients.indexOf(clientHandler));
+        }
     }
-
 }

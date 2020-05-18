@@ -19,7 +19,8 @@ Adafruit_SSD1306 display(OLED_RESET);
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&swSer);
 WiFiClient client;
 
-const String IP = "192.168.31.181";
+//const String IP = "192.168.31.181";
+const String IP = "83.254.129.68";
 const int PORT = 40000;
 const String TYPE = "fingerprint";
 int statusState = LOW;
@@ -203,6 +204,7 @@ void loop() {
     int fingerid = getFingerprintIDez();
     Serial.println(fingerid);
     if (fingerid == -2){
+      client.println("wrong finger");
       display.clearDisplay();
       display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
       display.setCursor(0, 24);

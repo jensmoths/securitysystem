@@ -145,6 +145,10 @@ public class PiServer extends Thread implements Serializable {
                             sensor = new ProximitySensor(id, location);
                             proximitySensors.add(sensor);
 
+                        case "fingerprint":
+                            sensor = new FingerprintSensor(id, location);
+                            //Fing.add(sensor);
+
 
                     }
                     allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
@@ -194,9 +198,10 @@ public class PiServer extends Thread implements Serializable {
             System.out.println("CH SEND TO FINGER");
             for (SecurityComponent s : map.keySet()
             ) {
-                if (s instanceof MagneticSensor) {
+                if (s instanceof FingerprintSensor) {
                     map.get(s).sendMessage(msg);
                     map.get(s).sendMessageID(id);
+                    System.out.println(id);
                 }
 
             }
@@ -216,8 +221,8 @@ public class PiServer extends Thread implements Serializable {
         ClientHandler(Socket socket, SecurityComponent securityComponent) throws IOException {
             this.socket = socket;
             this.sensor = securityComponent;
-            socket.setTcpNoDelay(true); //TODO HA DET HÄR ELLER?
-            socket.setSoTimeout(8000);
+            //socket.setTcpNoDelay(true); //TODO HA DET HÄR ELLER?
+            socket.setSoTimeout(20000);
 
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -309,10 +314,7 @@ public class PiServer extends Thread implements Serializable {
                         } else {
                             if (Controller.alarmOn) {
                                 message.setInfo("Fingerläsaren har larmat");
-                                controller.soundAlarm("Alarm för någon har försökt 3 gånger på fingerläsaren");
-                            } else {
-                                message.setInfo("Fingerläsaren har läst fel 3 gånger");
-                                controller.soundAlarm("Fingerläsaren har läst fel 3 gånger");
+                                controller.soundAlarm("Fire");
                             }
                         }
                         globalServer.globalsendMessage(message);
@@ -323,12 +325,12 @@ public class PiServer extends Thread implements Serializable {
 
 
                 } catch (SocketTimeoutException e) {
-                    if ((HeartbeatIntervall > 0) && ((System.currentTimeMillis() - lastRead) > HeartbeatIntervall)) {
+                    //if ((HeartbeatIntervall > 0) && ((System.currentTimeMillis() - lastRead) > HeartbeatIntervall)) {
                         e.printStackTrace();
                         globalMap.remove(sensor.getId());
                         System.out.println(sensor.getClass().getSimpleName() + " " + socket.getInetAddress() + " Har kopplats bort via HEARTHBEAT YEYEYEYE");
                         break;
-                    }
+                    //}
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;

@@ -10,8 +10,8 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
-//SoftSerial use pins D6 (TX) and D5 (RX).
-SoftwareSerial swSer(5, 4);
+//SoftSerial use pins D4 (RX) and D3 (TX).
+SoftwareSerial swSer(2, 0);
 
 //0x31
 #define OLED_RESET 0
@@ -19,7 +19,7 @@ Adafruit_SSD1306 display(OLED_RESET);
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&swSer);
 WiFiClient client;
 
-const String IP = "192.168.1.42";
+const String IP = "192.168.31.181";
 const int PORT = 40000;
 const String TYPE = "fingerprint";
 int statusState = LOW;
@@ -47,18 +47,7 @@ const unsigned char connectedBitmap [] PROGMEM = {
   0x07, 0x00, 0x02, 0x00
 };
 
-
-
-
-
-
-
-
-
-
-
 String setupWifiManager() {
-
 
   //uncomment to reset saved settings
   //wifiManager.resetSettings();
@@ -100,6 +89,7 @@ void setupDisplay() {
   display.clearDisplay();
   display.display();
 }
+
 void resetWifi() {
   wifiButton = digitalRead(wifiReset);
   if (wifiButton == HIGH) {
@@ -134,12 +124,10 @@ void statusBlink() {
   }
 }
 
-
-//add animation
 void connectToServer(String location) {
   display.clearDisplay();
   display.display();
-  resetWifi();
+  //resetWifi();
   while (true) {
     statusBlink();
     connectMs = millis();
@@ -165,7 +153,7 @@ void connectToServer(String location) {
 void reconnectToServer() {
   display.clearDisplay();
   display.display();
-  resetWifi();
+  //resetWifi();
   while (true) {
     statusBlink();
     reconnectMs = millis();
@@ -180,16 +168,13 @@ void reconnectToServer() {
     yield();
     if (client.connected()) break;
   }
-  display.clearDisplay();
-  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
-  display.display();
 }
 
 
 
 
 void setup() {
-  //setupDisplay();
+  setupDisplay();
   pinMode(wifiReset, INPUT);
   pinMode(resetState, INPUT);
   digitalWrite(resetState, LOW);
@@ -205,17 +190,42 @@ void setup() {
 }
 
 void loop() {
-  resetWifi();
+  //resetWifi();
   if (client.connected()) {
     heartBeat();
+    display.clearDisplay();
+    display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+    display.setCursor(0, 24);
+    display.println("Ready...");
+    display.display();
+    delay(50);
+
     int fingerid = getFingerprintIDez();
-    if (fingerid >= 0) {
+    Serial.println(fingerid);
+    if (fingerid == -2){
+      display.clearDisplay();
+      display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+      display.setCursor(0, 24);
+      display.println("No match");
+      display.display();
+      delay(2000);
+    }else if (fingerid >= 0 ) {
       client.println("on");
+
+      display.clearDisplay();
+      display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+      display.setCursor(0, 24);
+      display.println("Welcome");
+      display.print("home id ");    
+      display.println(fingerid);
+      display.display();
+
       Serial.println(fingerid);
+      delay(2000);
     }
 
-    //Serial.println(getFingerprintIDez());
-    delay(50);
+
+
     if (client.available() > 0) {
       char message = client.read();
       Serial.println(message);
@@ -232,7 +242,6 @@ void loop() {
         deleteFingerprint(id);
       }
     }
-
   } else reconnectToServer();
 }
 
@@ -407,7 +416,15 @@ int getFingerprintIDez() {
   if (p != FINGERPRINT_OK)  return -1;
 
   p = finger.fingerFastSearch();
-  if (p != FINGERPRINT_OK)  return -1;
+  if (p == FINGERPRINT_OK) {
+    Serial.println("Found a print match!");
+  }  else if (p == FINGERPRINT_NOTFOUND) {
+    Serial.println("Did not find a match");
+    return -2;
+  } else {
+    Serial.println("Unknown error");
+    return -1;
+  }
 
   // found a match!
   Serial.print("Found ID #"); Serial.print(finger.fingerID);

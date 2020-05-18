@@ -13,7 +13,8 @@ public class FingerprintGui extends JFrame implements ActionListener {
     private JFrame fingerFrame;
     private JButton add, delete, empty;
     private JPanel panel;
-    private JFormattedTextField addText, deleteText, clearText;
+    private JFormattedTextField addText;
+    private JFormattedTextField deleteText;
     private JList list;
     private MaskFormatter mask;
 
@@ -28,13 +29,12 @@ public class FingerprintGui extends JFrame implements ActionListener {
 
     }
     public void draw() throws ParseException {
-        mask = new MaskFormatter();
+        //mask = new MaskFormatter("###");
         panel = new JPanel(new GridLayout(6,6));
-            addText = new JFormattedTextField(mask);
-            deleteText = new JFormattedTextField(mask);
-            clearText = new JFormattedTextField(mask);
+            addText = new JFormattedTextField(1);
+            deleteText = new JFormattedTextField(1);
             list = new JList();
-            mask.setMask("###");
+            //mask.setMask("###");
                 add = new JButton("Add");
                 delete = new JButton("Delete");
                 empty = new JButton("Clear");
@@ -43,12 +43,10 @@ public class FingerprintGui extends JFrame implements ActionListener {
                 empty.addActionListener(this::actionPerformed);
                 addText.setBorder(BorderFactory.createTitledBorder("Add"));
         deleteText.setBorder(BorderFactory.createTitledBorder("Delete"));
-        clearText.setBorder(BorderFactory.createTitledBorder("Clear"));
 
             this.add(panel);
                 panel.add(addText);
                 panel.add(deleteText);
-                panel.add(clearText);
                 panel.add(add);
                 panel.add(delete);
                 panel.add(empty);
@@ -62,7 +60,8 @@ public class FingerprintGui extends JFrame implements ActionListener {
         if (actionEvent.getSource() == add){
             try {
 
-                int i = Integer.parseInt((String) addText.getValue());
+                int i = (int) addText.getValue();
+                System.out.println(i);
                 mainFrame.controller.sendToMK('a',i);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -70,7 +69,7 @@ public class FingerprintGui extends JFrame implements ActionListener {
         }
         if (actionEvent.getSource() == delete){
             try {
-                int i = Integer.parseInt((String) deleteText.getValue());
+                int i = Integer.parseInt((String)deleteText.getText());
                 mainFrame.controller.sendToMK('d',i);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -78,8 +77,7 @@ public class FingerprintGui extends JFrame implements ActionListener {
         }
         if (actionEvent.getSource() == empty){
             try {
-                int i = Integer.parseInt((String) clearText.getValue());
-                mainFrame.controller.sendToMK('e',i);
+                mainFrame.controller.sendToMK('e',0);
             } catch (IOException e) {
                 e.printStackTrace();
             }

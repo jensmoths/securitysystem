@@ -261,6 +261,7 @@ public class PiServer extends Thread implements Serializable {
                             } else {
                                 message.setInfo("Någon har öppnat dörren");
                                 controller.soundAlarm("greeting");
+                                //TODO CONTROLLER SETDOOROPEN
                             }
                         } else {
                             message.setInfo("Någon har stängt dörren");

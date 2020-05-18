@@ -215,7 +215,7 @@ void loop() {
       if (message == 'c') {
         myservo.write(90);
       } else if (message == 'o') {
-        myservo.write(1);
+        myservo.write(180);
       }
     }
   } else reconnectToServerDoor();

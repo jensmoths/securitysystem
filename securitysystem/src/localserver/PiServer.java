@@ -1,6 +1,7 @@
 package localserver;
 
 import localClient.Controller;
+import localClient.FingerprintGui;
 import model.*;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class PiServer extends Thread implements Serializable {
     private ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
+    private ArrayList<SecurityComponent> fingerprintSensor = new ArrayList<>();
     public ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
     public ArrayList<SecurityComponent> allOfflineSensors = new ArrayList<>();
     public GlobalServer globalServer;
@@ -77,7 +79,7 @@ public class PiServer extends Thread implements Serializable {
     }
 
     public void sendToFinger(char c, int id) throws IOException {
-        System.out.println("SERVER SEND TO FINGER");
+        System.out.println("SERVER SEND TO FINGER: "+ c +" Index: "+ id);
         startServer.sendToFingerChar(c, id);
 
     }
@@ -144,7 +146,11 @@ public class PiServer extends Thread implements Serializable {
                         case "proximity":
                             sensor = new ProximitySensor(id, location);
                             proximitySensors.add(sensor);
+                            break;
 
+                        case "fingerprint":
+                            sensor = new FingerprintSensor(id,location);
+                            fingerprintSensor.add(sensor);
 
                     }
                     allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
@@ -194,7 +200,7 @@ public class PiServer extends Thread implements Serializable {
             System.out.println("CH SEND TO FINGER");
             for (SecurityComponent s : map.keySet()
             ) {
-                if (s instanceof MagneticSensor) {
+                if (s instanceof FingerprintSensor) {
                     map.get(s).sendMessage(msg);
                     map.get(s).sendMessageID(id);
                 }
@@ -335,10 +341,18 @@ public class PiServer extends Thread implements Serializable {
                     break;
                 }
             }
+
+
             allOnlineSensors.remove(sensor);//TODO NYTT KOPPLA FRÅN SENSOR
             allOfflineSensors.add(sensor);
 
             controller.updateSensors();
+            System.out.println("Borde dö här, breakat while är i slutet av run");
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         public void sendMessage(char msg) throws IOException {

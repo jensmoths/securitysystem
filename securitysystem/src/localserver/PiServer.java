@@ -1,6 +1,7 @@
 package localserver;
 
 import localClient.Controller;
+import localClient.FingerprintGui;
 import model.*;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class PiServer extends Thread implements Serializable {
     private ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
+    private ArrayList<SecurityComponent> fingerprintSensor = new ArrayList<>();
     public ArrayList<SecurityComponent> allOnlineSensors = new ArrayList<>();
     public ArrayList<SecurityComponent> allOfflineSensors = new ArrayList<>();
     public GlobalServer globalServer;
@@ -72,12 +74,14 @@ public class PiServer extends Thread implements Serializable {
                     map.get(s).sendMessage('c');
                 }
                 map.get(s).sensor.setOpen(open);
+                s.setOpen(open);
+                allOnlineSensors.set(allOnlineSensors.indexOf(s), s);
             }
         }
     }
 
     public void sendToFinger(char c, int id) throws IOException {
-        System.out.println("SERVER SEND TO FINGER");
+        System.out.println("SERVER SEND TO FINGER: "+ c +" Index: "+ id);
         startServer.sendToFingerChar(c, id);
 
     }
@@ -144,11 +148,11 @@ public class PiServer extends Thread implements Serializable {
                         case "proximity":
                             sensor = new ProximitySensor(id, location);
                             proximitySensors.add(sensor);
+                            break;
 
                         case "fingerprint":
-                            sensor = new FingerprintSensor(id, location);
-                            //Fing.add(sensor);
-
+                            sensor = new FingerprintSensor(id,location);
+                            fingerprintSensor.add(sensor);
 
                     }
                     allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
@@ -270,6 +274,7 @@ public class PiServer extends Thread implements Serializable {
                             } else {
                                 message.setInfo("Någon har öppnat dörren");
                                 controller.soundAlarm("greeting");
+                                //TODO CONTROLLER SETDOOROPEN
                             }
                         } else {
                             message.setInfo("Någon har stängt dörren");
@@ -299,6 +304,7 @@ public class PiServer extends Thread implements Serializable {
                         message.setInfo("Det brinner");
                         globalServer.globalsendMessage(message);
                         controller.soundAlarm("fire");
+                        //controller.takePicture();
                         for (SecurityComponent s : map.keySet()) {
                             if (s instanceof DoorLock) {
                                 controller.setDoorOpen(true);
@@ -309,7 +315,7 @@ public class PiServer extends Thread implements Serializable {
                         if (message.getSecurityComponent().isOpen()) {
                             controller.setAlarmOn(false);
                             controller.soundAlarm("Welcome");
-                            message.setInfo("Fingerläsaren har öppnat dörren");
+                            message.setInfo("Fingerläsaren har öppnat dörren ");
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     controller.setDoorOpen(true);
@@ -349,6 +355,12 @@ public class PiServer extends Thread implements Serializable {
             allOfflineSensors.add(sensor);
 
             controller.updateSensors();
+            System.out.println("Borde dö här, breakat while är i slutet av run");
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         public void sendMessage(char msg) throws IOException {
@@ -444,7 +456,7 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("109.228.172.110", 8081);
+                connect("localhost", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Kunde inte ansluta till servern \n" + e.getMessage());
@@ -456,20 +468,22 @@ public class PiServer extends Thread implements Serializable {
                     if (obj instanceof Message) {
                         Message msg = (Message) obj;
                         if (msg.getInfo().equals("ny location")) {
+
                             map.get(msg.getSecurityComponent()).sensor.setLocation(msg.getSecurityComponent().getLocation());//TODO Byta hela sensorn?
+
+
                             if (allOnlineSensors.contains(msg.getSecurityComponent()))
                                 allOnlineSensors.set(allOnlineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
                             if (allOfflineSensors.contains(msg.getSecurityComponent()))
                                 allOfflineSensors.set(allOfflineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
                             controller.updateSensors();
                             saveKeySet();
-                        } else if (msg.getSecurityComponent() instanceof DoorLock) {
+                        }
+                        else if (msg.getSecurityComponent() instanceof DoorLock) {
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     if (msg.getSecurityComponent().isOpen()) {
-
                                        controller.setDoorOpen(true);
-
                                     } else controller.setDoorOpen(false);
                                 }
                             }  if (allOnlineSensors.contains(msg.getSecurityComponent())) {

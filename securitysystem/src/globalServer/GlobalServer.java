@@ -1,6 +1,5 @@
 package globalServer;
 
-import javax.mail.MessagingException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -96,91 +95,88 @@ public class GlobalServer implements Serializable{
             }
         }
 
-        @Override
-        public void run() {
-            authenticateUser();
+        public void handleServer() {
+            Object requestClientObject;
+            while (true) {
+                try {
 
-            if (authenticated) {
-                Object requestObject;
-                switch (serverOrClient) {
+                    ois = new ObjectInputStream(socket.getInputStream());
+                    requestClientObject = ois.readObject();
+                    requestHandler.handleServerRequest(requestClientObject, home);
 
-                    case "server":
-                        while (true) {
-                            try {
-                                ois = new ObjectInputStream(socket.getInputStream());
-                                requestObject = ois.readObject();
-                                requestHandler.handleServerRequest(requestObject, home, ClientHandler.this);
-
-                            } catch (IOException | ClassNotFoundException | MessagingException e) {
-                                System.out.println(socket.getInetAddress() + " has disconnected (local server)");
-                                try {
-                                    home.sendToAllClients("local server offline");
-                                    home.setLocalServer(null);
-                                    if (socket != null) {
-                                        socket.close();
-                                    }
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                    break;
-                                }
-                                break;
-                            }
+                }catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                    System.out.println(socket.getInetAddress() + " has disconnected (local server)");
+                    home.logger.addToLog(socket.getInetAddress() + " has disconnected (local server)");
+                    try {
+                        home.sendToAllClients("local server offline");
+                        home.setLocalServer(null);
+                        if (socket != null) {
+                            socket.close();
                         }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
                         break;
-
-                    case "globalClient":
-                        ObjectOutputStream localServerOos;
-//
-//                        if (!home.getObjectBuffer().objectListIsEmpty()) {
-//                            try {
-//                                Buffer<Object> buffer = home.getObjectBuffer();
-//                                for (int i = 0; i < buffer.getBufferSize(); i++) {
-//                                    Object object = buffer.getObjects(i);
-//                                    requestHandler.handleServerRequest(object, home, this);
-//                                }
-//                                buffer.clearObjectBuffer();
-//                            } catch (MessagingException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-
-                        while (true) {
-                            try {
-                                requestObject = ois.readObject();
-
-                                if (home.localServer != null) {
-                                    localServerOos = home.getLocalServer().getOos();
-                                    localServerOos.writeObject(requestHandler.handleClientRequest(requestObject));
-                                } else {
-                                    home.getGlobalClient(this).oos.writeObject("local server offline");
-                                }
-
-                            } catch (IOException | ClassNotFoundException e) {
-                                System.out.println(socket.getInetAddress() + " has disconnected (global client)");
-
-                                try {
-                                    home.logger.addToLog(socket.getInetAddress() + "has logged out (global client)");
-                                    home.removeGlobalClient(this);
-                                    if (socket != null) {
-                                        socket.close();
-                                    }
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                }
-                                break;
-                            }
-                        }
-                        break;
+                    }
+                    break;
                 }
             }
         }
+        public void handleClient() {
+            ObjectOutputStream localServerOos;
 
+            while (true) {
+                try {
+                    Object requestClientObject = ois.readObject();
+
+                    if (home.localServer != null) {
+                        localServerOos = home.getLocalServer().getOos();
+                        localServerOos.writeObject(requestHandler.handleClientRequest(requestClientObject));
+                    } else {
+                        home.getGlobalClient(this).oos.writeObject("local server offline");
+                    }
+
+                } catch (IOException | ClassNotFoundException e) {
+                    System.out.println(socket.getInetAddress() + " has disconnected (global client)");
+                    home.logger.addToLog(socket.getInetAddress() + " has disconnected (global client)");
+
+                    try {
+                        home.logger.addToLog(socket.getInetAddress() + " has disconnected (global client)");
+                        home.removeGlobalClient(this);
+                        if (socket != null) {
+                            socket.close();
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
+                }
+            }
+        }
         public ObjectOutputStream getOos() {
             return oos;
         }
 
         public String getServerOrClient() {
             return serverOrClient;
+        }
+
+        @Override
+        public void run() {
+            authenticateUser();
+
+            if (authenticated) {
+                switch (serverOrClient) {
+
+                    case "server":
+                        handleServer();
+                        break;
+                    case "globalClient":
+                        home.sendOnlineOfflineLists();
+                        handleClient();
+                        break;
+                }
+            }
         }
     }
 }

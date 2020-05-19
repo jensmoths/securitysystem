@@ -91,7 +91,8 @@ public class Meny extends JFrame {
         btnChangeCode.setForeground(Color.white);
         btnFingerprint.setForeground(Color.white);
         btnGoOnline.setForeground(Color.white);
-
+        tfofflineMK.setForeground(Color.white);
+        tfonlineMK.setForeground(Color.white);
         add(tfonlineMK,"span");
         add(tfofflineMK,"wrap, span");
         add(btnOpenDoor);
@@ -113,30 +114,8 @@ public class Meny extends JFrame {
 
     public void updateOnlineMK(ArrayList<SecurityComponent> sensors) {
         OnlineListModel.clear();
-        String status = "";
 
         for (SecurityComponent s: sensors) {
-
-                if (s instanceof MagneticSensor) {
-                    if(s.isOpen()) {
-                    status = " Dörren är: Öppen";
-
-                } else status = " Dörren är: Stängd";
-            }
-           if(s instanceof FireAlarm){
-               if(s.isOpen()) {
-               status = " Det brinner";
-           } else status = "";
-           }
-
-           if(s instanceof ProximitySensor){   //TODO TESTA DET HÄR, DEN BLIR ALDRIG BOOLEAN FALSE???
-               if(s.isOpen()){
-                   status = " Rörelse upptäckt";
-               }else status="";
-           }
-            String onlineMK;
-                onlineMK = s.getClass().getSimpleName() + " ID: " + s.getId() + " Location: " + s.getLocation() + status;
-
 
             OnlineListModel.addElement(s);
         }
@@ -150,7 +129,7 @@ public class Meny extends JFrame {
 
 
         for (SecurityComponent s: sensor){
-            String offlineMK =s.getClass().getSimpleName()+" ID: "+ s.getId()+ " Location: "+s.getLocation();
+
             OfflineListModel.addElement(s);
         }
         tfofflineMK.setModel(OfflineListModel);

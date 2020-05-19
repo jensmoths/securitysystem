@@ -35,7 +35,7 @@ public class MainPanel extends JPanel {
     private JButton btnOk;
     private JTextField textFieldPopup;
     private String location;
-    private SecurityComponent valdSensor;
+    private SecurityComponent chosenSensor;
     private JPopupMenu popup;
     private JPanel popupPanel;
     //
@@ -183,8 +183,8 @@ public class MainPanel extends JPanel {
 
         btnOFF = new JButton("Off");
         btnON = new JButton("On");
-        btnLocation = new JButton("Välj location");
-        btnPhoto = new JButton("Ta foto bror");
+        btnLocation = new JButton("Change location");
+        btnPhoto = new JButton("Take photo");
 
         btnUnlock.setPreferredSize(new Dimension(btnDimension));
         btnLock.setPreferredSize(new Dimension(btnDimension));
@@ -239,7 +239,7 @@ public class MainPanel extends JPanel {
         leftPanelCenter.setBorder(camera);
         centerPanelSouth.setBorder(borderImages);
 
-        rightPanel.setBorder(loggerBorder);
+        scrollPaneLogger.setBorder(loggerBorder);
 
         rightPanel.add(scrollPaneLogger);
 
@@ -411,9 +411,9 @@ public class MainPanel extends JPanel {
             if (SwingUtilities.isRightMouseButton(e) && !taOnline.isSelectionEmpty() && taOnline.locationToIndex(e.getPoint()) == taOnline.getSelectedIndex()) {
 
 
-                valdSensor = (SecurityComponent) dlmOnline.getElementAt(taOnline.getSelectedIndex());
+                chosenSensor = (SecurityComponent) dlmOnline.getElementAt(taOnline.getSelectedIndex());
                 popup = new JPopupMenu();
-                JLabel label1 = new JLabel("Välj location för: " + valdSensor.getClass().getSimpleName() + "\n" + " id: " + valdSensor.getId());
+                JLabel label1 = new JLabel("Välj location för: " + chosenSensor.getClass().getSimpleName() + "\n" + " id: " + chosenSensor.getId());
                 popupPanel = new JPanel();
                 popup.add(popupPanel);
                 popupPanel.add(label1);
@@ -436,7 +436,7 @@ public class MainPanel extends JPanel {
 
                 popup.show(taOnline, e.getX(), e.getY());
 
-                System.out.println("Du högerklickade på :" + valdSensor.getId());
+                System.out.println("Du högerklickade på :" + chosenSensor.getId());
 
             } else if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
                 int index = listImages.locationToIndex(e.getPoint());
@@ -454,14 +454,14 @@ public class MainPanel extends JPanel {
 
         public void actionPerformed(ActionEvent e) {
 
-            if (e.getSource() == btnON) {
-                globalClientController.send("on");
-            } else if (e.getSource() == btnOFF) {
-                globalClientController.send("off");
-            } else if (e.getSource() == btnLock) {
-                globalClientController.send("lock");
+            if (e.getSource() == btnLock) {
+               // globalClientController.send("lock");
+                chosenSensor = (SecurityComponent) dlmOnline.getElementAt(taOnline.getSelectedIndex());
+                globalClientController.send(new Message("lock", chosenSensor));
             } else if (e.getSource() == btnUnlock) {
-                globalClientController.send("unlock");
+                //globalClientController.send("unlock");
+                chosenSensor = (SecurityComponent) dlmOnline.getElementAt(taOnline.getSelectedIndex());
+                globalClientController.send(new Message("unlock", chosenSensor));
 
             } else if (e.getSource() == btnFilter) {
 
@@ -472,17 +472,14 @@ public class MainPanel extends JPanel {
             } else if (e.getSource() == btnOk) {
 
                 location = textFieldPopup.getText();
-                System.out.println("DETTA FYLLDES I: " + location);
+                System.out.println("This is the new location: " + location);
 
-                valdSensor.setLocation(location);
+                chosenSensor.setLocation(location);
                 popup.setVisible(false);
-
-
-                globalClientController.send(new Message("ny location", valdSensor));
+                globalClientController.send(new Message("new location", chosenSensor));
 
                 //TODO GLOBALA SKA TA EMOT RADEN OVANFÖR. SEN SKICKA VIDARE SENSOROBJEKTET TILL
                 // LOKALSERVER SOM SEDAN ÄNDRAR LOCATION
-
 
             }
         }

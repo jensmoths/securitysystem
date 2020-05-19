@@ -108,3 +108,4 @@ public class FingerprintGui extends JFrame implements ActionListener {
         }
     }
 }
+

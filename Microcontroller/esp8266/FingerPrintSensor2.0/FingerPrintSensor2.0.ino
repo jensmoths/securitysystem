@@ -10,8 +10,8 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
-//SoftSerial use pins D6 (TX) and D5 (RX).
-SoftwareSerial swSer(5, 4);
+//SoftSerial use pins D4 (TX) and D3 (RX).
+SoftwareSerial swSer(2, 0);
 
 //0x31
 #define OLED_RESET 0

@@ -107,6 +107,8 @@ public class GlobalServer implements Serializable {
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                     System.out.println(socket.getInetAddress() + " has disconnected (local server)");
+                    home.online.clear();
+                    home.offline.clear();
                     home.logger.addToLog(socket.getInetAddress() + " has disconnected (local server)");
                     try {
                         home.sendToAllClients("local server offline");

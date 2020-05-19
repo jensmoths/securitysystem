@@ -75,7 +75,7 @@ public class PiServer extends Thread implements Serializable {
                 }
                 map.get(s).sensor.setOpen(open);
                 s.setOpen(open);
-                allOnlineSensors.set(allOnlineSensors.indexOf(s), s);
+                allOnlineSensors.set(allOnlineSensors.indexOf(s), map.get(s).sensor);
             }
         }
     }
@@ -153,10 +153,10 @@ public class PiServer extends Thread implements Serializable {
                         case "fingerprint":
                             sensor = new FingerprintSensor(id,location);
                             fingerprintSensor.add(sensor);
+                            break;
 
                     }
-                    allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
-                    allOfflineSensors.remove(sensor);
+
                     //   globalServer.UpdateGlobal(allOnlineSensors);
 
 
@@ -179,7 +179,9 @@ public class PiServer extends Thread implements Serializable {
 
                         System.out.println("EN RECONNECT HAR SKETT: " + "MK FÅR SIN GAMLA LOCATION: " + sensor.getLocation());
                     }
-
+                    sensor = map.get(sensor).sensor;
+                    allOnlineSensors.add(sensor); //TODO NYTT KOPPLA FRÅN SENSOR
+                    allOfflineSensors.remove(sensor);
                     globalMap.put(sensor.getId(), sensor); //TODO NYTT
                     //    globalServer.UpdateGlobal(globalMap);
                     System.out.println("MAPSIZE: " + map.size());
@@ -459,15 +461,15 @@ public class PiServer extends Thread implements Serializable {
                     Object obj = ois.readObject();
                     if (obj instanceof Message) {
                         Message msg = (Message) obj;
-                        if (msg.getInfo().equals("ny location")) {
+                        if (msg.getInfo().equals("new location")) {
 
                             map.get(msg.getSecurityComponent()).sensor.setLocation(msg.getSecurityComponent().getLocation());//TODO Byta hela sensorn?
 
 
                             if (allOnlineSensors.contains(msg.getSecurityComponent()))
                                 allOnlineSensors.set(allOnlineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
-                            if (allOfflineSensors.contains(msg.getSecurityComponent()))
-                                allOfflineSensors.set(allOfflineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
+//                            else if (allOfflineSensors.contains(msg.getSecurityComponent()))
+//                                allOfflineSensors.set(allOfflineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
                             controller.updateSensors();
                             saveKeySet();
                         }

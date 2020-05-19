@@ -471,9 +471,7 @@ public class PiServer extends Thread implements Serializable {
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     if (msg.getSecurityComponent().isOpen()) {
-
                                        controller.setDoorOpen(true);
-
                                     } else controller.setDoorOpen(false);
                                 }
                             }  if (allOnlineSensors.contains(msg.getSecurityComponent())) {

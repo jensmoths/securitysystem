@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class GlobalServer implements Serializable{
+public class GlobalServer implements Serializable {
     private HashMap<String, Home> homes;
 
     public GlobalServer(int port, HashMap<String, Home> homes) {
@@ -104,7 +104,7 @@ public class GlobalServer implements Serializable{
                     requestClientObject = ois.readObject();
                     requestHandler.handleServerRequest(requestClientObject, home);
 
-                }catch (IOException | ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                     System.out.println(socket.getInetAddress() + " has disconnected (local server)");
                     home.logger.addToLog(socket.getInetAddress() + " has disconnected (local server)");
@@ -122,6 +122,7 @@ public class GlobalServer implements Serializable{
                 }
             }
         }
+
         public void handleClient() {
             ObjectOutputStream localServerOos;
 
@@ -153,6 +154,7 @@ public class GlobalServer implements Serializable{
                 }
             }
         }
+
         public ObjectOutputStream getOos() {
             return oos;
         }

@@ -169,7 +169,7 @@ public class MainPanel extends JPanel {
 
         centerPanelCenter.setPreferredSize(new Dimension(420, 300));
         centerPanelNorth.setPreferredSize(new Dimension(420, 300));
-        centerPanelSouth.setPreferredSize(new Dimension(840, 600));
+        centerPanelSouth.setPreferredSize(new Dimension(840, 660));
 
 
         taLogger.setEditable(false);
@@ -449,7 +449,7 @@ public class MainPanel extends JPanel {
                 ImageIcon imageIcon = globalClientController.getImages().get(index);
                 centerPanelSouth.removeAll();
                 // TODO: 12-May-20 Gör att den täcker över bägge onlinelistan och offline
-                centerPanelSouth.add(cropImage(imageIcon, 800, 680));
+                centerPanelSouth.add(cropImage(imageIcon, 780, 660));
                 centerPanelSouth.revalidate();
                 centerPanelSouth.repaint();
             }

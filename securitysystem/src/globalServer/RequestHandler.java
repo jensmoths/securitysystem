@@ -9,26 +9,28 @@ import java.util.ArrayList;
 
 public class RequestHandler {
 
-    private EmailSender emailSender = new EmailSender();
+    private EmailSender emailSender;
     private Home home;
+    private String customerFirstName;
 
     public RequestHandler(Home home) {
         this.home = home;
+        emailSender = new EmailSender();
+        customerFirstName = home.user.getFirstName();
     }
 
-    public void handleServerRequest(Object requestObject, Home home, GlobalServer.ClientHandler handler) {
+    public void handleServerRequest(Object requestObject, Home home) {
         if (requestObject instanceof String) {
-
             home.logger.addToLog((String) requestObject);
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
 
         } else if (requestObject instanceof ImageIcon) {
-
-            home.logger.addToLog("received an image");
+            home.logger.addToLog("Received an image");
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
-            emailSender.sendPictureMail(home.getUser().getEmail(), "", "Nytt foto från ditt hem", (ImageIcon) requestObject);
+            emailSender.sendPictureMail(home.getUser().getEmail(), "", "A new photo from your home",
+                    (ImageIcon) requestObject);
 
         } else if (requestObject instanceof Message) {
 
@@ -53,24 +55,27 @@ public class RequestHandler {
 
             if (securityComponent instanceof MagneticSensor) {
                 if (securityComponent.isOpen()) {
-                    home.sendToAllClients("Magnetsensorn larmar");
-                    home.logger.addToLog("Magnetsensorn larmar");
+                    home.sendToAllClients("The magnet sensor in " + securityComponent.getLocation() +
+                            " has gone off");
+                    home.logger.addToLog("The magnet sensor in " + securityComponent.getLocation() +
+                            " has gone off");
                     home.sendToAllClients(home.logger);
-                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n\n Magnetsensorn har larmat");
-
+                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n" +
+                            "Magnetsensorn är larmad i " + securityComponent.getLocation());
 
                 } else if (!securityComponent.isOpen()) {
-                    home.sendToAllClients("Magnetsensorn är aktiv");
-                    home.logger.addToLog("Magnetsensorn är aktiv");
+                    home.sendToAllClients("The magnet sensor in " + securityComponent.getLocation() + " is online");
+                    home.logger.addToLog("The magnet sensor in " + securityComponent.getLocation() + " is online");
                     home.sendToAllClients(home.logger);
 
                 }
             }
             if (securityComponent instanceof FireAlarm) {
-                home.sendToAllClients("Brandlarmet har upptäckt rök i byggnaden");
-                home.logger.addToLog("Brandlarmet har upptäckt rök i byggnaden");
+                home.sendToAllClients("The fire alarm detected smoke " + securityComponent.getLocation());
+                home.logger.addToLog("The fire alarm detected smoke " + securityComponent.getLocation());
                 try {
-                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Brandlarmet har utlösts");
+                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hello " +
+                            customerFirstName + "!\nBrandlarmet har upptäckt rök i " + securityComponent.getLocation());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -79,49 +84,50 @@ public class RequestHandler {
             }
 
             if (securityComponent instanceof ProximitySensor) {
-                home.sendToAllClients("Rörelsedetektorn har upptäckt rörelse i byggnaden");
-                home.logger.addToLog("Rörelsedetektorn har upptäckt rörelse i byggnaden");
+                home.sendToAllClients("The proximity sensor detected motion in " +
+                        securityComponent.getLocation());
+                home.logger.addToLog("The proximity sensor detected motion in " +
+                        securityComponent.getLocation());
                 home.sendToAllClients(home.logger);
-                emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n Rörelsedetektorn har upptäckt rörelse i byggnaden");
-
+                emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hello " +
+                        customerFirstName + "!\nThe proximity sensor detected motion in " + securityComponent.getLocation());
             }
         }
     }
 
     public Object handleClientRequest(Object clientRequest) {
-        Object respone = null;
+        Object response = null;
 
         if (clientRequest instanceof Message) {
 
-            if (((Message) clientRequest).getInfo().equals("ny location")) {
-                home.logger.addToLog("Ny location");
+            if (((Message) clientRequest).getInfo().equals("new location")) {
+                home.logger.addToLog(((Message) clientRequest).getSecurityComponent().getId() +
+                        " has a new location");
                 home.sendToAllClients(home.logger);
-                return clientRequest;
+                response = clientRequest;
             }
-        }
-
-
-        if (clientRequest instanceof String) {
-//                    if (clientRequest.equals("on")) {
-//                        //localServerOos.writeObject(new MagneticSensor());
-//                    } else if ("off".equals(clientRequest)) {
-//                        //localServerOos.writeObject(new);
-//                    } else
-            if ("lock".equals(clientRequest)) {
-                respone = new Message("", new DoorLock(false));
+            if (((Message) clientRequest).getInfo().equals("lock")) {
                 home.logger.addToLog("Door locked");
                 home.sendToAllClients(home.logger);
-            } else if ("unlock".equals(clientRequest)) {
-                respone = new Message("", new DoorLock(true));
+                ((Message) clientRequest).getSecurityComponent().setOpen(false);
+                response = clientRequest;
+            }
+            if (((Message) clientRequest).getInfo().equals("unlock")) {
                 home.logger.addToLog("Door unlocked");
                 home.sendToAllClients(home.logger);
-            } else if ("Take photo".equals(clientRequest)) {
-                respone = "Take photo";
+                ((Message) clientRequest).getSecurityComponent().setOpen(true);
+                response = clientRequest;
+            }
+        }
+        if (clientRequest instanceof String) {
+            if ("Take photo".equals(clientRequest)) {
+                response = "Take photo";
                 home.logger.addToLog("Client wants a photo");
                 home.sendToAllClients(home.logger);
             }
         }
-        return respone;
+
+        return response;
     }
 }
 

@@ -40,7 +40,7 @@ public class Controller {
     }
 
     public void sendToMK(char c, int id) throws IOException {
-        System.out.println("CONTROLLER SEND TO MK");
+       // System.out.println("CONTROLLER SEND TO MK");
         server.sendToFinger(c, id);
     }
 

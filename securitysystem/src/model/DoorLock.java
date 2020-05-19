@@ -1,7 +1,7 @@
 package model;
 
 public class DoorLock extends SecurityComponent {
-    private String id, location;
+
 
 
     public DoorLock(String id, String location, boolean open) {
@@ -11,8 +11,7 @@ public class DoorLock extends SecurityComponent {
 
     public DoorLock(String id, String location) {
         super(id, location);
-        this.id = id;
-        this.location = location;
+
 
     }
 
@@ -21,20 +20,12 @@ public class DoorLock extends SecurityComponent {
         super.setOpen(open);
     }
 
-    @Override
-    public boolean isOpen() {
-        return super.isOpen();
-    }
 
-    @Override
-    public void setOpen(boolean open) {
-        super.setOpen(open);
-    }
 
     @Override
     public String toString() {
         if (super.isOpen()) {
-            return getClass().getSimpleName() + "   Id: " + id + "   Location: " + location + " Dörren är : Öppen";
-        } else return getClass().getSimpleName() + "   Id: " + id + "   Location: " + location + " Dörren är : Stängd";
+            return getClass().getSimpleName() + "   Id: " + super.getId() + "   Location: " + super.getLocation()+ " Dörren är : Öppen";
+        } else return getClass().getSimpleName() + "   Id: " + super.getId() + "   Location: " + super.getLocation() + " Dörren är : Stängd";
     }
 }

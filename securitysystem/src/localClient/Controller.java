@@ -135,4 +135,9 @@ public class Controller {
     public void setOnlineButton(boolean b) {
         mainFrame.meny.btnGoOnline.setEnabled(b);
     }
+
+    public int getFingerAmount() throws IOException {
+        server.sendToFinger('g', 0);
+        return 0;
+    }
 }

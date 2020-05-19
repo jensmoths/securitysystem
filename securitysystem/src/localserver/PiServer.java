@@ -241,6 +241,10 @@ public class PiServer extends Thread implements Serializable {
                     if (stringMessage.equals("heartbeat")) {
                         continue;
                     }
+                    //if (stringMessage.matches(".*\\d.*")) {
+                        //set
+                      //  continue;
+                    //}
                     String[] split = stringMessage.split("\\|");
                     String state = split[0]; //, location = split[1], type = split[2];
                     System.out.println("DETTA HAR SKICKATS FRÅN MK: " + state);
@@ -335,6 +339,11 @@ public class PiServer extends Thread implements Serializable {
                     e.printStackTrace();
                     break;
                 }
+            }
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             allOnlineSensors.remove(sensor);//TODO NYTT KOPPLA FRÅN SENSOR
             allOfflineSensors.add(sensor);

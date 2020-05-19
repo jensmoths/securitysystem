@@ -20,7 +20,8 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&swSer);
 WiFiClient client;
 
 //const String IP = "192.168.31.181";
-const String IP = "83.254.129.68";
+const String IP = "83.254.129.68"; //Per
+//const String IP = "158.174.123.25"; //Karl
 const int PORT = 40000;
 const String TYPE = "fingerprint";
 int statusState = LOW;
@@ -203,7 +204,7 @@ void loop() {
 
     int fingerid = getFingerprintIDez();
     Serial.println(fingerid);
-    if (fingerid == -2){
+    if (fingerid == -2) {
       client.println("wrong finger");
       display.clearDisplay();
       display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
@@ -211,14 +212,14 @@ void loop() {
       display.println("No match");
       display.display();
       delay(2000);
-    }else if (fingerid >= 0 ) {
+    } else if (fingerid >= 0 ) {
       client.println("on");
 
       display.clearDisplay();
       display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
       display.setCursor(0, 24);
       display.println("Welcome");
-      display.print("home id ");    
+      display.print("home id ");
       display.println(fingerid);
       display.display();
 
@@ -251,6 +252,12 @@ uint8_t getFingerprintEnroll(int id) {
 
   int p = -1;
   Serial.print("Waiting for valid finger to enroll as #"); Serial.println(id);
+  display.clearDisplay();
+  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+  display.setCursor(0, 24);
+  display.println("Place");
+  display.println("finger");
+  display.display();
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -297,6 +304,12 @@ uint8_t getFingerprintEnroll(int id) {
   }
 
   Serial.println("Remove finger");
+  display.clearDisplay();
+  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+  display.setCursor(0, 24);
+  display.println("Remove");
+  display.println("finger");
+  display.display();
   delay(2000);
   p = 0;
   while (p != FINGERPRINT_NOFINGER) {
@@ -305,6 +318,13 @@ uint8_t getFingerprintEnroll(int id) {
   Serial.print("ID "); Serial.println(id);
   p = -1;
   Serial.println("Place same finger again");
+  display.clearDisplay();
+  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+  display.setCursor(0, 24);
+  display.println("Place");
+  display.println("finger");
+  display.println("again");
+  display.display();
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -371,6 +391,12 @@ uint8_t getFingerprintEnroll(int id) {
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
     Serial.println("Stored!");
+    display.clearDisplay();
+    display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+    display.setCursor(0, 24);
+    display.println("Stored");
+    display.display();
+    delay(2000);
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
     return p;

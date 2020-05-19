@@ -102,14 +102,12 @@ public class GlobalServer implements Serializable{
 
                     ois = new ObjectInputStream(socket.getInputStream());
                     requestClientObject = ois.readObject();
-                    requestHandler.handleServerRequest(requestClientObject, home, ClientHandler.this);
+                    requestHandler.handleServerRequest(requestClientObject, home);
 
                 }catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
-//                    if (e instanceof EOFException) {
-//                        handleServer();
-//                    }
                     System.out.println(socket.getInetAddress() + " has disconnected (local server)");
+                    home.logger.addToLog(socket.getInetAddress() + " has disconnected (local server)");
                     try {
                         home.sendToAllClients("local server offline");
                         home.setLocalServer(null);
@@ -140,9 +138,10 @@ public class GlobalServer implements Serializable{
 
                 } catch (IOException | ClassNotFoundException e) {
                     System.out.println(socket.getInetAddress() + " has disconnected (global client)");
+                    home.logger.addToLog(socket.getInetAddress() + " has disconnected (global client)");
 
                     try {
-                        home.logger.addToLog(socket.getInetAddress() + "has logged out (global client)");
+                        home.logger.addToLog(socket.getInetAddress() + " has disconnected (global client)");
                         home.removeGlobalClient(this);
                         if (socket != null) {
                             socket.close();

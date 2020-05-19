@@ -459,9 +459,13 @@ public class MainPanel extends JPanel {
             } else if (e.getSource() == btnOFF) {
                 globalClientController.send("off");
             } else if (e.getSource() == btnLock) {
-                globalClientController.send("lock");
+               // globalClientController.send("lock");
+                valdSensor = (SecurityComponent) dlmOnline.getElementAt(taOnline.getSelectedIndex());
+                globalClientController.send(new Message("lock", valdSensor));
             } else if (e.getSource() == btnUnlock) {
-                globalClientController.send("unlock");
+                //globalClientController.send("unlock");
+                valdSensor = (SecurityComponent) dlmOnline.getElementAt(taOnline.getSelectedIndex());
+                globalClientController.send(new Message("unlock", valdSensor));
 
             } else if (e.getSource() == btnFilter) {
 

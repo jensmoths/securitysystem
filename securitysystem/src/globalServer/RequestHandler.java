@@ -94,13 +94,23 @@ public class RequestHandler {
         if (clientRequest instanceof Message) {
 
             if (((Message) clientRequest).getInfo().equals("ny location")) {
-                home.logger.addToLog("Ny location");
-                home.sendToAllClients(home.logger);
+              //  home.logger.addToLog("Ny location");
+                //home.sendToAllClients(home.logger);
+                return clientRequest;
+            }
+            if (((Message) clientRequest).getInfo().equals("lock")) {
+              //  home.logger.addToLog("Door locked");
+              //  home.sendToAllClients(home.logger);
+                ((Message) clientRequest).getSecurityComponent().setOpen(false);
+                return clientRequest;
+            }
+            if (((Message) clientRequest).getInfo().equals("unlock")) {
+             //   home.logger.addToLog("Door unlocked");
+              //  home.sendToAllClients(home.logger);
+                ((Message) clientRequest).getSecurityComponent().setOpen(true);
                 return clientRequest;
             }
         }
-
-
         if (clientRequest instanceof String) {
 //                    if (clientRequest.equals("on")) {
 //                        //localServerOos.writeObject(new MagneticSensor());

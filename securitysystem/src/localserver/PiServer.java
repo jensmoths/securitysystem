@@ -74,6 +74,8 @@ public class PiServer extends Thread implements Serializable {
                     map.get(s).sendMessage('c');
                 }
                 map.get(s).sensor.setOpen(open);
+                s.setOpen(open);
+                allOnlineSensors.set(allOnlineSensors.indexOf(s), s);
             }
         }
     }
@@ -297,6 +299,7 @@ public class PiServer extends Thread implements Serializable {
                         message.setInfo("Det brinner");
                         globalServer.globalsendMessage(message);
                         controller.soundAlarm("fire");
+                        //controller.takePicture();
                         for (SecurityComponent s : map.keySet()) {
                             if (s instanceof DoorLock) {
                                 controller.setDoorOpen(true);
@@ -307,7 +310,7 @@ public class PiServer extends Thread implements Serializable {
                         if (message.getSecurityComponent().isOpen()) {
                             controller.setAlarmOn(false);
                             controller.soundAlarm("Welcome");
-                            message.setInfo("Fingerläsaren har öppnat dörren");
+                            message.setInfo("Fingerläsaren har öppnat dörren ");
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     controller.setDoorOpen(true);
@@ -315,11 +318,8 @@ public class PiServer extends Thread implements Serializable {
                             }
                         } else {
                             if (Controller.alarmOn) {
-                                message.setInfo("Fingerläsaren har larmat");
+                                message.setInfo("Fingerläsaren har larmat ");
                                 controller.soundAlarm("Alarm för någon har försökt 3 gånger på fingerläsaren");
-                            } else {
-                                message.setInfo("Fingerläsaren har läst fel 3 gånger");
-                                controller.soundAlarm("Fingerläsaren har läst fel 3 gånger");
                             }
                         }
                         globalServer.globalsendMessage(message);
@@ -448,7 +448,7 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("109.228.172.110", 8081);
+                connect("localhost", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Kunde inte ansluta till servern \n" + e.getMessage());
@@ -460,14 +460,18 @@ public class PiServer extends Thread implements Serializable {
                     if (obj instanceof Message) {
                         Message msg = (Message) obj;
                         if (msg.getInfo().equals("ny location")) {
+
                             map.get(msg.getSecurityComponent()).sensor.setLocation(msg.getSecurityComponent().getLocation());//TODO Byta hela sensorn?
+
+
                             if (allOnlineSensors.contains(msg.getSecurityComponent()))
                                 allOnlineSensors.set(allOnlineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
                             if (allOfflineSensors.contains(msg.getSecurityComponent()))
                                 allOfflineSensors.set(allOfflineSensors.indexOf(msg.getSecurityComponent()), msg.getSecurityComponent());
                             controller.updateSensors();
                             saveKeySet();
-                        } else if (msg.getSecurityComponent() instanceof DoorLock) {
+                        }
+                        else if (msg.getSecurityComponent() instanceof DoorLock) {
                             for (SecurityComponent s : map.keySet()) {
                                 if (s instanceof DoorLock) {
                                     if (msg.getSecurityComponent().isOpen()) {

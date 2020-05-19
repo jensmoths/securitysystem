@@ -183,8 +183,8 @@ public class MainPanel extends JPanel {
 
         btnOFF = new JButton("Off");
         btnON = new JButton("On");
-        btnLocation = new JButton("Välj location");
-        btnPhoto = new JButton("Ta foto bror");
+        btnLocation = new JButton("Change location");
+        btnPhoto = new JButton("Take photo");
 
         btnUnlock.setPreferredSize(new Dimension(btnDimension));
         btnLock.setPreferredSize(new Dimension(btnDimension));

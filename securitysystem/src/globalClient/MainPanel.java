@@ -23,8 +23,8 @@ public class MainPanel extends JPanel {
     private JPanel leftPanelCenter;
     private JPanel centerPanelNorth;
     private JPanel centerPanelCenter;
-    private JPanel centerPanelSouth = new JPanel();
-    private JPanel pnlDateTime = new JPanel();
+    private JPanel centerPanelSouth;
+    private JPanel pnlDateTime;
 
     private JButton btnON;
     private JButton btnOFF;
@@ -128,6 +128,8 @@ public class MainPanel extends JPanel {
         leftPanelCenter = new JPanel();
         centerPanelNorth = new JPanel();
         centerPanelCenter = new JPanel();
+        centerPanelSouth = new JPanel();
+        pnlDateTime = new JPanel();
         drawPnlDateTime();
         taLogger = new JTextArea();
         dlmOffline = new DefaultListModel();
@@ -167,7 +169,7 @@ public class MainPanel extends JPanel {
 
         centerPanelCenter.setPreferredSize(new Dimension(420, 300));
         centerPanelNorth.setPreferredSize(new Dimension(420, 300));
-        centerPanelSouth.setPreferredSize(new Dimension(420, 300));
+        centerPanelSouth.setPreferredSize(new Dimension(840, 600));
 
 
         taLogger.setEditable(false);
@@ -294,7 +296,7 @@ public class MainPanel extends JPanel {
         btnUnlock.addActionListener(buttonListener);
         btnPhoto.addActionListener(buttonListener);
         btnLocation.addActionListener(buttonListener);
-        frame.setSize(new Dimension(1500, 650));
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setContentPane(MainPanel.this);
         frame.setBackground(new Color(83, 86, 91));
         frame.setVisible(true);
@@ -447,7 +449,7 @@ public class MainPanel extends JPanel {
                 ImageIcon imageIcon = globalClientController.getImages().get(index);
                 centerPanelSouth.removeAll();
                 // TODO: 12-May-20 Gör att den täcker över bägge onlinelistan och offline
-                centerPanelSouth.add(cropImage(imageIcon, 410, 250));
+                centerPanelSouth.add(cropImage(imageIcon, 800, 680));
                 centerPanelSouth.revalidate();
                 centerPanelSouth.repaint();
             }

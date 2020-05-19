@@ -58,12 +58,10 @@ public class RequestHandler {
                     home.sendToAllClients(home.logger);
                     emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n\n Magnetsensorn har larmat");
 
-
                 } else if (!securityComponent.isOpen()) {
                     home.sendToAllClients("Magnetsensorn är aktiv");
                     home.logger.addToLog("Magnetsensorn är aktiv");
                     home.sendToAllClients(home.logger);
-
                 }
             }
             if (securityComponent instanceof FireAlarm) {
@@ -111,6 +109,8 @@ public class RequestHandler {
                 return clientRequest;
             }
         }
+
+
         if (clientRequest instanceof String) {
 //                    if (clientRequest.equals("on")) {
 //                        //localServerOos.writeObject(new MagneticSensor());

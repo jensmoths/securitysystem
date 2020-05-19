@@ -55,6 +55,7 @@ public class MainPanel extends JPanel {
     private JScrollPane scrollPaneLogger;
     private JScrollPane scrollPaneOnline;
     private JScrollPane scrollPaneOffline;
+    private JScrollPane scrollPanePictures;
 
     private JButton btnFilter;
     private JButton btnPhoto;
@@ -135,7 +136,6 @@ public class MainPanel extends JPanel {
         taOffline = new JList(dlmOffline);
         taOnline = new JList(dlmOnline);
         listImages = new JList(defaultListModelImages);
-        listImages.setBackground(Color.white);
 
         //TODO TA BORT DETTA?
         /*
@@ -155,6 +155,7 @@ public class MainPanel extends JPanel {
         taOnline.setForeground(Color.white);
         taOffline.setForeground(Color.white);
         taLogger.setForeground(Color.white);
+        listImages.setForeground(Color.white);
 
         leftPanel.setPreferredSize(new Dimension(280, 300));
         centerPanel.setPreferredSize(new Dimension(430, 600));
@@ -173,10 +174,13 @@ public class MainPanel extends JPanel {
         scrollPaneLogger = new JScrollPane(taLogger);
         scrollPaneOffline = new JScrollPane(taOffline);
         scrollPaneOnline = new JScrollPane(taOnline);
+        scrollPanePictures = new JScrollPane(listImages);
 
         scrollPaneLogger.setPreferredSize(new Dimension(600, 530));
         scrollPaneOnline.setPreferredSize(new Dimension(380, 260));
         scrollPaneOffline.setPreferredSize(new Dimension(380, 260));
+        scrollPanePictures.setPreferredSize(new Dimension(200,200));
+
 
         btnLock = new JButton("Lock door");
         btnUnlock = new JButton("Unlock door");
@@ -203,7 +207,7 @@ public class MainPanel extends JPanel {
         leftPanelNorth.add(btnON, BorderLayout.CENTER);
         leftPanelNorth.add(btnOFF, BorderLayout.CENTER);
         leftPanelCenter.add(btnPhoto);
-        leftPanelCenter.add(listImages);
+        leftPanelCenter.add(scrollPanePictures);
 
 
         leftPanel.add(leftPanelNorth, BorderLayout.NORTH);
@@ -221,7 +225,6 @@ public class MainPanel extends JPanel {
         TitledBorder doorBorder = new TitledBorder("Door");
         TitledBorder camera = new TitledBorder("Camera");
         TitledBorder borderImages = new TitledBorder("Images");
-
 
         loggerBorder.setTitleColor(new Color(62, 134, 160));
         onlineBorder.setTitleColor(new Color(62, 134, 160));
@@ -253,6 +256,7 @@ public class MainPanel extends JPanel {
         centerPanelNorth.setBackground(new Color(60, 63, 65));
         centerPanel.setBackground(new Color(60, 63, 65));
 
+        listImages.setBackground(new Color(43, 43, 43));
         taOnline.setBackground(new Color(43, 43, 43));
         taOffline.setBackground(new Color(43, 43, 43));
         taLogger.setBackground(new Color(43, 43, 43));

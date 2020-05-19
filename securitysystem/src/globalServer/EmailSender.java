@@ -57,6 +57,12 @@ public class EmailSender {
         }
     }
 
+    public void sendAlertMail(String recipient, String subject, String text) {
+        sendMail(recipient, subject, text);
+
+
+    }
+
 
     public void sendPictureMail(String recipient, String text, String subject, ImageIcon imageIcon) {
 

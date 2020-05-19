@@ -31,25 +31,25 @@ public class FingerprintGui extends JFrame implements ActionListener {
     public void draw() throws ParseException {
         //mask = new MaskFormatter("###");
         panel = new JPanel(new GridLayout(6,6));
-        addText = new JFormattedTextField(1);
-        deleteText = new JFormattedTextField(1);
-        list = new JList();
-        //mask.setMask("###");
-        add = new JButton("Add");
-        delete = new JButton("Delete");
-        empty = new JButton("Clear");
-        add.addActionListener(this::actionPerformed);
-        delete.addActionListener(this::actionPerformed);
-        empty.addActionListener(this::actionPerformed);
-        addText.setBorder(BorderFactory.createTitledBorder("Add"));
+            addText = new JFormattedTextField(1);
+            deleteText = new JFormattedTextField(1);
+            list = new JList();
+            //mask.setMask("###");
+                add = new JButton("Add");
+                delete = new JButton("Delete");
+                empty = new JButton("Clear");
+                add.addActionListener(this::actionPerformed);
+                delete.addActionListener(this::actionPerformed);
+                empty.addActionListener(this::actionPerformed);
+                addText.setBorder(BorderFactory.createTitledBorder("Add"));
         deleteText.setBorder(BorderFactory.createTitledBorder("Delete"));
 
-        this.add(panel);
-        panel.add(addText);
-        panel.add(deleteText);
-        panel.add(add);
-        panel.add(delete);
-        panel.add(empty);
+            this.add(panel);
+                panel.add(addText);
+                panel.add(deleteText);
+                panel.add(add);
+                panel.add(delete);
+                panel.add(empty);
 
 
     }
@@ -57,7 +57,7 @@ public class FingerprintGui extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (actionEvent.getSource() ==add){
+        if (actionEvent.getSource() == add){
             try {
 
                 int i = (int) addText.getValue();
@@ -85,4 +85,3 @@ public class FingerprintGui extends JFrame implements ActionListener {
 
     }
 }
-

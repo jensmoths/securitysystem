@@ -5,10 +5,18 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
-String locationString;
+//String locationString = "location";
+int buttonState = 0;         // current state of the button
+int lastButtonState = 0;     // previous state of the button
+const String IP = "83.254.129.68"; //per
+//const String IP = "192.168.31.181";
+const int PORT = 40000;
+const String TYPE = "magnet";
+
+WiFiClient client;
 
 
-void setupWifiManager() {
+String setupWifiManager() {
   WiFiManager wifiManager;
 
   //uncomment to reset saved settings
@@ -26,7 +34,40 @@ void setupWifiManager() {
   //if you get here you have connected to the WiFi
   Serial.println("connected to wifi");
   Serial.println(location.getValue());
-  locationString = location.getValue();
+  return location.getValue();
+}
+
+void connectToServer(String location) {
+  while (true) {
+    Serial.println("connecting to server");
+    client.connect(IP, PORT);
+    client.print(ESP.getChipId());
+    client.print("|");
+    client.print(TYPE);
+    client.print("|");
+    client.print("jens");   
+    client.println();
+    if (client.connected()) break;
+    delay(10000);
+  }
+  Serial.println("connected to server");
+}
+
+void reconnectToServer() {
+
+
+ 
+  
+  while (true) {
+    Serial.println("reconnecting to server");
+    client.connect(IP, PORT);
+    client.print(ESP.getChipId());
+    client.print("|");
+    client.println(TYPE);
+    if (client.connected()) break;
+    delay(10000);
+  }
+  Serial.println("connected to server");
 }
 
 
@@ -36,50 +77,45 @@ void setupWifiManager() {
 
 void setup() {
   // put your setup code here, to run once:
+  pinMode(4, OUTPUT);
+  pinMode(0, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
 
   //start serial for debugging
   Serial.begin(115200);
 
   //method for easy connection to a wifi
-  setupWifiManager();
+  String location = setupWifiManager();
 
-
-
+  connectToServer(location);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  // Use WiFiClient class to create TCP connections
-  WiFiClient client;
-  client.connect("192.168.1.46", 40000);
-  client.print(ESP.getChipId());
-  client.print(" ");
-  client.print("kitchen");
-  client.println(""); 
-
-
-
-
-
-  while (true) {
-
-    if (!client.connected()) {
-      Serial.println("connection failed");
-      delay(5000);
-      return;
-    }
-
-
-    // This will send a string to the server
-    Serial.println("sending data to server");
-    if (client.connected()) {
-      if (Serial.available() > 0) {
-      String s = Serial.readString();
-      client.println(s);
-      Serial.println(s);
+void loop() { 
+  if (client.connected()) {
+    buttonState = digitalRead(0);
+    if (buttonState != lastButtonState) {
+      if (buttonState == LOW) {
+        client.println("on");
+        
+        Serial.println("button on");
+      } else {
+        Serial.println("button off");
+        client.println("off");
       }
     }
+    lastButtonState = buttonState;
 
-    delay(10000);
-  }
+
+    if (client.available() > 0) {
+      char message = client.read();
+      Serial.println(message);
+      if (message == 'c') {
+        digitalWrite(4, HIGH);
+        digitalWrite(LED_BUILTIN, LOW);
+      } else if (message == 'o') {
+        digitalWrite(4, LOW);
+        digitalWrite(LED_BUILTIN, HIGH);
+      }
+    }
+  } else reconnectToServer();
 }

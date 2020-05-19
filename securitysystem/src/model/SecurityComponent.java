@@ -39,6 +39,7 @@ public class SecurityComponent implements Serializable {
     }
 
     public int hashCode() {
+        System.out.println(String.valueOf(id).hashCode());
         return String.valueOf(id).hashCode();
     }
 

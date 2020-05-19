@@ -83,7 +83,7 @@ public class MainFrame extends JPanel implements ActionListener {
         numPadPanel.setLayout(new GridLayout(4, 3, 2, 2));
         this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(300, 300));
-        numPadPanel.setBackground(Color.ORANGE);
+        numPadPanel.setBackground(new Color(62, 134, 160));
         tfPanel.setLayout(new BorderLayout());
 
         this.add(tfPanel, BorderLayout.NORTH);

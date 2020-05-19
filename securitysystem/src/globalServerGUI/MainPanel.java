@@ -202,11 +202,17 @@ public class MainPanel extends JPanel {
 
     public void setTableInfo(String[][] info) {
 
-        model = new DefaultTableModel(info, columns);
+        model = new DefaultTableModel(info, columns){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tblInfo.setModel(model);
         tblInfo.repaint();
 
     }
+
 
     public String[] getStartDate() {
         String temp = tfStartDate.getText();

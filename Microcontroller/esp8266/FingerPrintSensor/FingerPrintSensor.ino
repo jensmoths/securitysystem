@@ -2,13 +2,12 @@
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 #include <Adafruit_Fingerprint.h> //https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library
 #include <SoftwareSerial.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-
+#include <Adafruit_GFX.h>         //https://github.com/adafruit/Adafruit-GFX-Library
+#include <Adafruit_SSD1306.h>     //https://github.com/stblassitude/Adafruit_SSD1306_Wemos_OLED
 
 //needed libraries for WifiManager
 #include <DNSServer.h>
-#include <ESP8266WebServer.h>
+#include <ESP8266WebServer.h>    //https://github.com/esp8266/Arduino
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
 //SoftSerial use pins D4 (RX) and D3 (TX).

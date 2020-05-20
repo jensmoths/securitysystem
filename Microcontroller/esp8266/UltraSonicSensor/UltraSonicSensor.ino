@@ -1,13 +1,14 @@
+//author Karl Andersson, Jens Moths, Malek Abdul Sater
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 
 //needed libraries for WifiManager
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
-#include <Ultrasonic.h>
+#include <Ultrasonic.h>          //www.elecfreaks.com
 
 //String locationString = "location";
-float lastDistance = 0;         // current state of the distance
+
 
 //const String IP = "83.254.129.68";
 //const String IP = "192.168.1.42";//Olof mobil
@@ -17,13 +18,11 @@ const String TYPE = "proximity";
 // defines pins numbers
 const int trigpin = 4;
 const int echopin = 5;
-// defines variables
-long duration;
+const int wifiReset = 16;
 const int led = 13;
+const int resetState = 12;
+// defines variables
 int ledState = LOW;
-int wifiReset = 16;
-int wifiButton;
-int resetState = 12;
 unsigned long preMillis = 0;
 unsigned long ms;
 unsigned long beatMs;
@@ -32,17 +31,13 @@ unsigned long connectMs;
 unsigned long preConnect = 0;
 unsigned long reconnectMs;
 unsigned long preReconnect = 0;
-
-
+float lastDistance = 0;  // current state of the distance
 
 WiFiClient client;
 WiFiManager wifiManager;
 Ultrasonic ultrasonic(trigpin, echopin);
+
 String setupWifiManager() {
-
-
-  //uncomment to reset saved settings
-  //wifiManager.resetSettings();
 
   //Parameter for configuring the location at the same time as wifi
   WiFiManagerParameter location("location", "location", "", 40);
@@ -59,7 +54,7 @@ String setupWifiManager() {
   return location.getValue();
 }
 void resetWifi() {
-  wifiButton = digitalRead(wifiReset);
+  int wifiButton = digitalRead(wifiReset);
   if (wifiButton == HIGH) {
     wifiManager.resetSettings();
     delay(2000);
@@ -85,7 +80,6 @@ void heartBeat() {
     Serial.println("heartbeat Proxi");
   }
 }
-
 
 void connectToServer(String location) {
   while (true) {
@@ -124,16 +118,12 @@ void reconnectToServer() {
     }
     yield();
     if (client.connected()) break;
-    //delay(5000);
+
   }
   Serial.println("connected to server");
 }
 
-
-
-
 void setup() {
-
   //start serial for debugging
   Serial.begin(9600);
   client.setTimeout(250);
@@ -158,7 +148,7 @@ void loop() {
     cmdistance = ultrasonic.CalcDistance(microsec, Ultrasonic::CM); //this result unit is centimeter
 
     delay(10);
-
+    
     if (((lastDistance - cmdistance) > 10) || ((lastDistance - cmdistance) <  -10  )) {
       if (cmdistance < 20.00) {
 

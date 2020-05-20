@@ -10,7 +10,8 @@
 float lastDistance = 0;         // current state of the distance
 
 //const String IP = "83.254.129.68";
-const String IP = "192.168.1.42";//Olof mobil
+//const String IP = "192.168.1.42";//Olof mobil
+const String IP = "109.228.172.110";
 const int PORT = 40000;
 const String TYPE = "proximity";
 // defines pins numbers
@@ -167,12 +168,9 @@ void loop() {
           client.println("on");
           Serial.print("Distance: ");
           Serial.println(cmdistance);
-
+          lastDistance = cmdistance;
         }
-
-
       }
-      lastDistance = cmdistance;
     }
   } else reconnectToServer();
 }

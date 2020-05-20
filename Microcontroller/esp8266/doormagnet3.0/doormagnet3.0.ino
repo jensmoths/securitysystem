@@ -8,8 +8,9 @@
 //String locationString = "location";
 int buttonState = 0;         // current state of the button
 int lastButtonState = 0;     // previous state of the button
-const String IP = "83.254.129.68"; //per
+//const String IP = "83.254.129.68"; //per
 //const String IP = "192.168.1.42";
+const String IP = "109.228.172.110";
 const int PORT = 40000;
 const String TYPEMAGNET = "magnet";
 const String TYPEDOOR = "door";

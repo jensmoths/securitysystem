@@ -1,3 +1,4 @@
+//author Karl Andersson, Jens Moths
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 
 //needed libraries for WifiManager
@@ -12,13 +13,14 @@ const String IP = "109.228.172.110";
 //const String IP = "192.168.1.42";//Olof mobil
 const int PORT = 40000; //per
 const String TYPE = "firealarm";
+// defines pins numbers
 const int larm = 15;
 int larmSignal;
 const int led = 13;
 int ledState = LOW;
 int wifiReset = 16;
-int wifiButton;
 int resetState = 12;
+// defines variables
 unsigned long preMillis = 0;
 unsigned long ms;
 unsigned long beatMs;
@@ -35,10 +37,6 @@ WiFiManager wifiManager;
 
 String setupWifiManager() {
 
-
-  //uncomment to reset saved settings
-  //wifiManager.resetSettings();
-
   //Parameter for configuring the location at the same time as wifi
   WiFiManagerParameter location("location", "location", "", 40);
   wifiManager.addParameter(&location);
@@ -54,7 +52,7 @@ String setupWifiManager() {
   return location.getValue();
 }
 void resetWifi() {
-  wifiButton = digitalRead(wifiReset);
+  int wifiButton = digitalRead(wifiReset);
   if (wifiButton == HIGH) {
     wifiManager.resetSettings();
     delay(2000);
@@ -80,12 +78,6 @@ void heartBeat() {
     Serial.println("heartbeat firealarm");
   }
 }
-
-//unsigned long connectMs;
-//unsigned long preConnect = 0;
-//unsigned long reconnectMs;
-//unsigned long preReconnect = 0;
-
 
 void connectToServer(String location) {
   while (true) {
@@ -124,7 +116,6 @@ void reconnectToServer() {
     }
     yield();
     if (client.connected()) break;
-    //delay(5000);
   }
   Serial.println("connected to server firealarm");
 }
@@ -133,7 +124,7 @@ void reconnectToServer() {
 void setup() {
 
   //start serial for debugging
-  Serial.begin(115200);
+  Serial.begin(9600);
   client.setTimeout(250);
   pinMode(larm, INPUT);
   pinMode(led, OUTPUT);

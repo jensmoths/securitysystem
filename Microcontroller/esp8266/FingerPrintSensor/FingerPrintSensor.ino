@@ -1,5 +1,6 @@
+//author Jens Moths, Karl Andersson
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
-#include <Adafruit_Fingerprint.h>
+#include <Adafruit_Fingerprint.h> //https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library
 #include <SoftwareSerial.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -25,10 +26,11 @@ const String IP = "192.168.31.181";
 //const String IP = "109.228.172.110"; //Malek
 const int PORT = 40000;
 const String TYPE = "fingerprint";
+// defines pins numbers
 int statusState = LOW;
 int wifiReset = 16;
-int wifiButton;
 int resetState = 12;
+// defines variables
 unsigned long preMillis = 0;
 unsigned long ms;
 unsigned long beatMs;
@@ -51,9 +53,6 @@ const unsigned char connectedBitmap [] PROGMEM = {
 };
 
 String setupWifiManager() {
-
-  //uncomment to reset saved settings
-  //wifiManager.resetSettings();
 
   //Parameter for configuring the location at the same time as wifi
   WiFiManagerParameter location("location", "location", "", 40);
@@ -94,7 +93,7 @@ void setupDisplay() {
 }
 
 void resetWifi() {
-  wifiButton = digitalRead(wifiReset);
+  int wifiButton = digitalRead(wifiReset);
   if (wifiButton == HIGH) {
     wifiManager.resetSettings();
     delay(2000);
@@ -172,9 +171,6 @@ void reconnectToServer() {
     if (client.connected()) break;
   }
 }
-
-
-
 
 void setup() {
   setupDisplay();

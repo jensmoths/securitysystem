@@ -8,7 +8,8 @@
 //String locationString = "location";
 //const String IP = "83.254.129.68"; //per
 //const String IP = "82.209.130.123";//jens
-const String IP = "192.168.1.42";//Olof mobil
+const String IP = "109.228.172.110";
+//const String IP = "192.168.1.42";//Olof mobil
 const int PORT = 40000; //per
 const String TYPE = "firealarm";
 const int larm = 15;
@@ -34,7 +35,7 @@ WiFiManager wifiManager;
 
 String setupWifiManager() {
 
-   
+
   //uncomment to reset saved settings
   //wifiManager.resetSettings();
 
@@ -73,10 +74,10 @@ void ledBlink() {
 }
 void heartBeat() {
   beatMs = millis();
-  if ((beatMs - preBeat) >= 1000 ) {
+  if ((beatMs - preBeat) >= 3000 ) {
     preBeat = beatMs;
     client.println("heartbeat");
-    Serial.println("heartbeat");
+    Serial.println("heartbeat firealarm");
   }
 }
 
@@ -93,7 +94,7 @@ void connectToServer(String location) {
     connectMs = millis();
     if ((connectMs - preConnect) >= 5000 ) {
       preConnect = connectMs;
-      Serial.println("connecting to server");
+      Serial.println("connecting to server firealarm");
       client.connect(IP, PORT);
       client.print(ESP.getChipId());
       client.print("|");
@@ -105,7 +106,7 @@ void connectToServer(String location) {
     yield();
     if (client.connected()) break;
   }
-  Serial.println("connected to server");
+  Serial.println("connected to server firealarm");
 }
 
 void reconnectToServer() {
@@ -115,7 +116,7 @@ void reconnectToServer() {
     reconnectMs = millis();
     if ((reconnectMs - preReconnect) >= 5000) {
       preReconnect = reconnectMs;
-      Serial.println("reconnecting to server");
+      Serial.println("reconnecting to server firealarm");
       client.connect(IP, PORT);
       client.print(ESP.getChipId());
       client.print("|");
@@ -125,7 +126,7 @@ void reconnectToServer() {
     if (client.connected()) break;
     //delay(5000);
   }
-  Serial.println("connected to server");
+  Serial.println("connected to server firealarm");
 }
 
 
@@ -139,7 +140,6 @@ void setup() {
   pinMode(wifiReset, INPUT);
   pinMode(resetState, INPUT);
   digitalWrite(resetState, LOW);
-
   //method for easy connection to a wifi
   String location = setupWifiManager();
 

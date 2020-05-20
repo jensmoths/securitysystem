@@ -1,9 +1,6 @@
-package localClient;
+package localserver.GUI;
 
 
-import model.FireAlarm;
-import model.MagneticSensor;
-import model.ProximitySensor;
 import model.SecurityComponent;
 import net.miginfocom.swing.MigLayout;
 
@@ -13,6 +10,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Meny extends JFrame {
@@ -23,7 +21,7 @@ public class Meny extends JFrame {
     JButton btnAlarmOn = new JButton("Larma");
     JButton btnChangeCode = new JButton("Ändra kod");
     JButton btnFingerprint = new JButton("Fingeravläsare");
-    JButton btnGoOnline = new JButton("Go online");
+    public JButton btnGoOnline = new JButton("Go online");
 
     JList tfonlineMK = new JList();
     JList tfofflineMK = new JList();
@@ -163,6 +161,11 @@ public class Meny extends JFrame {
                 //ChangeCode.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             }
             if(e.getSource() == btnFingerprint){
+                try {
+                    mainFrame.controller.getFingerAmount();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
                 fingerprintGui.setVisible(true);
             }
             if(e.getSource() == btnGoOnline)

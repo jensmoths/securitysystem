@@ -1,16 +1,13 @@
-package localClient;
+package localserver;
 
 
-import localserver.*;
-import localserver.PiServer;
+import localserver.GUI.MainFrame;
 import model.Message;
-import model.SecurityComponent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Controller {
@@ -39,9 +36,9 @@ public class Controller {
         server.globalServer.updateGlobal();
     }
 
-    public void sendToMK(char c, int id) throws IOException {
+    public void sendToMK(char c) throws IOException {
        // System.out.println("CONTROLLER SEND TO MK");
-        server.sendToFinger(c, id);
+        server.sendToFinger(c);
     }
 
     public void connectToGlobal() {
@@ -136,8 +133,11 @@ public class Controller {
         mainFrame.meny.btnGoOnline.setEnabled(b);
     }
 
-    public int getFingerAmount() throws IOException {
-        server.sendToFinger('g', 0);
-        return 0;
+    public void getFingerAmount() throws IOException {
+        server.sendToFinger('g');
+    }
+
+    public void setFingersAmount(int fingers) {
+        mainFrame.fingerprintGui.setFingersAmount(fingers);
     }
 }

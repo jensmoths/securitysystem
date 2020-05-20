@@ -1,4 +1,6 @@
-package localClient;
+package localserver.GUI;
+
+import localserver.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,14 +20,14 @@ public class MainFrame extends JPanel implements ActionListener {
     private Font font = new Font("Courier", Font.BOLD, 45);
     private String systemPinCode;
     private Color numberPadColor = new Color(74, 77, 82);
-    ChangeCode cc;
-    Meny meny;
-    Controller controller;
+    public ChangeCode cc;
+    public Meny meny;
+    public Controller controller;
 
-    FingerprintGui fingerprintGui;
-    GoOnline goOnline;
+    public FingerprintGui fingerprintGui;
+    public GoOnline goOnline;
 
-    JFrame numpad;
+    public JFrame numpad;
 
 
 
@@ -33,7 +35,7 @@ public class MainFrame extends JPanel implements ActionListener {
     Instantiates the global GUI (the virtual numberpad) and hardcodes a value as the correct pincode.
     Also sets up all the necessary graphical components, using the draw() method.
      */
-    public MainFrame(Controller controller) throws ParseException {
+    public MainFrame(Controller controller) throws ParseException, IOException {
         this.controller = controller;
         numpad = new JFrame();
         //frame.setSize(new Dimension(320, 420));

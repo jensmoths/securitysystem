@@ -1,4 +1,4 @@
-package localClient;
+package localserver.GUI;
 
 import javax.swing.*;
 import java.awt.*;

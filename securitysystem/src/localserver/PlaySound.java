@@ -1,4 +1,4 @@
-package localClient;
+package localserver;
 
 import java.io.File;
 import java.io.IOException;

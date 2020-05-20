@@ -1,7 +1,5 @@
 package localserver;
 
-import localClient.Controller;
-import localClient.FingerprintGui;
 import model.*;
 
 import javax.swing.*;
@@ -80,9 +78,9 @@ public class PiServer extends Thread implements Serializable {
         }
     }
 
-    public void sendToFinger(char c, int id) throws IOException {
-        System.out.println("SERVER SEND TO FINGER: "+ c +" Index: "+ id);
-        startServer.sendToFingerChar(c, id);
+    public void sendToFinger(char c) throws IOException {
+        System.out.println("SERVER SEND TO FINGER: "+ c +" Index: ");
+        startServer.sendToFingerChar(c);
 
     }
 
@@ -198,14 +196,12 @@ public class PiServer extends Thread implements Serializable {
 
         }
 
-        public void sendToFingerChar(char msg, int id) throws IOException {
+        public void sendToFingerChar(char msg) throws IOException {
             System.out.println("CH SEND TO FINGER");
             for (SecurityComponent s : map.keySet()
             ) {
                 if (s instanceof FingerprintSensor) {
                     map.get(s).sendMessage(msg);
-                    map.get(s).sendMessageID(id);
-                    System.out.println(id);
                 }
 
             }
@@ -312,6 +308,9 @@ public class PiServer extends Thread implements Serializable {
                         }
                     }
                     if (message.getSecurityComponent() instanceof FingerprintSensor) {
+                        if (split[0].equals("fingers")) {
+                            controller.setFingersAmount(Integer.parseInt(split[1]));
+                        }
                         if (message.getSecurityComponent().isOpen()) {
                             controller.setAlarmOn(false);
                             controller.soundAlarm("Welcome");
@@ -456,7 +455,7 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("localhost", 8081);
+                connect("109.228.172.110", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Kunde inte ansluta till servern \n" + e.getMessage());

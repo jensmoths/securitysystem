@@ -10,8 +10,8 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
-//SoftSerial use pins D6 (TX) and D5 (RX).
-SoftwareSerial swSer(14, 12);
+//SoftSerial use pins D4 (RX) and D3 (TX).
+SoftwareSerial swSer(2, 0);
 
 //0x31
 #define OLED_RESET 0
@@ -20,9 +20,15 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&swSer);
 WiFiClient client;
 
 const String IP = "192.168.31.181";
+//const String IP = "83.254.129.68"; //Per
+//const String IP = "158.174.123.25"; //Karl
+//const String IP = "109.228.172.110"; //Malek
 const int PORT = 40000;
 const String TYPE = "fingerprint";
 int statusState = LOW;
+int wifiReset = 16;
+int wifiButton;
+int resetState = 12;
 unsigned long preMillis = 0;
 unsigned long ms;
 unsigned long beatMs;
@@ -32,7 +38,7 @@ unsigned long preConnect = 0;
 unsigned long reconnectMs;
 unsigned long preReconnect = 0;
 
-
+WiFiManager wifiManager;
 // reconnecting, 10x10px
 const unsigned char reconnectingBitmap [] PROGMEM = {
   0x08, 0x00, 0x1c, 0x00, 0x0b, 0x00, 0x01, 0x00, 0x40, 0x80, 0x40, 0x80, 0x20, 0x00, 0x34, 0x00,
@@ -44,18 +50,7 @@ const unsigned char connectedBitmap [] PROGMEM = {
   0x07, 0x00, 0x02, 0x00
 };
 
-
-
-
-
-
-
-
-
-
-
 String setupWifiManager() {
-  WiFiManager wifiManager;
 
   //uncomment to reset saved settings
   //wifiManager.resetSettings();
@@ -98,11 +93,20 @@ void setupDisplay() {
   display.display();
 }
 
+void resetWifi() {
+  wifiButton = digitalRead(wifiReset);
+  if (wifiButton == HIGH) {
+    wifiManager.resetSettings();
+    delay(2000);
+    pinMode(resetState, OUTPUT);
+  }
+}
+
 void heartBeat() {
   beatMs = millis();
   if ((beatMs - preBeat) >= 1000 ) {
     preBeat = beatMs;
-    client.print("heartbeat");
+    client.println("heartbeat");
     Serial.println("heartbeat");
   }
 }
@@ -123,11 +127,10 @@ void statusBlink() {
   }
 }
 
-
-//add animation
 void connectToServer(String location) {
   display.clearDisplay();
   display.display();
+  //resetWifi();
   while (true) {
     statusBlink();
     connectMs = millis();
@@ -153,6 +156,7 @@ void connectToServer(String location) {
 void reconnectToServer() {
   display.clearDisplay();
   display.display();
+  //resetWifi();
   while (true) {
     statusBlink();
     reconnectMs = millis();
@@ -167,9 +171,6 @@ void reconnectToServer() {
     yield();
     if (client.connected()) break;
   }
-  display.clearDisplay();
-  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
-  display.display();
 }
 
 
@@ -177,11 +178,13 @@ void reconnectToServer() {
 
 void setup() {
   setupDisplay();
+  pinMode(wifiReset, INPUT);
+  pinMode(resetState, INPUT);
+  digitalWrite(resetState, LOW);
+  Serial.begin(9600);
+  client.setTimeout(250);
 
-  Serial.begin(115200);
-   client.setTimeout(250);
-
-  //setupFingerPrint();
+  setupFingerPrint();
 
   //method for easy connection to a wifi
   String location = setupWifiManager();
@@ -190,20 +193,75 @@ void setup() {
 }
 
 void loop() {
+  //resetWifi();
   if (client.connected()) {
     heartBeat();
+    display.clearDisplay();
+    display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+    display.setCursor(0, 24);
+    display.println("Ready...");
+    display.display();
+    delay(50);
+
+    int fingerid = getFingerprintIDez();
+    Serial.println(fingerid);
+    if (fingerid == -2) {
+      client.println("wrong finger");
+      display.clearDisplay();
+      display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+      display.setCursor(0, 24);
+      display.println("No match");
+      display.display();
+      delay(2000);
+    } else if (fingerid >= 0 ) {
+      client.println("on");
+
+      display.clearDisplay();
+      display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+      display.setCursor(0, 24);
+      display.println("Welcome");
+      display.print("home id ");
+      display.println(fingerid);
+      display.display();
+
+      Serial.println(fingerid);
+      delay(2000);
+    }
+
+
+
     if (client.available() > 0) {
       char message = client.read();
       Serial.println(message);
       if (message == 'a') {
-        int id = client.parseInt();
-        while (!getFingerprintEnroll(4));
+        finger.getTemplateCount();
+        while (!getFingerprintEnroll(finger.templateCount + 1));
+        finger.getTemplateCount();
+        client.print("fingers");
+        client.print("|");
+        client.println(finger.templateCount); 
       } else if (message == 'e') {
         finger.emptyDatabase();
+        display.clearDisplay();
+        display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+        display.setCursor(0, 24);
+        display.println("Cleared");
+        display.display();
+        finger.getTemplateCount();
+        client.print("fingers");
+        client.print("|");
+        client.println(finger.templateCount); 
+        delay(2000);
         Serial.println("Database cleared");
       } else if (message == 'd') {
-        int id = client.parseInt();
-        deleteFingerprint(id);
+        
+        //Serial.println(id);
+        deleteFingerprint(finger.fingerID);
+      } else if (message == 'g'){
+        finger.getTemplateCount();
+        client.print("fingers");
+        client.print("|");
+        client.println(finger.templateCount);      
       }
     }
   } else reconnectToServer();
@@ -213,6 +271,12 @@ uint8_t getFingerprintEnroll(int id) {
 
   int p = -1;
   Serial.print("Waiting for valid finger to enroll as #"); Serial.println(id);
+  display.clearDisplay();
+  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+  display.setCursor(0, 24);
+  display.println("Place");
+  display.println("finger");
+  display.display();
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -259,6 +323,12 @@ uint8_t getFingerprintEnroll(int id) {
   }
 
   Serial.println("Remove finger");
+  display.clearDisplay();
+  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+  display.setCursor(0, 24);
+  display.println("Remove");
+  display.println("finger");
+  display.display();
   delay(2000);
   p = 0;
   while (p != FINGERPRINT_NOFINGER) {
@@ -267,6 +337,13 @@ uint8_t getFingerprintEnroll(int id) {
   Serial.print("ID "); Serial.println(id);
   p = -1;
   Serial.println("Place same finger again");
+  display.clearDisplay();
+  display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+  display.setCursor(0, 24);
+  display.println("Place");
+  display.println("finger");
+  display.println("again");
+  display.display();
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
@@ -333,6 +410,12 @@ uint8_t getFingerprintEnroll(int id) {
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
     Serial.println("Stored!");
+    display.clearDisplay();
+    display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+    display.setCursor(0, 24);
+    display.println("Stored");
+    display.display();
+    delay(2000);
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
     return p;
@@ -348,13 +431,20 @@ uint8_t getFingerprintEnroll(int id) {
   }
 }
 
-uint8_t deleteFingerprint(uint8_t id) {
+uint8_t deleteFingerprint(int id) {
   uint8_t p = -1;
 
   p = finger.deleteModel(id);
 
   if (p == FINGERPRINT_OK) {
     Serial.println("Deleted!");
+    display.clearDisplay();
+    display.drawBitmap(0, 0,  connectedBitmap, 10, 10, WHITE);
+    display.setCursor(0, 24);
+    display.println("Deleted");
+    display.println(id);
+    display.display();
+    delay(2000);
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
     return p;
@@ -368,4 +458,30 @@ uint8_t deleteFingerprint(uint8_t id) {
     Serial.print("Unknown error: 0x"); Serial.println(p, HEX);
     return p;
   }
+}
+
+
+// returns -1 if failed, otherwise returns ID #
+int getFingerprintIDez() {
+  uint8_t p = finger.getImage();
+  if (p != FINGERPRINT_OK)  return -1;
+
+  p = finger.image2Tz();
+  if (p != FINGERPRINT_OK)  return -1;
+
+  p = finger.fingerFastSearch();
+  if (p == FINGERPRINT_OK) {
+    Serial.println("Found a print match!");
+  }  else if (p == FINGERPRINT_NOTFOUND) {
+    Serial.println("Did not find a match");
+    return -2;
+  } else {
+    Serial.println("Unknown error");
+    return -1;
+  }
+
+  // found a match!
+  Serial.print("Found ID #"); Serial.print(finger.fingerID);
+  Serial.print(" with confidence of "); Serial.println(finger.confidence);
+  return finger.fingerID;
 }

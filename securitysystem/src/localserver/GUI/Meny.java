@@ -33,7 +33,7 @@ public class Meny extends JFrame {
 
 
 
-    public Meny (MainFrame mainFrame, ChangeCode changeCode, FingerprintGui fingerprintGui, GoOnline goOnline){
+    public Meny (MainFrame mainFrame, ChangeCode changeCode, FingerprintGui fingerprintGui){
         this.mainFrame = mainFrame;
         this.changeCode = changeCode;
         this.fingerprintGui = fingerprintGui;

@@ -25,7 +25,6 @@ public class MainFrame extends JPanel implements ActionListener {
     public Controller controller;
 
     public FingerprintGui fingerprintGui;
-    public GoOnline goOnline;
 
     public JFrame numpad;
 
@@ -47,8 +46,7 @@ public class MainFrame extends JPanel implements ActionListener {
         numpad.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         fingerprintGui = new FingerprintGui(this);
-        goOnline = new GoOnline(this);
-        meny = new Meny(this, cc, fingerprintGui, goOnline);
+        meny = new Meny(this, cc, fingerprintGui);
         meny.setVisible(false);
         meny.setBackground(new Color(83,86,91));
 

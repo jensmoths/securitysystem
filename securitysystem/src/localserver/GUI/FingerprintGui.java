@@ -69,6 +69,7 @@ public class FingerprintGui extends JFrame implements ActionListener {
         add.addActionListener(this::actionPerformed);
         delete.addActionListener(this::actionPerformed);
         clear.addActionListener(this::actionPerformed);
+        returnbtn.addActionListener(this::actionPerformed);
         fingersLabel.setFont(font);
         add.setFont(font);
         delete.setFont(font);
@@ -110,7 +111,7 @@ public class FingerprintGui extends JFrame implements ActionListener {
             }
         }
         if (actionEvent.getSource() == returnbtn) {
-            fingerFrame.setVisible(false);
+            setVisible(false);
         }
     }
 

@@ -13,14 +13,14 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Meny extends JFrame {
+public class Menu extends JFrame {
 
 
-    JButton btnOpenDoor = new JButton("Lås upp");
-    JButton btnCloseDoor = new JButton("Lås");
-    JButton btnAlarmOn = new JButton("Larma");
-    JButton btnChangeCode = new JButton("Ändra kod");
-    JButton btnFingerprint = new JButton("Fingeravläsare");
+    JButton btnOpenDoor = new JButton("Unlock");
+    JButton btnCloseDoor = new JButton("Lock");
+    JButton btnAlarmOn = new JButton("Alarm");
+    JButton btnChangeCode = new JButton("Change PIN code");
+    JButton btnFingerprint = new JButton("Fingerprint Reader");
     public JButton btnGoOnline = new JButton("Go online");
 
     JList tfonlineMK = new JList();
@@ -33,7 +33,7 @@ public class Meny extends JFrame {
 
 
 
-    public Meny (MainFrame mainFrame, ChangeCode changeCode, FingerprintGui fingerprintGui){
+    public Menu(MainFrame mainFrame, ChangeCode changeCode, FingerprintGui fingerprintGui){
         this.mainFrame = mainFrame;
         this.changeCode = changeCode;
         this.fingerprintGui = fingerprintGui;

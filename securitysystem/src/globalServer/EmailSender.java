@@ -30,7 +30,6 @@ public class EmailSender {
     }
 
     public void sendMail(String recipient, String subject, String text) {
-        System.out.println("Börjar skicka...");
         try {
             properties.put("mail.smtp.auth", "true");
             properties.put("mail.smtp.starttls.enable", "true");
@@ -49,18 +48,14 @@ public class EmailSender {
 
             Message message = messageCreator(session, myAccountEmail, recipient, subject, text);
             Transport.send(message);
-            System.out.println("skickat!");
 
         } catch (MessagingException m) {
-            System.out.println("Didn't find the specified email!");
             m.printStackTrace();
         }
     }
 
 
     public void sendPictureMail(String recipient, String text, String subject, ImageIcon imageIcon) {
-
-        System.out.println("Börjar skicka bild...");
 
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
@@ -79,12 +74,9 @@ public class EmailSender {
         try {
             Message message = messagePictureCreator(session, myAccountEmail, recipient, text, subject, imageIcon);
             Transport.send(message);
-            System.out.println("Bild skickat!");
         } catch (MessagingException m) {
-            System.out.println("Didn't find the specified email!");
             m.printStackTrace();
         }
-
     }
 
     public Message messageCreator(Session session, String myAccountEmail, String recipient, String subject, String text) throws MessagingException {
@@ -133,8 +125,6 @@ public class EmailSender {
             e.printStackTrace();
         }
 
-
-
         messageMime = new MimeBodyPart();
         FileDataSource source = new FileDataSource(file);
         messageMime.setDataHandler(new DataHandler(source));
@@ -145,11 +135,4 @@ public class EmailSender {
 
         return message;
     }
-
-
-    public static void main(String[] args) throws MessagingException, IOException {
-        //new EmailSender().sendMail("darwesfodsa" , "Larm har gått", "Hej kära kund!\n\n" + " Brandlarmet har upptäckt rök i hallen");
-         new EmailSender().sendPictureMail("darwesh.ammar@hotmail.com", "Bild","Bild" ,new ImageIcon("data/bild.jpg"));
-    }
-
 }

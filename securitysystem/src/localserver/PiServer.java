@@ -17,7 +17,7 @@ public class PiServer extends Thread implements Serializable {
     private MicroClients map = new MicroClients();
 
 
-    private ArrayList<SecurityComponent> firesensors = new ArrayList<SecurityComponent>();
+    private ArrayList<SecurityComponent> fireSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
@@ -127,7 +127,7 @@ public class PiServer extends Thread implements Serializable {
                     switch (type) {
                         case "firealarm":
                             sensor = new FireAlarm(id, location);
-                            firesensors.add(sensor);
+                            fireSensors.add(sensor);
 
 
                             break;
@@ -287,7 +287,7 @@ public class PiServer extends Thread implements Serializable {
                                 if (s instanceof DoorLock) {
                                     if (Controller.alarmOn) {
                                         controller.setDoorOpen(false);
-                                    } else controller.setDoorOpen(true);;
+                                    } else controller.setDoorOpen(true);
                                 }
                             }
                             if (Controller.alarmOn) {

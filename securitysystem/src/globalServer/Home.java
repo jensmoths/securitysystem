@@ -48,8 +48,6 @@ public class Home implements Serializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("Someone i trying to send to non-existing Global Client");
         }
     }
 
@@ -78,12 +76,10 @@ public class Home implements Serializable {
     }
 
     public void sendOnlineOfflineLists() {
-        //if (!online.isEmpty() && !offline.isEmpty()) {
             Message message = new Message();
             message.setOnlineSensors(online);
             message.setOfflineSensors(offline);
             sendToAllClients(message);
-        //}
     }
 
     public void setOffline(ArrayList<SecurityComponent> offline) {

@@ -93,8 +93,6 @@ public class GlobalServerController implements Observer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void writeHomeToFileAfterDelete() {
@@ -118,7 +116,6 @@ public class GlobalServerController implements Observer {
     public void readUserFromFile() {
 
         String filename = "data/HomeObject.dat";
-//        new Thread(() -> {
         try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
 
             Home home = (Home) ois.readObject();
@@ -131,11 +128,9 @@ public class GlobalServerController implements Observer {
                 home = (Home) ois.readObject();
 
             }
-        } catch (IOException | ClassNotFoundException e) {
-            //e.printStackTrace();
+        } catch (IOException | ClassNotFoundException ignored) {
+
         }
-//        });
-        System.out.println("thread started again");
     }
 
     public void removeHome(Home home) {
@@ -156,14 +151,6 @@ public class GlobalServerController implements Observer {
         mainFrame.getMainPanel().setTableInfo(strings);
     }
 
-    // TODO: 06-May-20 method below is experimental
-    public void sendTakePhoto(String userName) {
-        try {
-            homes.get(userName).getLocalServer().getOos().writeObject("Take photo");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void addUserToSystem(User user) {
         getUserRegister().addUser(user);
@@ -172,16 +159,16 @@ public class GlobalServerController implements Observer {
         mainFrame.disposeRegisterPanel();
 
         Thread thread = new Thread(() -> {
-            String loginInfo = "Hej! \nHär nedan kommer dina inloggningsuppgifter\nAnvändarnamn: " + user.getUserName()
-                    + "\nLösenord: " + user.getPassword();
+            String loginInfo = "Hello, "+user.getFormattedFirstName()+
+                    "!\n\nThe following are your login details:\nUsername: "
+                    + user.getUserName() + "\nPassword: " + user.getPassword() +"\n\nThank you for choosing " +
+                    "SecureHomesMAU as your security system provider.\nBest regards, The team at SecureHomesMAU!";
 
             sendEmail(user.getEmail(), "SecureHomesMAU", loginInfo);
-
             writeHomeToFile(getHomes().get(user.getUserName()));
         });
 
         thread.start();
-        System.out.println("created and added home");
     }
 
     @Override

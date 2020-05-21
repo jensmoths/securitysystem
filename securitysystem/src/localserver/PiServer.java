@@ -1,7 +1,5 @@
 package localserver;
 
-import localClient.Controller;
-import localClient.FingerprintGui;
 import model.*;
 
 import javax.swing.*;
@@ -19,7 +17,7 @@ public class PiServer extends Thread implements Serializable {
     private MicroClients map = new MicroClients();
 
 
-    private ArrayList<SecurityComponent> firesensors = new ArrayList<SecurityComponent>();
+    private ArrayList<SecurityComponent> fireSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> magnetSensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> proximitySensors = new ArrayList<SecurityComponent>();
     private ArrayList<SecurityComponent> doorSensors = new ArrayList<SecurityComponent>();
@@ -80,9 +78,9 @@ public class PiServer extends Thread implements Serializable {
         }
     }
 
-    public void sendToFinger(char c, int id) throws IOException {
-        System.out.println("SERVER SEND TO FINGER: "+ c +" Index: "+ id);
-        startServer.sendToFingerChar(c, id);
+    public void sendToFinger(char c) throws IOException {
+        System.out.println("SERVER SEND TO FINGER: "+ c +" Index: ");
+        startServer.sendToFingerChar(c);
 
     }
 
@@ -129,7 +127,7 @@ public class PiServer extends Thread implements Serializable {
                     switch (type) {
                         case "firealarm":
                             sensor = new FireAlarm(id, location);
-                            firesensors.add(sensor);
+                            fireSensors.add(sensor);
 
 
                             break;
@@ -200,13 +198,12 @@ public class PiServer extends Thread implements Serializable {
 
         }
 
-        public void sendToFingerChar(char msg, int id) throws IOException {
+        public void sendToFingerChar(char msg) throws IOException {
             System.out.println("CH SEND TO FINGER");
             for (SecurityComponent s : map.keySet()
             ) {
                 if (s instanceof FingerprintSensor) {
                     map.get(s).sendMessage(msg);
-                    map.get(s).sendMessageID(id);
                 }
 
             }
@@ -226,8 +223,8 @@ public class PiServer extends Thread implements Serializable {
         ClientHandler(Socket socket, SecurityComponent securityComponent) throws IOException {
             this.socket = socket;
             this.sensor = securityComponent;
-            socket.setTcpNoDelay(true); //TODO HA DET HÄR ELLER?
-            socket.setSoTimeout(8000);
+            //socket.setTcpNoDelay(true); //TODO HA DET HÄR ELLER?
+            socket.setSoTimeout(20000);
 
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -246,6 +243,10 @@ public class PiServer extends Thread implements Serializable {
                     if (stringMessage.equals("heartbeat")) {
                         continue;
                     }
+                    //if (stringMessage.matches(".*\\d.*")) {
+                        //set
+                      //  continue;
+                    //}
                     String[] split = stringMessage.split("\\|");
                     String state = split[0]; //, location = split[1], type = split[2];
                     System.out.println("DETTA HAR SKICKATS FRÅN MK: " + state);
@@ -286,7 +287,7 @@ public class PiServer extends Thread implements Serializable {
                                 if (s instanceof DoorLock) {
                                     if (Controller.alarmOn) {
                                         controller.setDoorOpen(false);
-                                    } else controller.setDoorOpen(true);;
+                                    } else controller.setDoorOpen(true);
                                 }
                             }
                             if (Controller.alarmOn) {
@@ -309,6 +310,9 @@ public class PiServer extends Thread implements Serializable {
                         }
                     }
                     if (message.getSecurityComponent() instanceof FingerprintSensor) {
+                        if (split[0].equals("fingers")) {
+                            controller.setFingersAmount(Integer.parseInt(split[1]));
+                        }
                         if (message.getSecurityComponent().isOpen()) {
                             controller.setAlarmOn(false);
                             controller.soundAlarm("Welcome");
@@ -320,8 +324,8 @@ public class PiServer extends Thread implements Serializable {
                             }
                         } else {
                             if (Controller.alarmOn) {
-                                message.setInfo("Fingerläsaren har larmat ");
-                                controller.soundAlarm("Alarm för någon har försökt 3 gånger på fingerläsaren");
+                                message.setInfo("Fingerläsaren har larmat");
+                                controller.soundAlarm("Fire");
                             }
                         }
                         globalServer.globalsendMessage(message);
@@ -332,19 +336,22 @@ public class PiServer extends Thread implements Serializable {
 
 
                 } catch (SocketTimeoutException e) {
-                    if ((HeartbeatIntervall > 0) && ((System.currentTimeMillis() - lastRead) > HeartbeatIntervall)) {
+                    //if ((HeartbeatIntervall > 0) && ((System.currentTimeMillis() - lastRead) > HeartbeatIntervall)) {
                         e.printStackTrace();
                         globalMap.remove(sensor.getId());
                         System.out.println(sensor.getClass().getSimpleName() + " " + socket.getInetAddress() + " Har kopplats bort via HEARTHBEAT YEYEYEYE");
                         break;
-                    }
+                    //}
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;
                 }
             }
-
-
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             allOnlineSensors.remove(sensor);//TODO NYTT KOPPLA FRÅN SENSOR
             allOfflineSensors.add(sensor);
 
@@ -450,7 +457,7 @@ public class PiServer extends Thread implements Serializable {
         @Override
         public void run() {
             try {
-                connect("localhost", 8081);
+                connect("109.228.172.110", 8081);
                 System.out.println("connected to server");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Kunde inte ansluta till servern \n" + e.getMessage());

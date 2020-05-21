@@ -101,8 +101,7 @@ public class MainPanel extends JPanel {
         tblScrollPane = new JScrollPane(tblInfo);
 
         this.setBackground(new Color(83, 86, 91));
-//        pnlLeft.setBackground(new Color(83, 86, 91));
-//        pnlRight.setBackground(new Color(83, 86, 91));
+
 
         taLogger.setBackground(new Color(43, 43, 43));
         tblInfo.setBackground(new Color(83, 86, 91));
@@ -111,24 +110,18 @@ public class MainPanel extends JPanel {
         pnlLeft.setBackground(new Color(60, 63, 65));
         pnlRight.setBackground(new Color(60, 63, 65));
 
-        //textArea.setBackground(new Color(43,43,43));
-//        tblScrollPane.getViewport().setBackground(new Color(43,43,43));
 
         this.setLayout(new BorderLayout());
         pnlLeft.setLayout(new FlowLayout());
         pnlRight.setLayout(new BorderLayout());
 
         this.setPreferredSize(new Dimension(1250, 486));
-//        pnlLeft.setPreferredSize(new Dimension(800, 485));
         pnlRight.setPreferredSize(new Dimension(610, 485));
-//        tblScrollPane.setPreferredSize(new Dimension(750, 370));
         tblScrollPane.getViewport().setBackground(new Color(43, 43, 43));
         loggerScrollPane.setPreferredSize(new Dimension(605, 370));
         this.setPreferredSize(new Dimension(1250, 600));
         pnlLeft.setPreferredSize(new Dimension(800, 580));
-//        pnlRight.setPreferredSize(new Dimension(450,580));
         tblScrollPane.setPreferredSize(new Dimension(750, 370));
-//        loggerScrollPane.setPreferredSize(new Dimension(420,370));
         lblEmpty.setPreferredSize(new Dimension(290, 40));
         tfSearch.setPreferredSize(new Dimension(200, 20));
 
@@ -146,10 +139,7 @@ public class MainPanel extends JPanel {
         pnlRight.setBorder(borderLogger);
 
         columns = new String[]{"First Name", "Last Name", "Address", "Zip Code", "City", "Username", "Password", "Email"};
-//        tblInfo.setForeground(Color.white);
 
-
-//        tblInfo.setForeground(Color.WHITE);
         model.setColumnIdentifiers(columns);
 
         tblInfo.setRowHeight(30);
@@ -167,8 +157,6 @@ public class MainPanel extends JPanel {
         btnDelete.setForeground(Color.white);
 
         lblSearch.setForeground(Color.white);
-//        taLogger.setForeground(Color.white);
-
         loggerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         pnlLeft.add(tblScrollPane);
@@ -192,10 +180,7 @@ public class MainPanel extends JPanel {
     }
 
 
-    // TODO: 05-May-20 add code to make it possible for server to see logs for individual homes
-    //  Do this by fixing the lowest to do
-    // TODO: 05-May-20 You need to have a search bar exactly like with the client. This means you just access
-    //  their logger from Home and getLog applying filter though this gui
+
     public void setTaLogger(String text) {
         taLogger.setText(text);
     }
@@ -232,8 +217,6 @@ public class MainPanel extends JPanel {
             JOptionPane.showMessageDialog(null, "Use the correct format!");
             return null;
         }
-//        String[] startTime = tfStartTime.getText().split("-");
-//        return startTime;
     }
 
     public String[] getEndDate() {
@@ -279,8 +262,6 @@ public class MainPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == btnRegister) {
-                // TODO: 05-May-20 Make it so that you can't register more than one user of the
-                //  same info. OR you can just implement a system where the username is added by an index if its the same.
                 registerPanel = new RegisterPanel(globalServerController);
             } else if (actionEvent.getSource() == btnDelete) {
                 String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
@@ -295,7 +276,6 @@ public class MainPanel extends JPanel {
                     String username = globalServerController.getUserRegister().getUser(getSelectedRow()).getUserName();
                     System.out.println(username);
                     setTaLogger(globalServerController.getClientLoggerText(username));
-                    //globalServerController.sendTakePhoto(username);
                 } else if (getSelectedRow() != -1 && !tfSearch.getText().isEmpty()) {
                     int i = tblInfo.getRowSorter().convertRowIndexToModel(getSelectedRow());
                     String username = globalServerController.getUserRegister().getUser(i).getUserName();

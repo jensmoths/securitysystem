@@ -1,16 +1,13 @@
-package localClient;
+package localserver;
 
 
-import localserver.*;
-import localserver.PiServer;
+import localserver.GUI.MainFrame;
 import model.Message;
-import model.SecurityComponent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Controller {
@@ -34,14 +31,14 @@ public class Controller {
     }
 
     public void updateSensors() {
-        mainFrame.meny.updateOnlineMK(server.allOnlineSensors);
-        mainFrame.meny.updateOfflineMK(server.allOfflineSensors);
+        mainFrame.menu.updateOnlineMK(server.allOnlineSensors);
+        mainFrame.menu.updateOfflineMK(server.allOfflineSensors);
         server.globalServer.updateGlobal();
     }
 
-    public void sendToMK(char c, int id) throws IOException {
+    public void sendToMK(char c) throws IOException {
        // System.out.println("CONTROLLER SEND TO MK");
-        server.sendToFinger(c, id);
+        server.sendToFinger(c);
     }
 
     public void connectToGlobal() {
@@ -92,7 +89,7 @@ public class Controller {
 
     public void setAlarmOn(boolean alarmOn) {
         if (alarmOn) {
-            JDialog jd = new JDialog(mainFrame.numpad, "");
+            JDialog jd = new JDialog(mainFrame.numPad, "");
             JOptionPane op = new JOptionPane("Larmar om 10 sekunder", JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{});
             jd.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
             jd.setUndecorated(true);
@@ -102,8 +99,8 @@ public class Controller {
             jd.setLocationRelativeTo(null);
 
 
-            mainFrame.numpad.setVisible(true);
-            mainFrame.meny.setVisible(false);
+            mainFrame.numPad.setVisible(true);
+            mainFrame.menu.setVisible(false);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -122,8 +119,8 @@ public class Controller {
             }).start();
             jd.setVisible(true);
         } else {
-            mainFrame.numpad.setVisible(false);
-            mainFrame.meny.setVisible(true);
+            mainFrame.numPad.setVisible(false);
+            mainFrame.menu.setVisible(true);
             Controller.alarmOn = false;
         }
     }
@@ -133,6 +130,14 @@ public class Controller {
     }
 
     public void setOnlineButton(boolean b) {
-        mainFrame.meny.btnGoOnline.setEnabled(b);
+        mainFrame.menu.btnGoOnline.setEnabled(b);
+    }
+
+    public void getFingerAmount() throws IOException {
+        server.sendToFinger('g');
+    }
+
+    public void setFingersAmount(int fingers) {
+        mainFrame.fingerprintGui.setFingersAmount(fingers);
     }
 }

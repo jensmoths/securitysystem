@@ -1,43 +1,72 @@
-package localClient;
+package localserver.GUI;
+
+import localserver.Controller;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.text.ParseException;
+import java.util.Objects;
 
-public class ChangeCode extends JFrame implements ActionListener {
+public class MainFrame extends JPanel implements ActionListener {
     private JButton btnNum0, btnNum1, btnNum2, btnNum3, btnNum4, btnNum5, btnNum6, btnNum7,
             btnNum8, btnNum9, btnClear, btnOK;
     JPanel tfPanel;
     JPanel numPadPanel;
-    private JTextField tfNumPad;
+    private JTextField tfNumber;
     private String pinCode = "";
-    private Font font = new Font("Courier", Font.BOLD, 30);
+    private Font font = new Font("Courier", Font.BOLD, 45);
+    private String systemPinCode;
     private Color numberPadColor = new Color(74, 77, 82);
-    private MainFrame mainFrame;
-    Frame ChangeCodeFrame;
-    boolean pinOK = false;
+    public ChangeCode cc;
+    public Menu menu;
+    public Controller controller;
+
+    public FingerprintGui fingerprintGui;
+
+    public JFrame numPad;
 
 
-    public ChangeCode(MainFrame mainFrame) {
-        this.mainFrame = mainFrame;
 
-        JFrame ChangeCodeFrame = new JFrame();
-        ChangeCodeFrame.setTitle("Ändra kod");
-        ChangeCodeFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setExtendedState(Frame.MAXIMIZED_BOTH);
-        setUndecorated(true);
-        drawChangeCode();
-        setVisible(true);
+    /*
+    Instantiates the global GUI (the virtual numberpad) and hardcodes a value as the correct pincode.
+    Also sets up all the necessary graphical components, using the draw() method.
+     */
+    public MainFrame(Controller controller) throws ParseException, IOException {
+        this.controller = controller;
+        numPad = new JFrame();
+        //frame.setSize(new Dimension(320, 420));
+        numPad.setExtendedState(Frame.MAXIMIZED_BOTH);
+        numPad.setUndecorated(true);
+        numPad.setContentPane(this);
+        numPad.setTitle("NumberPad");
+        numPad.setVisible(true);
+        numPad.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        JOptionPane.showMessageDialog(null, "Ange nuvarande pinkod");
+        fingerprintGui = new FingerprintGui(this);
+        menu = new Menu(this, cc, fingerprintGui);
+        menu.setVisible(false);
+        menu.setBackground(new Color(83,86,91));
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/userdata.txt"))) {
+            reader.readLine();
+            reader.readLine();
+            systemPinCode = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        draw();
     }
 
-    public void drawChangeCode() {
-
+    /*
+    instantiates all the needed graphical and non-graphical components needed for the virtual numberpad.
+     */
+    public void draw() {
         tfPanel = new JPanel();
         numPadPanel = new JPanel();
-        tfNumPad = new JTextField();
+        tfNumber = new JTextField();
         btnNum0 = new JButton("0");
         btnNum1 = new JButton("1");
         btnNum2 = new JButton("2");
@@ -62,6 +91,7 @@ public class ChangeCode extends JFrame implements ActionListener {
 
         drawNumPad();
         drawTextFieldPanel();
+
     }
 
     public void drawNumPad() {
@@ -164,45 +194,81 @@ public class ChangeCode extends JFrame implements ActionListener {
     }
 
     public void drawTextFieldPanel() {
-        tfPanel.add(tfNumPad, BorderLayout.CENTER);
-        tfPanel.setPreferredSize(new Dimension(300, 50));
-        tfNumPad.setHorizontalAlignment(JTextField.CENTER);
-        tfNumPad.setEditable(false);
-        tfNumPad.setFont(new Font("Courier", Font.BOLD, 35));
-        tfNumPad.setForeground(Color.DARK_GRAY);
+        tfPanel.add(tfNumber, BorderLayout.CENTER);
+        tfPanel.setPreferredSize(new Dimension(300, 100));
+        tfNumber.setHorizontalAlignment(JTextField.CENTER);
+        tfNumber.setEditable(false);
+        tfNumber.setFont(new Font("Courier", Font.BOLD, 65));
+        tfNumber.setForeground(Color.DARK_GRAY);
     }
 
+    /*
+    Detects when a button is pressed on the numberpad and reacts accordingly.
+     */
+    @Override
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) e.getSource();
         String buttonNumber = button.getText();
 
         if (pinCode.length() < 4 && !buttonNumber.equals("OK") && !buttonNumber.equals("CLR")) {
             pinCode += buttonNumber;
-        }
-        if (buttonNumber.equals("CLR")) {
+        } else if (buttonNumber.equals("CLR")) {
             pinCode = "";
-        }
-        if (buttonNumber.equals("OK") && pinCode.length() == 4 && !pinOK) {
-            String num = tfNumPad.getText();
-            if (num.equals(mainFrame.getSystemPinCode())) {
-                pinOK = true;
-                pinCode = "";
-                JOptionPane.showMessageDialog(null, "Ange ny pinkod");
-            }
         } else if (buttonNumber.equals("OK") && pinCode.length() == 4) {
-            String num = tfNumPad.getText();
-            mainFrame.setSystemPinCode(num);
-            JOptionPane.showMessageDialog(null, "Pinkod ändrad");
-            setVisible(false);
-        }
-        // TODO: 2020-04-14 Lägg till kod som berättar vad som händer med OK
-        else if (buttonNumber.equals("OK") && pinCode.length() < 4) {
+            System.out.println(systemPinCode);
+            if (pinCode.equals(systemPinCode)) {
+               // meny.setVisible(true);
+               // frame.setVisible(false);
+                controller.setAlarmOn(false); //TODO TESTA DETTA
+
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Please type again!");
+            }
+            pinCode = "";
+            // TODO: 2020-04-14 Lägg till kod som berättar vad som händer med OK
+        } else if (buttonNumber.equals("OK") && pinCode.length() < 4) {
             JOptionPane.showMessageDialog(null, "Invalid: Enter a 4 digit number");
-        }
-        if (pinCode.length() > 4) {
+        } else if (pinCode.length() == 4) {
             JOptionPane.showMessageDialog(null, "Invalid: Maximum 4 digits");
         }
-        tfNumPad.setText(pinCode);
+        tfNumber.setText(pinCode);
     }
+
+    public String getPinCode() {
+        return pinCode;
+    }
+
+    public void setPinCode(String pinCode) {
+        this.pinCode = pinCode;
+    }
+
+    public void setSystemPinCode(String newSystemPinCode) {
+
+        String userdata = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader("data/userdata.txt"))) {
+            userdata = reader.readLine();
+            userdata += "\n";
+            userdata += reader.readLine();
+            userdata += "\n";
+            userdata += reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/userdata.txt"))) {
+            userdata = Objects.requireNonNull(userdata).replace(systemPinCode, newSystemPinCode);
+            writer.write(userdata);
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.systemPinCode = newSystemPinCode;
+    }
+
+    public String getSystemPinCode() {
+        return systemPinCode;
+    }
+
+
 
 }

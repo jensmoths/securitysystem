@@ -63,7 +63,6 @@ public class User implements Serializable {
         String surName = getSurName().toLowerCase().replaceAll("\\s", "");
         String street = getStreet().toLowerCase().replaceAll("\\s", "");
         userName = street.substring(0, 3) + surName.substring(0, 2) + firstName.substring(0, 2);
-        System.out.println(getUserName() + ", "+ getPassword());
     }
 
     public String getFirstName() {
@@ -137,8 +136,12 @@ public class User implements Serializable {
         userInfo[7] = email;
 
         return userInfo;
-
     }
+
+    public String getFormattedFirstName () {
+        return getFirstName().substring(0,1).toUpperCase() + getFirstName().substring(1);
+    }
+
     public void generateRandomUserName(){
 
         Random rand = new Random();

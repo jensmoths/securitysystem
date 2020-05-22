@@ -4,7 +4,6 @@
 #include <SoftwareSerial.h>
 #include <Adafruit_GFX.h>         //https://github.com/adafruit/Adafruit-GFX-Library
 #include <Adafruit_SSD1306.h>     //https://github.com/stblassitude/Adafruit_SSD1306_Wemos_OLED
-
 //needed libraries for WifiManager
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>    //https://github.com/esp8266/Arduino
@@ -19,10 +18,11 @@ Adafruit_SSD1306 display(OLED_RESET);
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&swSer);
 WiFiClient client;
 
-const String IP = "192.168.31.181";
+const String IP = "192.168.1.108"; //Maleks local ip
 //const String IP = "83.254.129.68"; //Per
 //const String IP = "158.174.123.25"; //Karl
 //const String IP = "109.228.172.110"; //Malek
+
 const int PORT = 40000;
 const String TYPE = "fingerprint";
 // defines pins numbers

@@ -105,22 +105,26 @@ public class GlobalServer implements Serializable {
                     requestHandler.handleServerRequest(requestClientObject, home);
 
                 } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                    System.out.println(socket.getInetAddress() + " has disconnected (local server)");
-                    home.online.clear();
-                    home.offline.clear();
-                    home.logger.addToLog(socket.getInetAddress() + " has disconnected (local server)");
-                    try {
-                        home.sendToAllClients("local server offline");
-                        home.setLocalServer(null);
-                        if (socket != null) {
-                            socket.close();
+                    if (e instanceof UTFDataFormatException) {
+                        e.printStackTrace();
+                    } else {
+                        e.printStackTrace();
+                        System.out.println(socket.getInetAddress() + " has disconnected (local server)");
+                        home.online.clear();
+                        home.offline.clear();
+                        home.logger.addToLog(socket.getInetAddress() + " has disconnected (local server)");
+                        try {
+                            home.sendToAllClients("local server offline");
+                            home.setLocalServer(null);
+                            if (socket != null) {
+                                socket.close();
+                            }
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            break;
                         }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
                         break;
                     }
-                    break;
                 }
             }
         }

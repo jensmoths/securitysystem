@@ -27,6 +27,7 @@ class PlaySound implements Runnable {
             clip.open(audioIn);
             clip.start();
             Thread.sleep(clip.getMicrosecondLength()/1000);
+            clip.close();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | InterruptedException  e1) {
             e1.printStackTrace();
         }

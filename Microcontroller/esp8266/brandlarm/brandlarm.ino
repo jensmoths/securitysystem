@@ -9,7 +9,7 @@
 //String locationString = "location";
 //const String IP = "83.254.129.68"; //per
 //const String IP = "82.209.130.123";//jens
-const String IP = "109.228.172.110";
+const String IP = "192.168.1.108"; //Maleks local ip
 //const String IP = "192.168.1.42";//Olof mobil
 const int PORT = 40000; //per
 const String TYPE = "firealarm";

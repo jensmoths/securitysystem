@@ -46,7 +46,7 @@ public class Controller {
     }
 
     public void takePicture() {
-        System.out.println("Startar ny kameratråd" + cameraReady);
+        System.out.println("Starting new camera thread" + cameraReady);
         Thread t = new Thread(new CommandLine(this));
         t.start();
     }
@@ -90,7 +90,7 @@ public class Controller {
     public void setAlarmOn(boolean alarmOn) {
         if (alarmOn) {
             JDialog jd = new JDialog(mainFrame.numPad, "");
-            JOptionPane op = new JOptionPane("Larmar om 10 sekunder", JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{});
+            JOptionPane op = new JOptionPane("Alarming in 10 seconds", JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{});
             jd.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
             jd.setUndecorated(true);
             jd.setLayout(new BorderLayout());
@@ -107,7 +107,7 @@ public class Controller {
                     try {
                         for (int i = 9; i >= 0; i--) {
                             Thread.sleep(1000);
-                            jd.add(new JOptionPane("Larmar om " + i + " sekunder", JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}));
+                            jd.add(new JOptionPane("Alarming in " + i + " seconds", JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}));
                             jd.pack();
                         }
                         jd.dispose();

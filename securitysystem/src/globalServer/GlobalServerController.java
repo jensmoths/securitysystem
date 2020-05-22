@@ -28,7 +28,7 @@ public class GlobalServerController implements Observer {
         homes = new HashMap<>();
         mainFrame = new MainFrame(this);
 
-        globalServer = new GlobalServer(8081, homes);
+        globalServer = new GlobalServer(41000, homes);
         readUserFromFile();
     }
 
@@ -167,7 +167,6 @@ public class GlobalServerController implements Observer {
             sendEmail(user.getEmail(), "SecureHomesMAU", loginInfo);
             writeHomeToFile(getHomes().get(user.getUserName()));
         });
-
         thread.start();
     }
 

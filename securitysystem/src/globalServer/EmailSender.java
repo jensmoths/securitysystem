@@ -8,15 +8,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.sql.DataSource;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.Properties;
 
 public class EmailSender {
@@ -90,7 +86,7 @@ public class EmailSender {
 
     }
 
-    public static BufferedImage convertToBufferedImage(Image image)
+    public BufferedImage convertToBufferedImage(Image image)
     {
         BufferedImage newImage = new BufferedImage(
                 image.getWidth(null), image.getHeight(null),

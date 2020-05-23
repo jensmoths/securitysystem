@@ -23,8 +23,8 @@ public class Menu extends JFrame {
     JButton btnFingerprint = new JButton("Fingerprint Reader");
     public JButton btnGoOnline = new JButton("Go online");
 
-    JList tfonlineMK = new JList();
-    JList tfofflineMK = new JList();
+    JList tfOnlineMK = new JList();
+    JList tfOfllineMK = new JList();
     DefaultListModel OnlineListModel = new DefaultListModel();
     DefaultListModel OfflineListModel = new DefaultListModel();
     private MainFrame mainFrame;
@@ -44,8 +44,8 @@ public class Menu extends JFrame {
         setUndecorated(true);
 
 
-        tfonlineMK .setBackground(new Color(43, 43, 43));
-        tfofflineMK .setBackground(new Color(43, 43, 43));
+        tfOnlineMK.setBackground(new Color(43, 43, 43));
+        tfOfllineMK.setBackground(new Color(43, 43, 43));
 
 
         this.setLayout(new MigLayout());
@@ -53,11 +53,11 @@ public class Menu extends JFrame {
         setVisible(true);
         //setLocation(500,200);
 
-        DrawMeny();
+        DrawMenu();
 
     }
 
-    public void DrawMeny(){
+    public void DrawMenu(){
 
         btnOpenDoor.addActionListener(new ButtonListener());
         btnCloseDoor.addActionListener(new ButtonListener());
@@ -66,8 +66,8 @@ public class Menu extends JFrame {
         btnFingerprint.addActionListener(new ButtonListener());
         btnGoOnline.addActionListener(new ButtonListener());
 
-        tfofflineMK.setPreferredSize(new Dimension(400,400));
-        tfonlineMK.setPreferredSize(new Dimension(400, 400));
+        tfOfllineMK.setPreferredSize(new Dimension(400,400));
+        tfOnlineMK.setPreferredSize(new Dimension(400, 400));
 
         btnOpenDoor.setPreferredSize(new Dimension(90,90));
         btnCloseDoor.setPreferredSize(new Dimension(90,90));
@@ -89,10 +89,10 @@ public class Menu extends JFrame {
         btnChangeCode.setForeground(Color.white);
         btnFingerprint.setForeground(Color.white);
         btnGoOnline.setForeground(Color.white);
-        tfofflineMK.setForeground(Color.white);
-        tfonlineMK.setForeground(Color.white);
-        add(tfonlineMK,"span");
-        add(tfofflineMK,"wrap, span");
+        tfOfllineMK.setForeground(Color.white);
+        tfOnlineMK.setForeground(Color.white);
+        add(tfOnlineMK,"span");
+        add(tfOfllineMK,"wrap, span");
         add(btnOpenDoor);
         add(btnCloseDoor);
         add(btnAlarmOn);
@@ -104,8 +104,8 @@ public class Menu extends JFrame {
         TitledBorder onlineBorder = new TitledBorder(BorderFactory.createEtchedBorder(new Color(62, 134, 160), new Color(62, 134, 160)), "Online");
         offlineBorder.setTitleColor(new Color(62, 134, 160));
         onlineBorder.setTitleColor(new Color(62, 134, 160));
-        tfofflineMK.setBorder(offlineBorder);
-        tfonlineMK.setBorder(onlineBorder);
+        tfOfllineMK.setBorder(offlineBorder);
+        tfOnlineMK.setBorder(onlineBorder);
 
 
     }
@@ -117,8 +117,8 @@ public class Menu extends JFrame {
 
             OnlineListModel.addElement(s);
         }
-        tfonlineMK.setModel(OnlineListModel);
-        tfonlineMK.repaint();
+        tfOnlineMK.setModel(OnlineListModel);
+        tfOnlineMK.repaint();
 
 
     }
@@ -130,8 +130,8 @@ public class Menu extends JFrame {
 
             OfflineListModel.addElement(s);
         }
-        tfofflineMK.setModel(OfflineListModel);
-        tfofflineMK.repaint();
+        tfOfllineMK.setModel(OfflineListModel);
+        tfOfllineMK.repaint();
     }
 
 

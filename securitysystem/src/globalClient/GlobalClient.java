@@ -36,6 +36,9 @@ public class GlobalClient {
             System.out.println("You're connected");
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
+
+            oos.writeObject("globalClient");
+
             receiver = new Receiver();
             receiver.start();
         } catch (IOException e) {
@@ -71,11 +74,13 @@ public class GlobalClient {
 
         @Override
         public void run() {
-            try {
+           /* try {
                 oos.writeObject("globalClient");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            */
 
             while (true) {
                 try {

@@ -109,11 +109,6 @@ public class RegisterPanel extends JPanel {
         User user = new User(tfFirstName.getText().toLowerCase(), tfSurName.getText().toLowerCase(),
                 tfStreet.getText().toLowerCase(), tfZipCode.getText().toLowerCase(), tfCity.getText().toLowerCase()
                 , email);
-
-        // String city = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getCity());
-        //  String street = removeStringSpace(globalServerController.getHomes().get(user.getUserName()).getUser().getStreet());
-
-        //User user = new User("Malek", "Abdul Sater", "Sörbäcksgatan 4", "21625", "Malmö", "malek_malek@hotmail.com");
         user.generateLogInDetails();
         if (!globalServerController.getHomes().containsKey(user.getUserName())) {
             globalServerController.addUserToSystem(user);

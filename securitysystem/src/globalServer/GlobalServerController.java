@@ -19,7 +19,7 @@ public class GlobalServerController implements Observer {
     private UserRegister userRegister;
     private EmailSender emailSender;
 
-    LinkedList<Home> homesList = new LinkedList<>();
+    LinkedList<Home> homesList;
 
     public GlobalServerController() {
         emailSender = new EmailSender();
@@ -27,6 +27,8 @@ public class GlobalServerController implements Observer {
         this.userRegister.addObserver(this);
         homes = new HashMap<>();
         mainFrame = new MainFrame(this);
+
+        homesList = new LinkedList<>();
 
         globalServer = new GlobalServer(8081, homes);
         readUserFromFile();

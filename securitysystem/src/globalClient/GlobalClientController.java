@@ -13,11 +13,12 @@ public class GlobalClientController {
     private GlobalClient globalClient;
     private MainFrame mainFrame;
     private Logger logger;
-    private LinkedList<ImageIcon> images = new LinkedList<>();
+    private LinkedList<ImageIcon> images;
 
     public GlobalClientController() {
         globalClient = new GlobalClient("localhost", 8081, this);
         mainFrame = new MainFrame(this);
+        images = new LinkedList<>();
     }
 
     public void authenticateUser() {

@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**@author Malek Abdul Sater  @coauthor**/
 public class Logger implements Serializable {
-    // TODO: 05-May-20 Use HashMap instead of arraylists, time as key, event as value
     private ArrayList<Long> timeStamps;
     private ArrayList<String> events;
     private String userName;
@@ -104,10 +103,6 @@ public class Logger implements Serializable {
             if (temp.after(startingTime) & temp.before(endingTime)) {
                 res += (temp.toLocalDateTime() + ": " + events.get(i) + "\n");
             }
-//                else {
-//                JOptionPane.showMessageDialog(null, "Invalid time filter!");
-//                return res;
-//                }
         }
         return res;
     }

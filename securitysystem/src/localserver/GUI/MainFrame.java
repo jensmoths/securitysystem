@@ -22,12 +22,12 @@ public class MainFrame extends JPanel implements ActionListener {
     private String systemPinCode;
     private Color numberPadColor = new Color(74, 77, 82);
     public ChangeCode cc;
-    public Meny meny;
+    public Menu menu;
     public Controller controller;
 
     public FingerprintGui fingerprintGui;
 
-    public JFrame numpad;
+    public JFrame numPad;
 
 
 
@@ -37,19 +37,19 @@ public class MainFrame extends JPanel implements ActionListener {
      */
     public MainFrame(Controller controller) throws ParseException, IOException {
         this.controller = controller;
-        numpad = new JFrame();
+        numPad = new JFrame();
         //frame.setSize(new Dimension(320, 420));
-        numpad.setExtendedState(Frame.MAXIMIZED_BOTH);
-        numpad.setUndecorated(true);
-        numpad.setContentPane(this);
-        numpad.setTitle("Numpad");
-        numpad.setVisible(true);
-        numpad.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        numPad.setExtendedState(Frame.MAXIMIZED_BOTH);
+        numPad.setUndecorated(true);
+        numPad.setContentPane(this);
+        numPad.setTitle("NumberPad");
+        numPad.setVisible(true);
+        numPad.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         fingerprintGui = new FingerprintGui(this);
-        meny = new Meny(this, cc, fingerprintGui);
-        meny.setVisible(false);
-        meny.setBackground(new Color(83,86,91));
+        menu = new Menu(this, cc, fingerprintGui);
+        menu.setVisible(false);
+        menu.setBackground(new Color(83,86,91));
 
         try (BufferedReader reader = new BufferedReader(new FileReader("data/userdata.txt"))) {
             reader.readLine();

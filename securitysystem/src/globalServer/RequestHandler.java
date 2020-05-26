@@ -12,26 +12,28 @@ public class RequestHandler {
 
     private EmailSender emailSender;
     private Home home;
-    private String customerFirstName;
 
     public RequestHandler(Home home) {
         this.home = home;
         emailSender = new EmailSender();
-        customerFirstName = home.user.getFirstName();
+
     }
 
     public void handleServerRequest(Object requestObject, Home home) {
+        String customerFirstName = home.getUser().getFormattedFirstName();
+        String finishingStatement = "\n\nBest regards, The team at SecureHomesMAU";
+
         if (requestObject instanceof String) {
             home.logger.addToLog((String) requestObject);
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
 
         } else if (requestObject instanceof ImageIcon) {
-            home.logger.addToLog("Received an image");
+            home.logger.addToLog("Received an image from home");
             home.sendToAllClients(home.logger);
             home.sendToAllClients(requestObject);
-            emailSender.sendPictureMail(home.getUser().getEmail(), "", "A new photo from your home",
-                    (ImageIcon) requestObject);
+            emailSender.sendPictureMail(home.getUser().getEmail(), finishingStatement,
+                    "A new photo from your home", (ImageIcon) requestObject);
 
         } else if (requestObject instanceof Message) {
 
@@ -41,42 +43,41 @@ public class RequestHandler {
             if (securityComponent == null) {
                 home.setOffline(message.getOfflineSensors());
                 home.setOnline(message.getOnlineSensors());
-                boolean alarm = message.isAlarmOn();
                 home.sendToAllClients(message);
-
-
-                for (SecurityComponent s : home.getOnline()) {
-                    System.out.println("ONLINE SENSOR: " + s.getId());
-                }
-                for (SecurityComponent s : home.getOffline()) {
-                    System.out.println("OFFLINE SENSOR: " + s.getId());
-                }
-                System.out.println("Alarm status: " + alarm);
+//                boolean alarm = message.isAlarmOn();
+//                for (SecurityComponent s : home.getOnline()) {
+//                    System.out.println("ONLINE SENSOR: " + s.getId());
+//                }
+//                for (SecurityComponent s : home.getOffline()) {
+//                    System.out.println("OFFLINE SENSOR: " + s.getId());
+//                }
+//                System.out.println("Alarm status: " + alarm);
             }
 
             if (securityComponent instanceof MagneticSensor) {
                 if (securityComponent.isOpen()) {
                     home.sendToAllClients("The magnet sensor in " + securityComponent.getLocation() +
-                            " has gone off");
+                            " has been triggered");
                     home.logger.addToLog("The magnet sensor in " + securityComponent.getLocation() +
-                            " has gone off");
+                            " has been triggered");
                     home.sendToAllClients(home.logger);
-                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hej kära kund!\n" +
-                            "Magnetsensorn är larmad i " + securityComponent.getLocation());
+                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hello " +
+                            customerFirstName + "!\n\n" + "The magnetic sensor in " + securityComponent.getLocation() +
+                            " has been triggered." + finishingStatement);
 
                 } else if (!securityComponent.isOpen()) {
                     home.sendToAllClients("The magnet sensor in " + securityComponent.getLocation() + " is online");
                     home.logger.addToLog("The magnet sensor in " + securityComponent.getLocation() + " is online");
                     home.sendToAllClients(home.logger);
-
                 }
             }
             if (securityComponent instanceof FireAlarm) {
                 home.sendToAllClients("The fire alarm detected smoke " + securityComponent.getLocation());
                 home.logger.addToLog("The fire alarm detected smoke " + securityComponent.getLocation());
                 try {
-                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hello " +
-                            customerFirstName + "!\nBrandlarmet har upptäckt rök i " + securityComponent.getLocation());
+                    emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hello, " +
+                            customerFirstName + "!\n\nThe fire alarm has detected smoke in " +
+                            securityComponent.getLocation() + "." + finishingStatement);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -90,8 +91,9 @@ public class RequestHandler {
                 home.logger.addToLog("The proximity sensor detected motion in " +
                         securityComponent.getLocation());
                 home.sendToAllClients(home.logger);
-                emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hello " +
-                        customerFirstName + "!\nThe proximity sensor detected motion in " + securityComponent.getLocation());
+                emailSender.sendMail(home.getUser().getEmail(), "SecureHomesMAU", "Hello, " +
+                        customerFirstName + "!\n\nThe proximity sensor detected motion in "
+                        + securityComponent.getLocation() + "." +finishingStatement);
             }
         }
     }

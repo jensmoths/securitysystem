@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Random;
 
+/**@author Jens Moths, Per Blomqvist  @coauthor**/
 public class Controller {
     public static boolean alarmOn = false;
     public boolean cameraReady = true;
@@ -115,6 +116,8 @@ public class Controller {
                         e.printStackTrace();
                     }
                     Controller.alarmOn = true;
+
+                    setDoorOpen(false);
                 }
             }).start();
             jd.setVisible(true);

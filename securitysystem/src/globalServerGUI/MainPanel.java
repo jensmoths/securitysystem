@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class MainPanel extends JPanel {
     private RegisterPanel registerPanel;
     private JPanel pnlLeft;

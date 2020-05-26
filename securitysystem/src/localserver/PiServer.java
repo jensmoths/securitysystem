@@ -10,6 +10,7 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**@author Olof Persson, Jens Moths, Per Blomqvist  @coauthor**/
 public class PiServer extends Thread implements Serializable {
 
 
@@ -324,8 +325,8 @@ public class PiServer extends Thread implements Serializable {
                             }
                         } else {
                             if (Controller.alarmOn) {
-                                message.setInfo("Fingerläsaren har larmat");
-                                controller.soundAlarm("Fire");
+                                //message.setInfo("Fingerläsaren har larmat");
+                                //controller.soundAlarm("Fire");
                             }
                         }
                         globalServer.globalsendMessage(message);

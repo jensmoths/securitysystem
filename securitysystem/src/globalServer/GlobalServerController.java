@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class GlobalServerController implements Observer {
     private GlobalServer globalServer;
     private HashMap<String, Home> homes;

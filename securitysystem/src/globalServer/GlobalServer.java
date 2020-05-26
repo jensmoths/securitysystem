@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor Jens Moths, Per Blomqvist**/
 public class GlobalServer implements Serializable {
     private HashMap<String, Home> homes;
 

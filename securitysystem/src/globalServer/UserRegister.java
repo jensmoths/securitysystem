@@ -4,6 +4,7 @@ package globalServer;
 
 import java.util.*;
 
+/**@author Ammar Darwesh  @coauthor**/
 public class UserRegister extends Observable {
 
     private LinkedList<User> users = new LinkedList<>();

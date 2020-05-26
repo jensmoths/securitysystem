@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor Jens Moths, Per Blomqvist**/
 public class RequestHandler {
 
     private EmailSender emailSender;

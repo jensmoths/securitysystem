@@ -14,6 +14,7 @@ import globalServer.User;
 import globalServer.UserRegister;
 import net.miginfocom.swing.MigLayout;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class RegisterPanel extends JPanel {
     private JTextField tfFirstName, tfSurName, tfStreet, tfZipCode, tfCity, tfEmail;
     private JLabel lblFirstName, lblSurName, lblStreet, lblZipCode, lblCity, lblEmail;

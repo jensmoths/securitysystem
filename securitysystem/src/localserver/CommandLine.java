@@ -7,9 +7,8 @@ import java.io.InputStreamReader;
 import java.util.Observable;
 import java.util.Scanner;
 
+/**@author Olof Persson, Karl Andersson  @coauthor Per Blomqvist, Jens Moths**/
 public class CommandLine implements Runnable {
-
-
     static int number = 0;
     Controller controller;
 

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class LogInPanel extends JPanel {
 
     private JTextField tfUsername, tfPassword;

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**@author Malek Abdul Sater  @coauthor**/
 public class Logger implements Serializable {
     // TODO: 05-May-20 Use HashMap instead of arraylists, time as key, event as value
     private ArrayList<Long> timeStamps;

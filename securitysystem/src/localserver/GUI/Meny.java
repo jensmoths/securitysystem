@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**@author Olof Persson  @coauthor Per Blomqvist, Jens Moths**/
 public class Meny extends JFrame {
 
 

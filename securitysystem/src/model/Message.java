@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**@author Jens Moths, Per Blomqvist, Malek Abdul Sater, Ammar Darwesh  @coauthor**/
 public class Message implements Serializable {
     boolean alarmOn;
     ArrayList<SecurityComponent> onlineSensors;

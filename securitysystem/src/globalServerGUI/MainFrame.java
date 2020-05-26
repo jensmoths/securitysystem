@@ -5,6 +5,7 @@ import globalServer.GlobalServerController;
 import javax.swing.*;
 import java.awt.*;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class MainFrame {
     private JFrame frame = new JFrame();
     private GlobalServerController globalServerController;

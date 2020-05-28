@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class Home implements Serializable {
     User user;
     GlobalServer.ClientHandler localServer;

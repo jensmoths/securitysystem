@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**@author Malek Abdul Sater  @coauthor**/
 public class Logger implements Serializable {
     private ArrayList<Long> timeStamps;
     private ArrayList<String> events;

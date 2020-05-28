@@ -10,6 +10,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.util.Objects;
 
+/**@author Malek Abdul Sater, Jens Moths  @coauthor Olof Persson**/
 public class MainFrame extends JPanel implements ActionListener {
     private JButton btnNum0, btnNum1, btnNum2, btnNum3, btnNum4, btnNum5, btnNum6, btnNum7,
             btnNum8, btnNum9, btnClear, btnOK;

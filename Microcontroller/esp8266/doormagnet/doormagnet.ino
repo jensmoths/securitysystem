@@ -1,4 +1,4 @@
-//author Karl Andersson, Jens Moths
+//author Karl Andersson, Jens Moths, Olof Persson
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 
 //needed libraries for WifiManager

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor Per Blomqvist**/
 public class MainPanel extends JPanel {
 
     private JPanel leftPanel;

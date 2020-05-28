@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**@author Olof Persson, Jens Moths  @coauthor**/
 public class ChangeCode extends JFrame implements ActionListener {
     private JButton btnNum0, btnNum1, btnNum2, btnNum3, btnNum4, btnNum5, btnNum6, btnNum7,
             btnNum8, btnNum9, btnClear, btnOK;

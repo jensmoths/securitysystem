@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class GlobalClient {
 
     private Socket socket;

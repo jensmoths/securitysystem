@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class GlobalClientController {
     private GlobalClient globalClient;
     private MainFrame mainFrame;

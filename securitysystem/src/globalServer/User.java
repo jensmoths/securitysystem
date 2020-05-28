@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Random;
 
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class User implements Serializable {
 
     private String firstName, surName, street, zipCode, city, userName, password, email;

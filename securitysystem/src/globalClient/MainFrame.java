@@ -2,7 +2,7 @@ package globalClient;
 
 import javax.swing.*;
 
-
+/**@author Ammar Darwesh, Malek Abdul Sater  @coauthor**/
 public class MainFrame extends JFrame {
     private MainPanel mainPanel;
     private LogInPanel logInPanel;

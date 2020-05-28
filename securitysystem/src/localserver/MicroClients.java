@@ -7,6 +7,7 @@ import model.Sensor;
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**@author Rolf Axelsson  @coauthor Per Blomqvist**/
 public class MicroClients implements Serializable {
     private HashMap<SecurityComponent, PiServer.ClientHandler> map = new HashMap<>();
 

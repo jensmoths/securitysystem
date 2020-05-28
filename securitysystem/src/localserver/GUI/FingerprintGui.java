@@ -8,13 +8,12 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.ParseException;
 
+/**@author Per Blomqvist, Jens Moths  @coauthor**/
 public class FingerprintGui extends JFrame implements ActionListener {
     private MainFrame mainFrame;
     private JFrame fingerFrame;
     private JButton add, delete, clear, returnbtn;
     private JPanel panel;
-    private JList list;
-    private MaskFormatter mask;
 
     private JLabel fingersLabel;
 
@@ -37,13 +36,9 @@ public class FingerprintGui extends JFrame implements ActionListener {
     }
 
     public void draw() throws ParseException {
-        //mask = new MaskFormatter("###");
         panel = new JPanel(new GridLayout(5, 1));
         panel.setBackground(new Color(62, 134, 160));
-
-
         fingersLabel = new JLabel("Waiting for fingers", SwingConstants.CENTER);
-        //mask.setMask("###");
         add = new JButton("Add a finger");
         delete = new JButton("Delete the latest used finger");
         clear = new JButton("Clear");

@@ -1,5 +1,6 @@
 package model;
 
+/**@author Jens Moths, Per Blomqvist, Malek Abdul Sater  @coauthor**/
 public class FireAlarm extends Sensor {
 
 

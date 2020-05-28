@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Properties;
 
+/**@author Ammar Darwesh  @coauthor Jens Moths**/
 public class EmailSender {
 
     private Properties properties;

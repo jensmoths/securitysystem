@@ -13,7 +13,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Menu extends JFrame {
+/**@author Olof Persson  @coauthor Per Blomqvist, Jens Moths**/
+public class Meny extends JFrame {
 
 
     JButton btnOpenDoor = new JButton("Unlock");

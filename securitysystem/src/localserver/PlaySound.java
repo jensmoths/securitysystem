@@ -9,6 +9,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+/**@author Olof Persson, Karl Andersson  @coauthor Per Blomqvist**/
 class PlaySound implements Runnable {
 
     private String filepath;

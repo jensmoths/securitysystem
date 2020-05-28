@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 
+/**@author Jens Moths, Per Blomqvist, Malek Abdul Sater  @coauthor**/
 public class SecurityComponent implements Serializable {
     private String id;
     private String location;
